@@ -17,17 +17,24 @@ class DateTimeFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: 20.h),
-      child: DateTimeField(
-        format: DateFormat('yyyy-MM-dd'),
-        decoration: FormDecoration.style(label: label, suffixIcon: suffix),
-        onShowPicker: (context, currentValue) {
-          return showDatePicker(
-            context: context,
-            firstDate: DateTime.now(),
-            initialDate: currentValue ?? DateTime.now(),
-            lastDate: DateTime.now().add(const Duration(days: 30)),
-          );
-        },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label),
+          SizedBox(height: 8.h),
+          DateTimeField(
+            format: DateFormat('yyyy-MM-dd'),
+            decoration: FormDecoration.style(suffixIcon: suffix),
+            onShowPicker: (context, currentValue) {
+              return showDatePicker(
+                context: context,
+                firstDate: DateTime.now(),
+                initialDate: currentValue ?? DateTime.now(),
+                lastDate: DateTime.now().add(const Duration(days: 30)),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

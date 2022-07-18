@@ -1,4 +1,5 @@
 import 'package:berhentikok/base/size_const.dart';
+import 'package:berhentikok/page/finance/widget/add_item_dialog.dart';
 import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
 import 'package:berhentikok/widget/card_widget/long_card_widget.dart';
 import 'package:berhentikok/widget/chart_widget/chart_widget.dart';
@@ -27,16 +28,51 @@ class FinancePage extends StatelessWidget {
               ),
               SectionStatisticDetailWidget(
                 title: 'Target Barang',
-                child: Row(
+                child: Column(
                   children: [
-                    BoxCardWidget(
-                      child: Column(
-                        children: const [
-                          Text("SSD 512 GB"),
-                          Text('Rp 20.000/650.000'),
-                        ],
-                      ),
+                    Row(
+                      children: [
+                        BoxCardWidget(
+                          child: Column(
+                            children: const [
+                              Text("SSD 512 GB"),
+                              Text('Rp 20.000/650.000'),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
+                    SizedBox(height: 8.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SimpleDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 30.w,
+                                    vertical: 25.h,
+                                  ),
+                                  children: const [AddItemDialog()],
+                                );
+                              },
+                            );
+                          },
+                          child: Row(
+                            children: const [
+                              Text('Tambah Barang'),
+                              Icon(Icons.add_rounded),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),

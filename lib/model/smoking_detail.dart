@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 
-class SmokingDetails extends Equatable {
+class SmokingDetail extends Equatable {
   final DateTime date;
   final String excuse;
   final int total;
 
-  const SmokingDetails({
+  const SmokingDetail({
     required this.date,
     required this.excuse,
     required this.total,
@@ -20,8 +20,7 @@ class SmokingDetails extends Equatable {
   @override
   String toString() => "${_format.format(date)}: ${total.toString()} Rokok";
 
-  @override
-  String sumTotal(List<SmokingDetails> smokingDetails) {
+  String sumTotal(List<SmokingDetail> smokingDetails) {
     return smokingDetails
         .fold<int>(0, (previousValue, element) => element.total + previousValue)
         .toString();

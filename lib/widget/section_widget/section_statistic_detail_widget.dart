@@ -17,6 +17,7 @@ class SectionStatisticDetailWidget extends StatelessWidget {
       child: Column(
         children: [
           if (title != null) Text(title!),
+          if (title != null) SizedBox(height: 10.h),
           child,
         ],
       ),

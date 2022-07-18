@@ -1,10 +1,10 @@
 import 'dart:collection';
 
 import 'package:berhentikok/base/color_const.dart';
-import 'package:berhentikok/model/smoking_details.dart';
+import 'package:berhentikok/model/smoking_detail.dart';
+import 'package:berhentikok/page/consumption/widget/smoking_detail_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarTableWidget extends StatefulWidget {
@@ -15,21 +15,20 @@ class CalendarTableWidget extends StatefulWidget {
 }
 
 class _CalendarTableWidgetState extends State<CalendarTableWidget> {
-  final DateFormat _format = DateFormat('d-MMMM');
-  late final ValueNotifier<List<SmokingDetails>> _selectedEvents;
+  late final ValueNotifier<List<SmokingDetail>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
-  final kSmokingDetails = LinkedHashMap<DateTime, List<SmokingDetails>>(
+  final kSmokingDetails = LinkedHashMap<DateTime, List<SmokingDetail>>(
     equals: isSameDay,
-    hashCode: SmokingDetails.getHashCode,
+    hashCode: SmokingDetail.getHashCode,
   )..addAll(
       {
         DateTime.now(): [
-          SmokingDetails(date: DateTime.now(), excuse: 'excuse-1', total: 1),
-          SmokingDetails(date: DateTime.now(), excuse: 'excuse-2', total: 2),
-          SmokingDetails(date: DateTime.now(), excuse: 'excuse-3', total: 20),
+          SmokingDetail(date: DateTime.now(), excuse: 'excuse-1', total: 1),
+          SmokingDetail(date: DateTime.now(), excuse: 'excuse-2', total: 2),
+          SmokingDetail(date: DateTime.now(), excuse: 'excuse-3', total: 20),
         ],
       },
     );
@@ -52,7 +51,7 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TableCalendar<SmokingDetails>(
+        TableCalendar<SmokingDetail>(
           locale: "id_ID",
           firstDay: DateTime.now().subtract(const Duration(days: 7)),
           lastDay: DateTime.now(),
@@ -101,7 +100,7 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
           ),
         ),
         SizedBox(height: 10.h),
-        ValueListenableBuilder<List<SmokingDetails>>(
+        ValueListenableBuilder<List<SmokingDetail>>(
           valueListenable: _selectedEvents,
           builder: (context, values, _) {
             return Column(
@@ -113,7 +112,7 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
     );
   }
 
-  List<SmokingDetails> _getSmokingDetailsForDay(DateTime day) {
+  List<SmokingDetail> _getSmokingDetailsForDay(DateTime day) {
     return kSmokingDetails[day] ?? [];
   }
 
@@ -136,7 +135,7 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
     }
   }
 
-  List<Widget> _buildSmokingDetails(List<SmokingDetails> smokingDetails) {
+  List<Widget> _buildSmokingDetails(List<SmokingDetail> smokingDetails) {
     return smokingDetails.map((smokingDetail) {
       return Container(
         margin: EdgeInsets.symmetric(
@@ -148,7 +147,23 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: ListTile(
-          onTap: () => print(smokingDetail.excuse),
+          onTap: () async {
+            await showDialog(
+              context: context,
+              builder: (context) {
+                return SimpleDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 30.w,
+                    vertical: 25.h,
+                  ),
+                  children: [SmokingDetailDialog(smokingDetail: smokingDetail)],
+                );
+              },
+            );
+          },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.r),
           ),

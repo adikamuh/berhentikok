@@ -8,7 +8,7 @@ class HealthPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Kesehatan"),
+        title: const Text("Kesehatan"),
       ),
       body: Column(
         children: [

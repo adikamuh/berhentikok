@@ -1,5 +1,7 @@
 import 'package:berhentikok/base/size_const.dart';
+import 'package:berhentikok/page/consumption/widget/add_smoking_detail_dialog.dart';
 import 'package:berhentikok/page/consumption/widget/calendar_table_widget.dart';
+import 'package:berhentikok/widget/button_widget/button_primary_widget.dart';
 import 'package:berhentikok/widget/card_widget/long_card_widget.dart';
 import 'package:berhentikok/widget/chart_widget/chart_widget.dart';
 import 'package:berhentikok/widget/section_widget/projection_child_widget.dart';
@@ -24,9 +26,33 @@ class ConsumptionPage extends StatelessWidget {
               const SectionStatisticDetailWidget(
                 child: CalendarTableWidget(),
               ),
-              const SectionStatisticDetailWidget(
+              SectionStatisticDetailWidget(
                 title: 'Jumlah rokok yang berhasil kamu hindari',
-                child: LongCardWidget(text: '20 Rokok'),
+                child: Column(
+                  children: [
+                    const LongCardWidget(text: '20 Rokok'),
+                    ButtonPrimaryWidget(
+                      text: 'Saya merokok hari ini',
+                      onPressed: () async {
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SimpleDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 30.w,
+                                vertical: 25.h,
+                              ),
+                              children: const [AddSmokingDetailDialog()],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
               SectionStatisticDetailWidget(
                 title: 'Proyeksi',

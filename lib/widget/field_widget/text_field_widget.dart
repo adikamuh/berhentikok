@@ -25,22 +25,28 @@ class TextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: 20.h),
-      child: TextField(
-        textAlign: textAlign ?? TextAlign.start,
-        textAlignVertical: TextAlignVertical.top,
-        maxLines: maxLine,
-        keyboardType: isNumber ? TextInputType.number : null,
-        inputFormatters: isNumber
-            ? <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly,
-                ThousandsSeparatorInputFormatter(),
-              ]
-            : null,
-        decoration: FormDecoration.style(
-          label: label,
-          hintText: hintText,
-          prefix: prefix,
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label),
+          SizedBox(height: 8.h),
+          TextField(
+            textAlign: textAlign ?? TextAlign.start,
+            textAlignVertical: TextAlignVertical.top,
+            maxLines: maxLine,
+            keyboardType: isNumber ? TextInputType.number : null,
+            inputFormatters: isNumber
+                ? <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly,
+                    ThousandsSeparatorInputFormatter(),
+                  ]
+                : null,
+            decoration: FormDecoration.style(
+              hintText: hintText,
+              prefix: prefix,
+            ),
+          ),
+        ],
       ),
     );
   }

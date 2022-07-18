@@ -12,9 +12,7 @@ class ButtonPrimaryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        
-      ),
+      style: ElevatedButton.styleFrom(),
       onPressed: onPressed,
       child: Text(text),
     );
