@@ -13,7 +13,10 @@ class ProjectionChildWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [Text(caption), Text(value)],
+      children: [
+        Text(caption),
+        Text(value),
+      ],
     );
   }
 }

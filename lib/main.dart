@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
             '/': (context) => const OnBoardingPage(),
             '/home': (context) => const HomePage(),
           },
-          initialRoute: "/home",
+          initialRoute: "/",
         );
       },
     );

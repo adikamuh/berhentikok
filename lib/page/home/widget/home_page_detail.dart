@@ -1,9 +1,7 @@
-import 'package:berhentikok/base/button_style_const.dart';
 import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/font_const.dart';
 import 'package:berhentikok/base/size_const.dart';
 import 'package:berhentikok/page/achievement/achievement_page.dart';
-import 'package:berhentikok/page/consumption/widget/add_smoking_detail_dialog.dart';
 import 'package:berhentikok/page/consumption/widget/smoking_free_duration_card.dart';
 import 'package:berhentikok/page/health/widget/linear_indicator.dart';
 import 'package:berhentikok/page/home/widget/tips_dialog.dart';
@@ -142,12 +140,7 @@ class HomePageDetail extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 10.h),
-                    const LinearIndicator(value: 50)
-                    // const LinearProgressIndicator(
-                    //   value: 0.5,
-                    //   backgroundColor: ColorConst.lightGlowingGreen,
-                    //   color: ColorConst.glowingGreen,
-                    // ),
+                    const LinearIndicator(value: 50),
                   ],
                 ),
               ),
@@ -236,13 +229,21 @@ class HomePageDetail extends StatelessWidget {
           textColor: ColorConst.darkGreen,
           isSuffixIconOn: true,
           onTap: () {
-            showDialog(
-              context: context,
-              builder: (context) => const SmokingCessationMethodsPage(),
-            );
+            _showSmokingCessationMethods(context: context, isFirst: false);
           },
         ),
       ],
+    );
+  }
+
+  void _showSmokingCessationMethods({
+    required BuildContext context,
+    bool isFirst = true,
+  }) {
+    showDialog(
+      barrierDismissible: isFirst ? false : true,
+      context: context,
+      builder: (context) => const SmokingCessationMethodsPage(),
     );
   }
 }

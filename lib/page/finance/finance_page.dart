@@ -1,7 +1,10 @@
+import 'package:berhentikok/base/button_style_const.dart';
+import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/size_const.dart';
+import 'package:berhentikok/model/target_item.dart';
 import 'package:berhentikok/page/finance/widget/add_item_dialog.dart';
-import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
-import 'package:berhentikok/widget/card_widget/long_card_widget.dart';
+import 'package:berhentikok/page/finance/widget/money_saved_card_widget.dart';
+import 'package:berhentikok/page/finance/widget/target_item_card_widget.dart';
 import 'package:berhentikok/widget/chart_widget/chart_widget.dart';
 import 'package:berhentikok/widget/section_widget/projection_child_widget.dart';
 import 'package:berhentikok/widget/section_widget/section_statistic_detail_widget.dart';
@@ -16,37 +19,69 @@ class FinancePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Uang Tersimpan"),
+        backgroundColor: ColorConst.darkGreen,
       ),
-      body: Padding(
-        padding: SizeConst.pagePadding,
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: SizeConst.pagePadding,
           child: Column(
             children: [
               const SectionStatisticDetailWidget(
                 title: 'Kamu berhasil menghemat',
-                child: LongCardWidget(text: 'Rp 20.000'),
+                child: MoneySavedCardWidget(value: "Rp 20.000"),
               ),
               SectionStatisticDetailWidget(
                 title: 'Target Barang',
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        BoxCardWidget(
-                          child: Column(
-                            children: const [
-                              Text("SSD 512 GB"),
-                              Text('Rp 20.000/650.000'),
-                            ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: const [
+                          TargetItemCardWidget(
+                            targetItem: TargetItem(
+                              name: 'SSD 512GB',
+                              price: 650000,
+                            ),
+                            moneySaved: 20000,
                           ),
-                        ),
-                      ],
+                          TargetItemCardWidget(
+                            targetItem: TargetItem(
+                              name: 'SSD 512GB',
+                              price: 650000,
+                            ),
+                            moneySaved: 20000,
+                          ),
+                          TargetItemCardWidget(
+                            targetItem: TargetItem(
+                              name: 'SSD 512GB',
+                              price: 650000,
+                            ),
+                            moneySaved: 20000,
+                          ),
+                          TargetItemCardWidget(
+                            targetItem: TargetItem(
+                              name: 'SSD 512GB',
+                              price: 650000,
+                            ),
+                            moneySaved: 20000,
+                          ),
+                          TargetItemCardWidget(
+                            targetItem: TargetItem(
+                              name: 'SSD 512GB',
+                              price: 650000,
+                            ),
+                            moneySaved: 20000,
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 8.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
+                          style: ButtonStyleConst.primary(),
                           onPressed: () async {
                             await showDialog(
                               context: context,

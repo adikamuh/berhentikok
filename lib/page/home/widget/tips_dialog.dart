@@ -57,11 +57,14 @@ class _TipsDialogState extends State<TipsDialog> {
                       padding: EdgeInsets.all(8.w),
                       decoration: BoxDecoration(
                         color: _indexTips == 0
-                            ? ColorConst.primaryColor4
-                            : ColorConst.primaryColor3,
+                            ? ColorConst.lightGreen.withOpacity(0.5)
+                            : ColorConst.lightGreen,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.keyboard_arrow_left_rounded),
+                      child: const Icon(
+                        Icons.keyboard_arrow_left_rounded,
+                        color: ColorConst.darkGreen,
+                      ),
                     ),
                   ),
                   SizedBox(width: 10.w),
@@ -78,11 +81,14 @@ class _TipsDialogState extends State<TipsDialog> {
                       padding: EdgeInsets.all(8.w),
                       decoration: BoxDecoration(
                         color: _indexTips == (tips.length - 1)
-                            ? ColorConst.primaryColor4
-                            : ColorConst.primaryColor3,
+                            ? ColorConst.lightGreen.withOpacity(0.5)
+                            : ColorConst.lightGreen,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.keyboard_arrow_right_rounded),
+                      child: const Icon(
+                        Icons.keyboard_arrow_right_rounded,
+                        color: ColorConst.darkGreen,
+                      ),
                     ),
                   ),
                 ],
@@ -99,13 +105,13 @@ class _TipsDialogState extends State<TipsDialog> {
             },
             child: Container(
               padding: EdgeInsets.all(4.w),
-              decoration: BoxDecoration(
-                color: Colors.red.shade700,
+              decoration: const BoxDecoration(
+                color: ColorConst.lightRed,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.close_rounded,
-                color: Colors.white,
+                color: ColorConst.darkRed,
               ),
             ),
           ),

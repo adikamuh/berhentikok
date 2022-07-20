@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:berhentikok/base/color_const.dart';
+import 'package:berhentikok/base/font_const.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/page/consumption/widget/smoking_detail_dialog.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,7 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
           locale: "id_ID",
           firstDay: DateTime.now().subtract(const Duration(days: 7)),
           lastDay: DateTime.now(),
-          calendarFormat: CalendarFormat.month,
+          calendarFormat: _calendarFormat,
           startingDayOfWeek: StartingDayOfWeek.monday,
           focusedDay: _focusedDay,
           onFormatChanged: _onFormatChanged,
@@ -65,15 +66,20 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
           selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
           onDaySelected: _onDaySelected,
           eventLoader: _getSmokingDetailsForDay,
+          availableCalendarFormats: const {
+            CalendarFormat.month: 'Seminggu',
+            CalendarFormat.twoWeeks: 'Bulan',
+            CalendarFormat.week: '2 Minggu',
+          },
           calendarStyle: const CalendarStyle(
             selectedDecoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: ColorConst.secondaryColor1,
+              color: ColorConst.darkGreen,
             ),
             todayTextStyle: TextStyle(color: Colors.black),
             todayDecoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: ColorConst.secondaryColor2,
+              color: ColorConst.lightGreen,
             ),
           ),
           calendarBuilders: CalendarBuilders(
@@ -84,13 +90,16 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
                   bottom: -5,
                   child: Container(
                     padding: EdgeInsets.all(4.w),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.red.shade700,
+                      color: ColorConst.lightRed,
                     ),
                     child: Text(
                       events.first.sumTotal(events),
-                      style: const TextStyle(color: Colors.white),
+                      style: FontConst.small(
+                        color: ColorConst.darkRed,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 );
@@ -143,7 +152,7 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
           vertical: 4.0.h,
         ),
         decoration: BoxDecoration(
-          color: ColorConst.primaryColor1,
+          color: ColorConst.lightGreen,
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: ListTile(
@@ -167,10 +176,9 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.r),
           ),
-          tileColor: ColorConst.primaryColor1,
           title: Text(
             smokingDetail.toString(),
-            style: const TextStyle(color: Colors.white),
+            style: FontConst.subtitle(color: ColorConst.darkGreen),
           ),
         ),
       );

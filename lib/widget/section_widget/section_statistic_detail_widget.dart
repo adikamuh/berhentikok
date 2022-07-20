@@ -1,3 +1,4 @@
+import 'package:berhentikok/base/font_const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,7 +17,11 @@ class SectionStatisticDetailWidget extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 16.h),
       child: Column(
         children: [
-          if (title != null) Text(title!),
+          if (title != null)
+            Text(
+              title!,
+              style: FontConst.header3(),
+            ),
           if (title != null) SizedBox(height: 10.h),
           child,
         ],

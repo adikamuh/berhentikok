@@ -1,33 +1,36 @@
-import 'package:berhentikok/base/color_const.dart';
+import 'package:berhentikok/base/font_const.dart';
+import 'package:berhentikok/model/health_progress.dart';
+import 'package:berhentikok/page/health/widget/linear_indicator.dart';
+import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HealthCardWidget extends StatelessWidget {
-  final IconData iconData;
-  final String caption;
-  final double progressValue;
-  const HealthCardWidget({
-    Key? key,
-    required this.iconData,
-    required this.caption,
-    required this.progressValue,
-  }) : super(key: key);
+  final HealthProgress healthProgress;
+  const HealthCardWidget({Key? key, required this.healthProgress})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.r),
-        color: ColorConst.primaryColor1,
-      ),
+    return BoxCardWidget(
       child: Row(
         children: [
-          Icon(iconData),
+          Icon(
+            healthProgress.icon,
+            size: 40.w,
+            color: Colors.white,
+          ),
+          SizedBox(width: 24.w),
           Expanded(
             child: Column(
               children: [
-                Text(caption),
-                LinearProgressIndicator(value: progressValue),
+                Text(
+                  healthProgress.caption,
+                  style: FontConst.subtitle(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10.h),
+                LinearIndicator(value: healthProgress.value),
               ],
             ),
           ),

@@ -1,8 +1,9 @@
+import 'package:berhentikok/base/button_style_const.dart';
+import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/size_const.dart';
 import 'package:berhentikok/page/consumption/widget/add_smoking_detail_dialog.dart';
 import 'package:berhentikok/page/consumption/widget/calendar_table_widget.dart';
-import 'package:berhentikok/widget/button_widget/button_primary_widget.dart';
-import 'package:berhentikok/widget/card_widget/long_card_widget.dart';
+import 'package:berhentikok/page/consumption/widget/smoking_free_total_card_widget.dart';
 import 'package:berhentikok/widget/chart_widget/chart_widget.dart';
 import 'package:berhentikok/widget/section_widget/projection_child_widget.dart';
 import 'package:berhentikok/widget/section_widget/section_statistic_detail_widget.dart';
@@ -17,6 +18,7 @@ class ConsumptionPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Konsumsi Rokok"),
+        backgroundColor: ColorConst.darkGreen,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -30,9 +32,9 @@ class ConsumptionPage extends StatelessWidget {
                 title: 'Jumlah rokok yang berhasil kamu hindari',
                 child: Column(
                   children: [
-                    const LongCardWidget(text: '20 Rokok'),
-                    ButtonPrimaryWidget(
-                      text: 'Saya merokok hari ini',
+                    const SmokingFreeTotalCardWidget(total: 12),
+                    ElevatedButton(
+                      style: ButtonStyleConst.danger(),
                       onPressed: () async {
                         await showDialog(
                           context: context,
@@ -50,6 +52,7 @@ class ConsumptionPage extends StatelessWidget {
                           },
                         );
                       },
+                      child: const Text("Saya merokok hari ini"),
                     ),
                   ],
                 ),
@@ -60,19 +63,19 @@ class ConsumptionPage extends StatelessWidget {
                   children: const [
                     ProjectionChildWidget(
                       caption: 'Dalam sehari',
-                      value: '6',
+                      value: '6 batang',
                     ),
                     ProjectionChildWidget(
                       caption: 'Dalam seminggu',
-                      value: '42',
+                      value: '42 batang',
                     ),
                     ProjectionChildWidget(
                       caption: 'Dalam sebulan',
-                      value: '180',
+                      value: '180 batang',
                     ),
                     ProjectionChildWidget(
                       caption: 'Dalam setahun',
-                      value: '2.190',
+                      value: '2.190 batang',
                     ),
                   ],
                 ),
