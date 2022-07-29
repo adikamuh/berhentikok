@@ -3,13 +3,20 @@ import 'dart:collection';
 import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/font_const.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
+import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/page/consumption/widget/smoking_detail_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarTableWidget extends StatefulWidget {
-  const CalendarTableWidget({Key? key}) : super(key: key);
+  final LinkedHashMap<DateTime, List<SmokingDetail>> smokingDetails;
+  final User user;
+  const CalendarTableWidget({
+    Key? key,
+    required this.smokingDetails,
+    required this.user,
+  }) : super(key: key);
 
   @override
   State<CalendarTableWidget> createState() => _CalendarTableWidgetState();
@@ -21,23 +28,9 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
-  final kSmokingDetails = LinkedHashMap<DateTime, List<SmokingDetail>>(
-    equals: isSameDay,
-    hashCode: SmokingDetail.getHashCode,
-  )..addAll(
-      {
-        DateTime.now(): [
-          SmokingDetail(date: DateTime.now(), excuse: 'excuse-1', total: 1),
-          SmokingDetail(date: DateTime.now(), excuse: 'excuse-2', total: 2),
-          SmokingDetail(date: DateTime.now(), excuse: 'excuse-3', total: 20),
-        ],
-      },
-    );
-
   @override
   void initState() {
     super.initState();
-
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getSmokingDetailsForDay(_selectedDay!));
   }
@@ -54,7 +47,7 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
       children: [
         TableCalendar<SmokingDetail>(
           locale: "id_ID",
-          firstDay: DateTime.now().subtract(const Duration(days: 7)),
+          firstDay: widget.user.startDateStopSmoking,
           lastDay: DateTime.now(),
           calendarFormat: _calendarFormat,
           startingDayOfWeek: StartingDayOfWeek.monday,
@@ -95,7 +88,7 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
                       color: ColorConst.lightRed,
                     ),
                     child: Text(
-                      events.first.sumTotal(events),
+                      events.sumTotal().toString(),
                       style: FontConst.small(
                         color: ColorConst.darkRed,
                         fontWeight: FontWeight.w600,
@@ -122,7 +115,7 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
   }
 
   List<SmokingDetail> _getSmokingDetailsForDay(DateTime day) {
-    return kSmokingDetails[day] ?? [];
+    return widget.smokingDetails[day] ?? [];
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {

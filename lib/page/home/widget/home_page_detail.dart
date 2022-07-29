@@ -1,44 +1,84 @@
 import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/font_const.dart';
+import 'package:berhentikok/base/int_extension.dart';
 import 'package:berhentikok/base/size_const.dart';
+import 'package:berhentikok/base/string_extension.dart';
+import 'package:berhentikok/model/smoking_detail.dart';
+import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/page/achievement/achievement_page.dart';
+import 'package:berhentikok/page/consumption/bloc/consumption_bloc.dart';
 import 'package:berhentikok/page/consumption/widget/smoking_free_duration_card.dart';
-import 'package:berhentikok/page/health/widget/linear_indicator.dart';
+import 'package:berhentikok/page/finance/bloc/finance_bloc.dart';
+import 'package:berhentikok/page/health/bloc/health_bloc.dart';
+import 'package:berhentikok/page/health/widget/health_card_widget.dart';
+import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
 import 'package:berhentikok/page/home/widget/tips_dialog.dart';
 import 'package:berhentikok/page/smoking_cessation_methods/smoking_cessation_methods_page.dart';
 import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
 import 'package:berhentikok/widget/card_widget/long_card_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class HomePageDetail extends StatelessWidget {
+class HomePageDetail extends StatefulWidget {
   const HomePageDetail({Key? key}) : super(key: key);
+
+  @override
+  State<HomePageDetail> createState() => _HomePageDetailState();
+}
+
+class _HomePageDetailState extends State<HomePageDetail> {
+  late HomePageBloc _homePageBloc;
+
+  @override
+  void initState() {
+    _homePageBloc = context.read<HomePageBloc>()..add(FetchUser());
+    context.read<HealthBloc>().add(LoadHealth());
+    context.read<ConsumptionBloc>().add(LoadConsumption());
+    context.read<FinanceBloc>().add(LoadFinance());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          _buildHeader(context),
-          SizedBox(height: 18.h),
-          Padding(
-            padding: SizeConst.pagePadding,
-            child: Column(
+      child: BlocBuilder<HomePageBloc, HomePageState>(
+        bloc: _homePageBloc,
+        builder: (context, state) {
+          if (state is UserLoaded) {
+            final User user = state.user;
+            return Column(
               children: [
-                _buildConsumptionSummary(context),
+                _buildHeader(context, user),
                 SizedBox(height: 18.h),
-                _buildOverallSummary(),
-                SizedBox(height: 18.h),
-                _buildOthers(context),
+                Padding(
+                  padding: SizeConst.pagePadding,
+                  child: Column(
+                    children: [
+                      _buildConsumptionSummary(context, user),
+                      SizedBox(height: 18.h),
+                      _buildOverallSummary(user),
+                      SizedBox(height: 18.h),
+                      _buildOthers(context),
+                    ],
+                  ),
+                ),
               ],
-            ),
-          ),
-        ],
+            );
+          } else if (state is HomePageFailed) {
+            state.errorMessage.showToast();
+            return Text(
+              'Muat ulang',
+              style: FontConst.header3(color: ColorConst.darkRed),
+            );
+          }
+          return const SizedBox();
+        },
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, User user) {
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
@@ -69,11 +109,11 @@ class HomePageDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Hi, John Doe",
+                        "Hi, ${user.name.getFirstWord()}",
                         style: FontConst.header1(color: Colors.white),
                       ),
                       Text(
-                        "Ingat terus untuk tetap berhenti merokok karena kamu ingin uangmu dihabiskan dengan cukup baik!",
+                        "Ingat terus untuk tetap berhenti merokok ${user.motivation.toLowerCase()}",
                         style: FontConst.subtitle(color: Colors.white),
                       ),
                     ],
@@ -98,22 +138,32 @@ class HomePageDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildConsumptionSummary(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const [
-            Expanded(
-              child: SmokingFreeDurationCard(),
-            ),
-          ],
-        ),
-      ],
+  Widget _buildConsumptionSummary(BuildContext context, User user) {
+    return BlocBuilder<ConsumptionBloc, ConsumptionState>(
+      builder: (context, state) {
+        if (state is ConsumptionLoaded) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: SmokingFreeDurationCard(
+                      user: state.user,
+                      smokingDetails: state.smokingDetails,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        }
+        return const SizedBox();
+      },
     );
   }
 
-  Widget _buildOverallSummary() {
+  Widget _buildOverallSummary(User user) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -122,71 +172,72 @@ class HomePageDetail extends StatelessWidget {
           style: FontConst.header2(color: ColorConst.blackColor2),
         ),
         SizedBox(height: 12.h),
-        BoxCardWidget(
-          child: Row(
-            children: [
-              Icon(
-                Icons.favorite,
-                size: 40.w,
-                color: Colors.white,
-              ),
-              SizedBox(width: 24.w),
-              Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      'Tekanan darah kembali normal',
-                      style: FontConst.subtitle(color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 10.h),
-                    const LinearIndicator(value: 50),
-                  ],
-                ),
-              ),
-            ],
-          ),
+        BlocBuilder<HealthBloc, HealthState>(
+          builder: (context, state) {
+            if (state is HealthLoaded) {
+              return HealthCardWidget(
+                healthProgress: state.healthProgresses.first,
+                smokingDetails: state.smokingDetails,
+                user: user,
+              );
+            }
+            return const SizedBox();
+          },
         ),
         SizedBox(height: 8.w),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: BoxCardWidget(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.savings_rounded,
-                      color: Colors.white,
-                      size: 40.w,
+            BlocBuilder<FinanceBloc, FinanceState>(
+              builder: (context, state) {
+                if (state is FinanceLoaded) {
+                  return Expanded(
+                    child: BoxCardWidget(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.savings_rounded,
+                            color: Colors.white,
+                            size: 40.w,
+                          ),
+                          SizedBox(height: 8.h),
+                          Text(
+                            state.moneySavedOnRelapse.toCurrencyFormatter(),
+                            style: FontConst.subtitle(color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 8.h),
-                    Text(
-                      'Rp 12.000',
-                      style: FontConst.subtitle(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
+                  );
+                }
+                return const SizedBox();
+              },
             ),
             SizedBox(width: 8.w),
-            Expanded(
-              child: BoxCardWidget(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.smoke_free,
-                      color: Colors.white,
-                      size: 40.w,
+            BlocBuilder<ConsumptionBloc, ConsumptionState>(
+              builder: (context, state) {
+                if (state is ConsumptionLoaded) {
+                  return Expanded(
+                    child: BoxCardWidget(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.smoke_free,
+                            color: Colors.white,
+                            size: 40.w,
+                          ),
+                          SizedBox(height: 8.h),
+                          Text(
+                            '${state.smokingDetails.totalFreeCigaretteOnRelapse(user)} batang rokok',
+                            style: FontConst.subtitle(color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 8.h),
-                    Text(
-                      '12 batang rokok',
-                      style: FontConst.subtitle(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
+                  );
+                }
+                return const SizedBox();
+              },
             ),
           ],
         ),

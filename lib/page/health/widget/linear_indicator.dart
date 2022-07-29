@@ -9,36 +9,30 @@ class LinearIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _width = 270.w;
+    final _widthValue = (value / 100) * _width;
     return Stack(
+      alignment: Alignment.center,
       children: [
-        Container(
-          width: double.infinity,
-          height: 5.h,
-          decoration: BoxDecoration(
-            color: ColorConst.lightGlowingGreen,
-            borderRadius: BorderRadius.circular(50.r),
+        if (value < 100)
+          Container(
+            width: _width,
+            height: 5.h,
+            decoration: BoxDecoration(
+              color: ColorConst.lightGlowingGreen,
+              borderRadius: BorderRadius.circular(50.r),
+            ),
           ),
-        ),
         Row(
           children: [
-            Expanded(
-              flex: value,
-              child: Container(
-                width: double.infinity,
-                height: 5.h,
-                decoration: BoxDecoration(
-                  color: ColorConst.glowingGreen,
-                  borderRadius: BorderRadius.circular(50.r),
-                ),
+            Container(
+              width: value >= 100 ? _width : _widthValue,
+              height: 5.h,
+              decoration: BoxDecoration(
+                color: ColorConst.glowingGreen,
+                borderRadius: BorderRadius.circular(50.r),
               ),
             ),
-            Expanded(
-              flex: 100 - value,
-              child: const SizedBox(width: double.infinity),
-            ),
-            // Expanded(
-            //   flex: 100 - value,
-            // ),
           ],
         ),
       ],

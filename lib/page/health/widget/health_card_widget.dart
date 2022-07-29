@@ -1,14 +1,22 @@
 import 'package:berhentikok/base/font_const.dart';
 import 'package:berhentikok/model/health_progress.dart';
+import 'package:berhentikok/model/smoking_detail.dart';
+import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/page/health/widget/linear_indicator.dart';
 import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HealthCardWidget extends StatelessWidget {
+  final User user;
   final HealthProgress healthProgress;
-  const HealthCardWidget({Key? key, required this.healthProgress})
-      : super(key: key);
+  final List<SmokingDetail> smokingDetails;
+  const HealthCardWidget({
+    Key? key,
+    required this.healthProgress,
+    required this.smokingDetails,
+    required this.user,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +38,12 @@ class HealthCardWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 10.h),
-                LinearIndicator(value: healthProgress.value),
+                LinearIndicator(
+                  value: healthProgress.value(
+                    user: user,
+                    smokingDetails: smokingDetails,
+                  ),
+                ),
               ],
             ),
           ),

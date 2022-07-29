@@ -1,8 +1,14 @@
+import 'package:berhentikok/base/int_extension.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
+import 'package:hive/hive.dart';
 
+part 'target_item.g.dart';
+
+@HiveType(typeId: 2)
 class TargetItem extends Equatable {
+  @HiveField(0)
   final String name;
+  @HiveField(1)
   final int price;
 
   const TargetItem({
@@ -13,7 +19,11 @@ class TargetItem extends Equatable {
   @override
   List<Object?> get props => [name, price];
 
-  String toCurrencyFormatter() =>
-      NumberFormat.currency(locale: 'ID', symbol: "Rp ", decimalDigits: 0)
-          .format(price);
+  String toStringProgress(int totalMoneySaved) {
+    if (totalMoneySaved >= price) {
+      return "${price.toCurrencyFormatter()} / ${price.toCurrencyFormatter()}";
+    } else {
+      return "${totalMoneySaved.toCurrencyFormatter()} / ${price.toCurrencyFormatter()}";
+    }
+  }
 }
