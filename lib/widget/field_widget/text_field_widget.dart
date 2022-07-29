@@ -11,6 +11,8 @@ class TextFieldWidget extends StatelessWidget {
   final TextAlign? textAlign;
   final int? maxLine;
   final bool isNumber;
+  final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
   const TextFieldWidget({
     Key? key,
     required this.label,
@@ -19,6 +21,8 @@ class TextFieldWidget extends StatelessWidget {
     this.textAlign,
     this.maxLine,
     this.isNumber = false,
+    this.validator,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -30,11 +34,13 @@ class TextFieldWidget extends StatelessWidget {
         children: [
           Text(label),
           SizedBox(height: 8.h),
-          TextField(
+          TextFormField(
             textAlign: textAlign ?? TextAlign.start,
             textAlignVertical: TextAlignVertical.top,
             maxLines: maxLine,
             keyboardType: isNumber ? TextInputType.number : null,
+            validator: validator,
+            onChanged: onChanged,
             inputFormatters: isNumber
                 ? <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly,

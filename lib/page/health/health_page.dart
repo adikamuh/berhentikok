@@ -1,65 +1,22 @@
 import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/size_const.dart';
 import 'package:berhentikok/model/health_progress.dart';
+import 'package:berhentikok/model/smoking_detail.dart';
+import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/page/health/widget/health_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HealthPage extends StatelessWidget {
-  const HealthPage({Key? key}) : super(key: key);
-
-  static List<HealthProgress> healthProgresses = [
-    const HealthProgress(
-      icon: Icons.favorite,
-      caption: 'Tekanan darah kembali normal',
-      value: 50,
-    ),
-    const HealthProgress(
-      icon: Icons.favorite,
-      caption: 'Tekanan darah kembali normal',
-      value: 50,
-    ),
-    const HealthProgress(
-      icon: Icons.favorite,
-      caption: 'Tekanan darah kembali normal',
-      value: 50,
-    ),
-    const HealthProgress(
-      icon: Icons.favorite,
-      caption: 'Tekanan darah kembali normal',
-      value: 50,
-    ),
-    const HealthProgress(
-      icon: Icons.favorite,
-      caption: 'Tekanan darah kembali normal',
-      value: 50,
-    ),
-    const HealthProgress(
-      icon: Icons.favorite,
-      caption: 'Tekanan darah kembali normal',
-      value: 50,
-    ),
-    const HealthProgress(
-      icon: Icons.favorite,
-      caption: 'Tekanan darah kembali normal',
-      value: 50,
-    ),
-    const HealthProgress(
-      icon: Icons.favorite,
-      caption: 'Tekanan darah kembali normal',
-      value: 50,
-    ),
-    const HealthProgress(
-      icon: Icons.favorite,
-      caption: 'Tekanan darah kembali normal',
-      value: 50,
-    ),
-    const HealthProgress(
-      icon: Icons.favorite,
-      caption: 'Tekanan darah kembali normal',
-      value: 50,
-    ),
-  ];
+  final List<HealthProgress> healthProgresses;
+  final List<SmokingDetail> smokingDetails;
+  final User user;
+  const HealthPage({
+    Key? key,
+    required this.healthProgresses,
+    required this.smokingDetails,
+    required this.user,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +32,11 @@ class HealthPage extends StatelessWidget {
           final HealthProgress healthProgress = healthProgresses[index];
           return Padding(
             padding: EdgeInsets.only(bottom: 10.h),
-            child: HealthCardWidget(healthProgress: healthProgress),
+            child: HealthCardWidget(
+              healthProgress: healthProgress,
+              smokingDetails: smokingDetails,
+              user: user,
+            ),
           );
         },
       ),

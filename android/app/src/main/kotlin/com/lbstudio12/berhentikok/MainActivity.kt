@@ -1,4 +1,4 @@
-package com.example.berhentikok
+package com.lbstudio12.berhentikok
 
 import io.flutter.embedding.android.FlutterActivity
 

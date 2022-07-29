@@ -1,13 +1,22 @@
 import 'package:berhentikok/base/color_const.dart';
+import 'package:berhentikok/model/chart_type.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChartWidget extends StatelessWidget {
-  const ChartWidget({Key? key}) : super(key: key);
+  final List<FlSpot> data;
+  final ChartType chartType;
+  const ChartWidget({
+    Key? key,
+    required this.data,
+    required this.chartType,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    double _intervalX = chartType == ChartType.consumption ? 10 : 10000;
+
     List<Color> gradientColors = [
       const Color(0xff23b6e6),
       const Color(0xff02d39a),
@@ -31,23 +40,29 @@ class ChartWidget extends StatelessWidget {
             sideTitles: SideTitles(showTitles: false),
           ),
           bottomTitles: AxisTitles(
-            axisNameWidget: const Text("Minggu"),
+            axisNameWidget: const Text(
+              "Hari",
+              textAlign: TextAlign.center,
+            ),
             axisNameSize: 25.w,
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 30,
-              interval: 1,
-              getTitlesWidget: bottomTitleWidgets,
+              interval: 5,
+              // getTitlesWidget: bottomTitleWidgets,
             ),
           ),
           leftTitles: AxisTitles(
-            axisNameWidget: const Text('Jumlah'),
-            axisNameSize: 25.w,
+            axisNameWidget: const Text(
+              'Jumlah',
+              textAlign: TextAlign.end,
+            ),
+            axisNameSize: 20.w,
             sideTitles: SideTitles(
               showTitles: true,
-              interval: 1,
-              getTitlesWidget: leftTitleWidgets,
               reservedSize: 42,
+              interval: _intervalX,
+              // getTitlesWidget: leftTitleWidgets,
             ),
           ),
         ),
@@ -58,18 +73,18 @@ class ChartWidget extends StatelessWidget {
             left: BorderSide(color: ColorConst.blackColor2),
           ),
         ),
-        minX: 0,
-        maxX: 11,
+        minX: 1,
+        maxX: data
+            .reduce((current, next) => current.x > next.x ? current : next)
+            .x,
         minY: 0,
-        maxY: 6,
+        maxY: data
+            .reduce((current, next) => current.y > next.y ? current : next)
+            .y,
         lineBarsData: [
           LineChartBarData(
-            spots: const [
-              FlSpot(1, 3),
-              FlSpot(2, 2),
-              FlSpot(3, 5),
-            ],
-            isCurved: true,
+            spots: data,
+            isCurved: false,
             gradient: LinearGradient(
               colors: gradientColors,
               begin: Alignment.centerLeft,
@@ -97,7 +112,6 @@ class ChartWidget extends StatelessWidget {
   }
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
-    // TODO: change style
     const style = TextStyle(
       color: Color(0xff67727d),
       fontWeight: FontWeight.bold,
@@ -122,7 +136,6 @@ class ChartWidget extends StatelessWidget {
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    // TODO: change style
     const style = TextStyle(
       color: Color(0xff68737d),
       fontWeight: FontWeight.bold,

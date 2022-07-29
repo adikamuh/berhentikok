@@ -1,18 +1,47 @@
 import 'package:berhentikok/base/button_style_const.dart';
 import 'package:berhentikok/base/color_const.dart';
+import 'package:berhentikok/base/int_extension.dart';
 import 'package:berhentikok/base/size_const.dart';
+import 'package:berhentikok/model/chart_type.dart';
+import 'package:berhentikok/model/finance.dart';
+import 'package:berhentikok/model/projection.dart';
 import 'package:berhentikok/model/target_item.dart';
+import 'package:berhentikok/model/user.dart';
+import 'package:berhentikok/page/finance/bloc/add_item_bloc.dart';
+import 'package:berhentikok/page/finance/cubit/finance_chart_cubit.dart';
 import 'package:berhentikok/page/finance/widget/add_item_dialog.dart';
 import 'package:berhentikok/page/finance/widget/money_saved_card_widget.dart';
 import 'package:berhentikok/page/finance/widget/target_item_card_widget.dart';
 import 'package:berhentikok/widget/chart_widget/chart_widget.dart';
 import 'package:berhentikok/widget/section_widget/projection_child_widget.dart';
 import 'package:berhentikok/widget/section_widget/section_statistic_detail_widget.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class FinancePage extends StatelessWidget {
-  const FinancePage({Key? key}) : super(key: key);
+class FinancePage extends StatefulWidget {
+  final Finance finance;
+  final User user;
+  final int moneySavedOnRelapse;
+  const FinancePage({
+    Key? key,
+    required this.finance,
+    required this.user,
+    required this.moneySavedOnRelapse,
+  }) : super(key: key);
+
+  @override
+  State<FinancePage> createState() => _FinancePageState();
+}
+
+class _FinancePageState extends State<FinancePage> {
+  @override
+  void initState() {
+    context.read<FinanceChartCubit>().load();
+    context.read<AddItemBloc>().add(LoadItems());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,54 +55,39 @@ class FinancePage extends StatelessWidget {
           padding: SizeConst.pagePadding,
           child: Column(
             children: [
-              const SectionStatisticDetailWidget(
+              SectionStatisticDetailWidget(
                 title: 'Kamu berhasil menghemat',
-                child: MoneySavedCardWidget(value: "Rp 20.000"),
+                child: MoneySavedCardWidget(
+                  value: widget.moneySavedOnRelapse.toCurrencyFormatter(),
+                ),
               ),
               SectionStatisticDetailWidget(
                 title: 'Target Barang',
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: const [
-                          TargetItemCardWidget(
-                            targetItem: TargetItem(
-                              name: 'SSD 512GB',
-                              price: 650000,
-                            ),
-                            moneySaved: 20000,
-                          ),
-                          TargetItemCardWidget(
-                            targetItem: TargetItem(
-                              name: 'SSD 512GB',
-                              price: 650000,
-                            ),
-                            moneySaved: 20000,
-                          ),
-                          TargetItemCardWidget(
-                            targetItem: TargetItem(
-                              name: 'SSD 512GB',
-                              price: 650000,
-                            ),
-                            moneySaved: 20000,
-                          ),
-                          TargetItemCardWidget(
-                            targetItem: TargetItem(
-                              name: 'SSD 512GB',
-                              price: 650000,
-                            ),
-                            moneySaved: 20000,
-                          ),
-                          TargetItemCardWidget(
-                            targetItem: TargetItem(
-                              name: 'SSD 512GB',
-                              price: 650000,
-                            ),
-                            moneySaved: 20000,
-                          ),
-                        ],
+                      child: BlocBuilder<AddItemBloc, AddItemState>(
+                        builder: (context, state) {
+                          if (state is ItemsLoaded) {
+                            return Row(
+                              children: state.targetItems
+                                  .map(
+                                    (item) => TargetItemCardWidget(
+                                      targetItem: TargetItem(
+                                        name: item.name,
+                                        price: item.price,
+                                      ),
+                                      moneySaved: widget.moneySavedOnRelapse,
+                                    ),
+                                  )
+                                  .toList(),
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
                       ),
                     ),
                     SizedBox(height: 8.h),
@@ -114,33 +128,44 @@ class FinancePage extends StatelessWidget {
               SectionStatisticDetailWidget(
                 title: 'Proyeksi',
                 child: Column(
-                  children: const [
+                  children: [
                     ProjectionChildWidget(
-                      caption: 'Dalam sehari',
-                      value: 'Rp7.000',
+                      projectionType: ProjectionType.day,
+                      moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                      user: widget.user,
                     ),
                     ProjectionChildWidget(
-                      caption: 'Dalam seminggu',
-                      value: 'Rp49.000',
+                      projectionType: ProjectionType.week,
+                      moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                      user: widget.user,
                     ),
                     ProjectionChildWidget(
-                      caption: 'Dalam sebulan',
-                      value: 'Rp210.000',
+                      projectionType: ProjectionType.month,
+                      moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                      user: widget.user,
                     ),
                     ProjectionChildWidget(
-                      caption: 'Dalam setahun',
-                      value: 'Rp2.555.000',
+                      projectionType: ProjectionType.year,
+                      moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                      user: widget.user,
                     ),
                   ],
                 ),
               ),
-              SectionStatisticDetailWidget(
-                title: 'Statistik',
-                child: SizedBox(
-                  width: 350.w,
-                  height: 200.h,
-                  child: const ChartWidget(),
-                ),
+              BlocBuilder<FinanceChartCubit, List<FlSpot>>(
+                builder: (context, state) {
+                  return SectionStatisticDetailWidget(
+                    title: 'Statistik',
+                    child: SizedBox(
+                      width: 350.w,
+                      height: 200.h,
+                      child: ChartWidget(
+                        chartType: ChartType.finance,
+                        data: state,
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),
