@@ -44,7 +44,7 @@ class User extends Equatable {
     if (smokingDetails.isEmpty) {
       lastDayOfSmoke = startDateStopSmoking;
     } else {
-      lastDayOfSmoke = smokingDetails.lastDaySmoke();
+      lastDayOfSmoke = smokingDetails.lastDaySmoke() ?? startDateStopSmoking;
     }
     return Stream.periodic(const Duration(seconds: 1), (int count) {
       final now = DateTime.now();

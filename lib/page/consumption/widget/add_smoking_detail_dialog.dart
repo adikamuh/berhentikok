@@ -63,6 +63,7 @@ class _AddSmokingDetailDialogState extends State<AddSmokingDetailDialog> {
               label: 'Kapan kamu terakhir merokok',
               firstDate: widget.user.startDateStopSmoking,
               lastDate: DateTime.now(),
+              suffix: const Icon(Icons.calendar_month),
               onChanged: (value) {
                 if (value != null && value.isNotEmpty) {
                   setState(() {
@@ -71,7 +72,7 @@ class _AddSmokingDetailDialogState extends State<AddSmokingDetailDialog> {
                 }
               },
               validator: (value) {
-                if (value == null) {
+                if (value == null || value.isEmpty) {
                   return 'Tanggal kamu merokok harus diisi.';
                 }
                 return null;
@@ -117,6 +118,16 @@ class _AddSmokingDetailDialogState extends State<AddSmokingDetailDialog> {
                         context
                             .read<SmokingDetailBloc>()
                             .add(AddSmokingDetail(smokingDetail));
+                      } else {
+                        if (_date == null) {
+                          "Kenapa kamu harus merokok harus diisi".showToast();
+                        }
+                        if (_total == null) {
+                          "Jumlah rokok harus diisi".showToast();
+                        }
+                        if (_excuse == null) {
+                          "Kenapa kamu merokok harus diisi".showToast();
+                        }
                       }
                     }
                   },

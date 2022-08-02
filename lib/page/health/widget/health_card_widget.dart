@@ -11,22 +11,28 @@ class HealthCardWidget extends StatelessWidget {
   final User user;
   final HealthProgress healthProgress;
   final List<SmokingDetail> smokingDetails;
+  final Color? linearValueColor;
+  final Color? backgroundColor;
+  final Color? textColor;
   const HealthCardWidget({
     Key? key,
     required this.healthProgress,
     required this.smokingDetails,
     required this.user,
+    this.linearValueColor,
+    this.backgroundColor,
+    this.textColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BoxCardWidget(
+      backgroundColor: backgroundColor,
       child: Row(
         children: [
-          Icon(
-            healthProgress.icon,
-            size: 40.w,
-            color: Colors.white,
+          Image.asset(
+            healthProgress.imageFile,
+            width: 40.w,
           ),
           SizedBox(width: 24.w),
           Expanded(
@@ -34,11 +40,15 @@ class HealthCardWidget extends StatelessWidget {
               children: [
                 Text(
                   healthProgress.caption,
-                  style: FontConst.subtitle(color: Colors.white),
+                  style: FontConst.subtitle(
+                    color: textColor ?? Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 10.h),
                 LinearIndicator(
+                  valueColor: linearValueColor,
                   value: healthProgress.value(
                     user: user,
                     smokingDetails: smokingDetails,

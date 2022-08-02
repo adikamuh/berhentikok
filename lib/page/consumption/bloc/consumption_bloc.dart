@@ -15,11 +15,11 @@ class ConsumptionBloc extends Bloc<ConsumptionEvent, ConsumptionState> {
     required this.userRepository,
     required this.smokingDetailRepository,
   }) : super(ConsumptionInitial()) {
-    on<LoadConsumption>((event, emit) {
+    on<LoadConsumption>((event, emit) async {
       try {
         final user = userRepository.load();
         final List<SmokingDetail> smokingDetails =
-            smokingDetailRepository.loadAll();
+            await smokingDetailRepository.loadAll();
         if (user != null) {
           emit(ConsumptionLoaded(
             user: user,

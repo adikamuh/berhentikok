@@ -4,7 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BoxCardWidget extends StatelessWidget {
   final Widget child;
-  const BoxCardWidget({Key? key, required this.child}) : super(key: key);
+  final Color? backgroundColor;
+  const BoxCardWidget({
+    Key? key,
+    required this.child,
+    this.backgroundColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,9 @@ class BoxCardWidget extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 20.w),
-        decoration: const BoxDecoration(color: ColorConst.darkGreen),
+        decoration: BoxDecoration(
+          color: backgroundColor ?? ColorConst.darkGreen,
+        ),
         child: child,
       ),
     );

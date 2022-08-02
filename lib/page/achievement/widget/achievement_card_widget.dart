@@ -26,27 +26,28 @@ class AchievementCardWidget extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(
-              achievement.icon,
-              size: 45.w,
-              color: ColorConst.darkGreen,
+            Image.asset(
+              achievement.imageFile,
+              width: 45.w,
+              color: achievement.isAchieved
+                  ? null
+                  : ColorConst.lightGreen.withOpacity(0.5),
+              colorBlendMode: BlendMode.modulate,
             ),
             SizedBox(width: 18.w),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     achievement.title,
+                    textAlign: TextAlign.center,
                     style: FontConst.subtitle(
-                      color: ColorConst.darkGreen,
+                      color: achievement.isAchieved
+                          ? ColorConst.darkGreen
+                          : ColorConst.darkGreen.withOpacity(0.5),
                       fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    achievement.description,
-                    style: FontConst.body(
-                      color: ColorConst.darkGreen,
                     ),
                   ),
                 ],

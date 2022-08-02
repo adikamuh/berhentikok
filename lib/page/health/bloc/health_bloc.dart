@@ -19,11 +19,13 @@ class HealthBloc extends Bloc<HealthEvent, HealthState> {
     required this.userRepository,
     required this.smokingDetailRepository,
   }) : super(HealthInitial()) {
-    on<LoadHealth>((event, emit) {
+    on<LoadHealth>((event, emit) async {
       try {
-        final healthProgresses = healthProgressRepository.load();
-        final smokingDetails = smokingDetailRepository.loadAll();
-        final user = userRepository.load();
+        final List<HealthProgress> healthProgresses =
+            healthProgressRepository.load();
+        final List<SmokingDetail> smokingDetails =
+            await smokingDetailRepository.loadAll();
+        final User? user = userRepository.load();
         emit(
           HealthLoaded(
             healthProgresses: healthProgresses,

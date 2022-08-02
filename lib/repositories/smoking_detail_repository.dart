@@ -6,7 +6,7 @@ class SmokingDetailRepository {
 
   SmokingDetailRepository(this.smokingDetailsBox);
 
-  List<SmokingDetail> loadAll() {
+  Future<List<SmokingDetail>> loadAll() async {
     List<SmokingDetail> smokingDetails = smokingDetailsBox.values.toList();
     smokingDetails.sort(((a, b) => a.date.compareTo(b.date)));
     return smokingDetails;

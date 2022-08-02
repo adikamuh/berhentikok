@@ -14,10 +14,10 @@ class FinanceChartCubit extends Cubit<List<FlSpot>> {
     required this.smokingDetailRepository,
   }) : super([]);
 
-  void load() {
+  void load() async {
     try {
-      final smokingDetails = smokingDetailRepository.loadAll();
-      final user = userRepository.load();
+      final List<SmokingDetail> smokingDetails = await smokingDetailRepository.loadAll();
+      final User? user = userRepository.load();
       if (user != null) {
         Map<DateTime, int> daysFromStopSmoking = {};
         DateTime day = user.startDateStopSmoking;

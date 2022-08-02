@@ -4,8 +4,10 @@ import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/font_const.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/model/user.dart';
+import 'package:berhentikok/page/consumption/bloc/consumption_bloc.dart';
 import 'package:berhentikok/page/consumption/widget/add_smoking_detail_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SmokingFreeDurationCard extends StatefulWidget {
@@ -46,6 +48,23 @@ class _SmokingFreeDurationCardState extends State<SmokingFreeDurationCard> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocListener<ConsumptionBloc, ConsumptionState>(
+      listener: (context, state) {
+        if (state is ConsumptionLoaded) {
+          _streamSubscription = widget.user
+              .sumFreeSmokingDuration(state.smokingDetails)
+              .listen((duration) {
+            setState(() {
+              _durationFreeSmoking = duration;
+            });
+          });
+        }
+      },
+      child: _buildCard(),
+    );
+  }
+
+  Widget _buildCard() {
     if (_durationFreeSmoking == null) {
       return Card(
         clipBehavior: Clip.antiAlias,
@@ -130,6 +149,7 @@ class _SmokingFreeDurationCardState extends State<SmokingFreeDurationCard> {
                       );
                     },
                   );
+                  context.read<ConsumptionBloc>().add(LoadConsumption());
                 },
                 child: Container(
                   color: ColorConst.lightGreen,

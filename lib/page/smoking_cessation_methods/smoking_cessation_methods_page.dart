@@ -7,7 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SmokingCessationMethodsPage extends StatefulWidget {
-  const SmokingCessationMethodsPage({Key? key}) : super(key: key);
+  final bool isFirst;
+  const SmokingCessationMethodsPage({
+    Key? key,
+    this.isFirst = true,
+  }) : super(key: key);
 
   @override
   State<SmokingCessationMethodsPage> createState() =>
@@ -63,28 +67,29 @@ class _SmokingCessationMethodsPageState
                 );
               },
             ),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    if (_clickCount > 0) {
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: Text(
-                    'Saya sudah mengerti!',
-                    style: FontConst.body(
-                      fontWeight: FontWeight.w600,
-                      color: _clickCount > 0
-                          ? ColorConst.darkGreen
-                          : ColorConst.lightGreen,
+            if (widget.isFirst) const Spacer(),
+            if (widget.isFirst)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      if (_clickCount > 0) {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    child: Text(
+                      'Saya sudah mengerti!',
+                      style: FontConst.body(
+                        fontWeight: FontWeight.w600,
+                        color: _clickCount > 0
+                            ? ColorConst.darkGreen
+                            : ColorConst.lightGreen,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
           ],
         ),
       ),

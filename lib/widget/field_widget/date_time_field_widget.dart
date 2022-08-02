@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-class DateTimeFieldWidget extends StatelessWidget {
+class DateTimeFieldWidget extends StatefulWidget {
   final String label;
   final Widget? suffix;
   final DateTime? initialDate;
@@ -26,35 +26,49 @@ class DateTimeFieldWidget extends StatelessWidget {
       DateFormat("d MMMM yyyy, HH:mm", 'id_ID');
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController dateTextController = TextEditingController();
+  State<DateTimeFieldWidget> createState() => _DateTimeFieldWidgetState();
+}
 
+class _DateTimeFieldWidgetState extends State<DateTimeFieldWidget> {
+  final TextEditingController dateTextController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    dateTextController.addListener(() {
+      if (widget.onChanged != null) {
+        widget.onChanged!(dateTextController.text);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: 20.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label),
+          Text(widget.label),
           SizedBox(height: 8.h),
           TextFormField(
-            // format: _dateFormat,
-            decoration: FormDecoration.style(suffixIcon: suffix),
-            validator: validator,
-            onChanged: onChanged,
+            controller: dateTextController,
+            decoration: FormDecoration.style(suffixIcon: widget.suffix),
+            validator: widget.validator,
             onTap: () async {
               FocusScope.of(context).requestFocus(FocusNode());
               DateTime? date = await showDatePicker(
                 context: context,
-                firstDate: firstDate ?? DateTime.now(),
-                initialDate: initialDate ?? DateTime.now(),
-                lastDate:
-                    lastDate ?? DateTime.now().add(const Duration(days: 30)),
+                firstDate: widget.firstDate ?? DateTime.now(),
+                initialDate: widget.initialDate ?? DateTime.now(),
+                lastDate: widget.lastDate ??
+                    DateTime.now().add(const Duration(days: 30)),
               );
               if (date != null) {
                 TimeOfDay? time = await showTimePicker(
                   context: context,
-                  initialTime:
-                      TimeOfDay.fromDateTime(initialDate ?? DateTime.now()),
+                  initialTime: TimeOfDay.fromDateTime(
+                      widget.initialDate ?? DateTime.now()),
                   builder: (BuildContext context, Widget? child) {
                     return MediaQuery(
                       data: MediaQuery.of(context)
@@ -64,43 +78,17 @@ class DateTimeFieldWidget extends StatelessWidget {
                   },
                 );
                 if (time != null) {
-                  dateTextController.text = _dateFormat.format(DateTime(
+                  final text = DateTimeFieldWidget._dateFormat.format(DateTime(
                     date.year,
                     date.month,
                     date.day,
                     time.hour,
                     time.minute,
                   ));
+                  dateTextController.text = text;
                 }
               }
             },
-            // onShowPicker: (context, currentValue) async {
-            //   DateTime? date = await showDatePicker(
-            //     context: context,
-            //     firstDate: firstDate ?? DateTime.now(),
-            //     initialDate: currentValue ?? DateTime.now(),
-            //     lastDate:
-            //         lastDate ?? DateTime.now().add(const Duration(days: 30)),
-            //   );
-            //   if (date != null) {
-            //     TimeOfDay? time = await showTimePicker(
-            //       context: context,
-            //       initialTime:
-            //           TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-            //       builder: (BuildContext context, Widget? child) {
-            //         return MediaQuery(
-            //           data: MediaQuery.of(context)
-            //               .copyWith(alwaysUse24HourFormat: true),
-            //           child: child!,
-            //         );
-            //       },
-            //     );
-            //     if (time != null) {
-            //       return DateTimeField.combine(date, time);
-            //     }
-            //   }
-            //   return null;
-            // },
           ),
         ],
       ),

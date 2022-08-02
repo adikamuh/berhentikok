@@ -38,7 +38,7 @@ extension Ex on List<SmokingDetail> {
   int sumTotal() =>
       fold<int>(0, (previousValue, element) => element.total + previousValue);
 
-  DateTime lastDaySmoke() => last.date;
+  DateTime? lastDaySmoke() => isNotEmpty ? last.date : null;
 
   int totalFreeCigaretteOnRelapse(User user) {
     final total = user.totalFreeCigarette - sumTotal();

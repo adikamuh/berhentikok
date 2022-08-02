@@ -38,135 +38,138 @@ class _StatisticPageState extends State<StatisticPage> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: SizeConst.pagePadding,
-        child: Column(
-          children: [
-            BlocBuilder<HealthBloc, HealthState>(
-              builder: (context, state) {
-                if (state is HealthLoaded) {
-                  return StatisticSectionWidget(
-                    title: 'Kesehatan',
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: ((context) => HealthPage(
-                                healthProgresses: state.healthProgresses,
-                                smokingDetails: state.smokingDetails,
-                                user: state.user,
-                              )),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        HealthCardWidget(
-                          healthProgress: state.healthProgresses[0],
-                          user: state.user,
-                          smokingDetails: state.smokingDetails,
-                        ),
-                        SizedBox(height: 10.h),
-                        HealthCardWidget(
-                          healthProgress: state.healthProgresses[1],
-                          smokingDetails: state.smokingDetails,
-                          user: state.user,
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return const SizedBox();
-              },
-            ),
-            SizedBox(height: 12.h),
-            BlocBuilder<FinanceBloc, FinanceState>(
-              builder: (context, financeState) {
-                if (financeState is FinanceLoaded) {
-                  return StatisticSectionWidget(
-                    title: 'Uang Tersimpan',
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: ((context) => FinancePage(
-                                finance: financeState.finance,
-                                user: financeState.user,
-                                moneySavedOnRelapse:
-                                    financeState.moneySavedOnRelapse,
-                              )),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        MoneySavedCardWidget(
-                          value: financeState.moneySavedOnRelapse
-                              .toCurrencyFormatter(),
-                        ),
-                        SizedBox(height: 10.h),
-                        BlocBuilder<AddItemBloc, AddItemState>(
-                          builder: (context, state) {
-                            if (state is ItemsLoaded &&
-                                state.targetItems.isNotEmpty) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  if (state.targetItems.isNotEmpty)
-                                    TargetItemCardWidget(
-                                      targetItem: state.targetItems.first,
-                                      moneySaved:
-                                          financeState.moneySavedOnRelapse,
-                                      margin: EdgeInsets.zero,
-                                    ),
-                                  if (state.targetItems.length >= 2)
-                                    TargetItemCardWidget(
-                                      targetItem: state.targetItems[1],
-                                      moneySaved:
-                                          financeState.moneySavedOnRelapse,
-                                      margin: EdgeInsets.zero,
-                                    ),
-                                ],
-                              );
-                            }
-                            return const SizedBox();
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return const SizedBox();
-              },
-            ),
-            SizedBox(height: 12.h),
-            BlocBuilder<ConsumptionBloc, ConsumptionState>(
-              builder: (context, state) {
-                if (state is ConsumptionLoaded) {
-                  return StatisticSectionWidget(
-                    title: 'Konsumsi Rokok',
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: ((context) => ConsumptionPage(
-                                user: state.user,
-                                smokingDetails: state.smokingDetails,
-                              )),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        SmokingFreeTotalCardWidget(
-                          total: state.smokingDetails
-                              .totalFreeCigaretteOnRelapse(state.user),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return const SizedBox();
-              },
-            ),
-          ],
+        padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
+        child: Padding(
+          padding: SizeConst.pagePadding,
+          child: Column(
+            children: [
+              BlocBuilder<HealthBloc, HealthState>(
+                builder: (context, state) {
+                  if (state is HealthLoaded) {
+                    return StatisticSectionWidget(
+                      title: 'Kesehatan',
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: ((context) => HealthPage(
+                                  healthProgresses: state.healthProgresses,
+                                  smokingDetails: state.smokingDetails,
+                                  user: state.user,
+                                )),
+                          ),
+                        );
+                      },
+                      child: Column(
+                        children: [
+                          HealthCardWidget(
+                            healthProgress: state.healthProgresses[0],
+                            user: state.user,
+                            smokingDetails: state.smokingDetails,
+                          ),
+                          SizedBox(height: 10.h),
+                          HealthCardWidget(
+                            healthProgress: state.healthProgresses[1],
+                            smokingDetails: state.smokingDetails,
+                            user: state.user,
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
+              SizedBox(height: 12.h),
+              BlocBuilder<FinanceBloc, FinanceState>(
+                builder: (context, financeState) {
+                  if (financeState is FinanceLoaded) {
+                    return StatisticSectionWidget(
+                      title: 'Uang Tersimpan',
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: ((context) => FinancePage(
+                                  finance: financeState.finance,
+                                  user: financeState.user,
+                                  moneySavedOnRelapse:
+                                      financeState.moneySavedOnRelapse,
+                                )),
+                          ),
+                        );
+                      },
+                      child: Column(
+                        children: [
+                          MoneySavedCardWidget(
+                            value: financeState.moneySavedOnRelapse
+                                .toCurrencyFormatter(),
+                          ),
+                          SizedBox(height: 10.h),
+                          BlocBuilder<AddItemBloc, AddItemState>(
+                            builder: (context, state) {
+                              if (state is ItemsLoaded &&
+                                  state.targetItems.isNotEmpty) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    if (state.targetItems.isNotEmpty)
+                                      TargetItemCardWidget(
+                                        targetItem: state.targetItems.first,
+                                        moneySaved:
+                                            financeState.moneySavedOnRelapse,
+                                        margin: EdgeInsets.zero,
+                                      ),
+                                    if (state.targetItems.length >= 2)
+                                      TargetItemCardWidget(
+                                        targetItem: state.targetItems[1],
+                                        moneySaved:
+                                            financeState.moneySavedOnRelapse,
+                                        margin: EdgeInsets.zero,
+                                      ),
+                                  ],
+                                );
+                              }
+                              return const SizedBox();
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
+              SizedBox(height: 12.h),
+              BlocBuilder<ConsumptionBloc, ConsumptionState>(
+                builder: (context, state) {
+                  if (state is ConsumptionLoaded) {
+                    return StatisticSectionWidget(
+                      title: 'Konsumsi Rokok',
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: ((context) => ConsumptionPage(
+                                  user: state.user,
+                                  smokingDetails: state.smokingDetails,
+                                )),
+                          ),
+                        );
+                      },
+                      child: Column(
+                        children: [
+                          SmokingFreeTotalCardWidget(
+                            total: state.smokingDetails
+                                .totalFreeCigaretteOnRelapse(state.user),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

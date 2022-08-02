@@ -15,7 +15,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
     required TargetItemRepository targetItemRepository,
     required SmokingDetailRepository smokingDetailRepository,
   }) : super(FinanceInitial()) {
-    on<LoadFinance>((event, emit) {
+    on<LoadFinance>((event, emit) async {
       try {
         final User? user = userRepository.load();
         if (user != null) {
@@ -24,7 +24,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
             targetItems: targetItemRepository.loadAll(),
           );
           final int moneySavedOnRelapse = finance.countMoneySaved(
-            smokingDetails: smokingDetailRepository.loadAll(),
+            smokingDetails: await smokingDetailRepository.loadAll(),
             user: user,
           );
           emit(FinanceLoaded(

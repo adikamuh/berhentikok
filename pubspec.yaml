@@ -35,6 +35,11 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  assets:
+    - assets/health/
+    - assets/icons/
+    - assets/achievement/
+
 flutter_icons:
   android: "launcher_icon"
   ios: true

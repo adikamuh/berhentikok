@@ -1,16 +1,15 @@
 import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/model/user.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 class HealthProgress extends Equatable {
-  final IconData icon;
+  final String imageFile;
   final String caption;
   final Duration startDuration;
   final Duration endDuration;
 
   const HealthProgress({
-    required this.icon,
+    required this.imageFile,
     required this.caption,
     required this.startDuration,
     required this.endDuration,
@@ -18,7 +17,7 @@ class HealthProgress extends Equatable {
 
   @override
   List<Object?> get props => [
-        icon,
+        imageFile,
         caption,
         startDuration,
         endDuration,
@@ -32,7 +31,8 @@ class HealthProgress extends Equatable {
     if (smokingDetails.isEmpty) {
       lastDayOfSmoke = user.startDateStopSmoking;
     } else {
-      lastDayOfSmoke = smokingDetails.lastDaySmoke();
+      lastDayOfSmoke =
+          smokingDetails.lastDaySmoke() ?? user.startDateStopSmoking;
     }
     final DateTime now = DateTime.now();
     final Duration difference = now.difference(lastDayOfSmoke);

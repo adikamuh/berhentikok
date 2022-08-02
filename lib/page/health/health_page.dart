@@ -36,6 +36,9 @@ class HealthPage extends StatelessWidget {
               healthProgress: healthProgress,
               smokingDetails: smokingDetails,
               user: user,
+              backgroundColor: ColorConst.lightGreen,
+              textColor: ColorConst.darkGreen,
+              linearValueColor: ColorConst.darkGreen,
             ),
           );
         },

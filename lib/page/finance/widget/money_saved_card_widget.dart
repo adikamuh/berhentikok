@@ -21,10 +21,9 @@ class MoneySavedCardWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.payment_rounded,
-              color: Colors.white,
-              size: 40.w,
+            Image.asset(
+              'assets/icons/ic-savings.png',
+              width: 40.w,
             ),
             SizedBox(width: 18.w),
             Text(

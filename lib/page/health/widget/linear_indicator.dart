@@ -5,7 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 // [value] is 0-100
 class LinearIndicator extends StatelessWidget {
   final int value;
-  const LinearIndicator({Key? key, required this.value}) : super(key: key);
+  final Color? valueColor;
+  const LinearIndicator({
+    Key? key,
+    required this.value,
+    this.valueColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +34,7 @@ class LinearIndicator extends StatelessWidget {
               width: value >= 100 ? _width : _widthValue,
               height: 5.h,
               decoration: BoxDecoration(
-                color: ColorConst.glowingGreen,
+                color: valueColor ?? ColorConst.glowingGreen,
                 borderRadius: BorderRadius.circular(50.r),
               ),
             ),

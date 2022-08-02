@@ -6,6 +6,8 @@ import 'package:berhentikok/base/string_extension.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/page/achievement/achievement_page.dart';
+import 'package:berhentikok/page/achievement/bloc/achievement_bloc.dart';
+import 'package:berhentikok/page/achievement/cubit/achievement_indicator_cubit.dart';
 import 'package:berhentikok/page/consumption/bloc/consumption_bloc.dart';
 import 'package:berhentikok/page/consumption/widget/smoking_free_duration_card.dart';
 import 'package:berhentikok/page/finance/bloc/finance_bloc.dart';
@@ -36,7 +38,13 @@ class _HomePageDetailState extends State<HomePageDetail> {
     context.read<HealthBloc>().add(LoadHealth());
     context.read<ConsumptionBloc>().add(LoadConsumption());
     context.read<FinanceBloc>().add(LoadFinance());
+    context.read<AchievementBloc>().add(LoadAchievement());
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -81,6 +89,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
   Widget _buildHeader(BuildContext context, User user) {
     return Container(
       clipBehavior: Clip.antiAlias,
+      padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.r)),
         color: ColorConst.darkGreen,
@@ -120,15 +129,54 @@ class _HomePageDetailState extends State<HomePageDetail> {
                   ),
                 ),
                 SizedBox(width: 30.w),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: ((context) => const AchievementPage())));
+                BlocBuilder<AchievementBloc, AchievementState>(
+                  builder: (context, state) {
+                    return InkWell(
+                      onTap: () async {
+                        context
+                            .read<AchievementIndicatorClickedCubit>()
+                            .click();
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: ((context) => AchievementPage(
+                                  achievements: state.achievements,
+                                )),
+                          ),
+                        );
+                      },
+                      child: Stack(
+                        children: [
+                          const Icon(
+                            Icons.stars_rounded,
+                            color: Colors.white,
+                          ),
+                          if (state.isNewAchieved &&
+                              !context
+                                  .read<AchievementIndicatorClickedCubit>()
+                                  .state)
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: Container(
+                                width: 10.w,
+                                height: 10.w,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: ColorConst.secondaryColor2,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.5),
+                                      offset: const Offset(-1, 2),
+                                      blurRadius: 3,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                        ],
+                      ),
+                    );
                   },
-                  child: const Icon(
-                    Icons.stars_rounded,
-                    color: Colors.white,
-                  ),
                 ),
               ],
             ),
@@ -179,6 +227,9 @@ class _HomePageDetailState extends State<HomePageDetail> {
                 healthProgress: state.healthProgresses.first,
                 smokingDetails: state.smokingDetails,
                 user: user,
+                backgroundColor: ColorConst.lightGreen,
+                textColor: ColorConst.darkGreen,
+                linearValueColor: ColorConst.darkGreen,
               );
             }
             return const SizedBox();
@@ -193,17 +244,20 @@ class _HomePageDetailState extends State<HomePageDetail> {
                 if (state is FinanceLoaded) {
                   return Expanded(
                     child: BoxCardWidget(
+                      backgroundColor: ColorConst.lightGreen,
                       child: Column(
                         children: [
-                          Icon(
-                            Icons.savings_rounded,
-                            color: Colors.white,
-                            size: 40.w,
+                          Image.asset(
+                            'assets/icons/ic-savings.png',
+                            width: 40.w,
                           ),
                           SizedBox(height: 8.h),
                           Text(
                             state.moneySavedOnRelapse.toCurrencyFormatter(),
-                            style: FontConst.subtitle(color: Colors.white),
+                            style: FontConst.subtitle(
+                              color: ColorConst.darkGreen,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ],
                       ),
@@ -219,17 +273,20 @@ class _HomePageDetailState extends State<HomePageDetail> {
                 if (state is ConsumptionLoaded) {
                   return Expanded(
                     child: BoxCardWidget(
+                      backgroundColor: ColorConst.lightGreen,
                       child: Column(
                         children: [
-                          Icon(
-                            Icons.smoke_free,
-                            color: Colors.white,
-                            size: 40.w,
+                          Image.asset(
+                            'assets/icons/ic-free-smoking.png',
+                            width: 40.w,
                           ),
                           SizedBox(height: 8.h),
                           Text(
                             '${state.smokingDetails.totalFreeCigaretteOnRelapse(user)} batang rokok',
-                            style: FontConst.subtitle(color: Colors.white),
+                            style: FontConst.subtitle(
+                              color: ColorConst.darkGreen,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ],
                       ),
@@ -294,7 +351,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
     showDialog(
       barrierDismissible: isFirst ? false : true,
       context: context,
-      builder: (context) => const SmokingCessationMethodsPage(),
+      builder: (context) => SmokingCessationMethodsPage(isFirst: isFirst),
     );
   }
 }

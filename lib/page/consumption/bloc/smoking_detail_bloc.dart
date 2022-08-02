@@ -22,9 +22,9 @@ class SmokingDetailBloc extends Bloc<SmokingDetailEvent, SmokingDetailState> {
       }
     });
 
-    on<LoadSmokingDetails>((event, emit) {
+    on<LoadSmokingDetails>((event, emit) async {
       try {
-        final List<SmokingDetail> smokingDetails =
+        final List<SmokingDetail> smokingDetails =await 
             smokingDetailRepository.loadAll();
         LinkedHashMap<DateTime, List<SmokingDetail>> smokingDetailsMap =
             LinkedHashMap<DateTime, List<SmokingDetail>>(
