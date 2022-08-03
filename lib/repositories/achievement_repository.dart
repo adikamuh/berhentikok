@@ -23,28 +23,28 @@ class AchievementRepository {
           'Wow! prosess yang sudah bagus buatmu. Lanjutkan terus hari demi hari ya!',
       duration: const Duration(days: 1),
     ),
-    Achievement(
-      imageFile: 'assets/achievement/ic-free-smoking.png',
-      title: '7 Hari tanpa merokok!',
-      description: '',
-      dialogDescription:
-          "Kamu sudah berhasil selama 7 hari terbebas dari rokok. Lanjutkan kebiasaan baik ini!",
-      duration: const Duration(days: 7),
-    ),
-    Achievement(
-      imageFile: 'assets/achievement/ic-free-smoking.png',
-      title: 'test',
-      description: '',
-      dialogDescription: "test",
-      duration: const Duration(days: 7),
-    ),
-    Achievement(
-      imageFile: 'assets/achievement/ic-free-smoking.png',
-      title: 'mock test',
-      description: '',
-      dialogDescription: "mock test",
-      duration: const Duration(days: 1),
-    ),
+    // Achievement(
+    //   imageFile: 'assets/achievement/ic-free-smoking.png',
+    //   title: '7 Hari tanpa merokok!',
+    //   description: '',
+    //   dialogDescription:
+    //       "Kamu sudah berhasil selama 7 hari terbebas dari rokok. Lanjutkan kebiasaan baik ini!",
+    //   duration: const Duration(days: 7),
+    // ),
+    // Achievement(
+    //   imageFile: 'assets/achievement/ic-free-smoking.png',
+    //   title: 'test',
+    //   description: '',
+    //   dialogDescription: "test",
+    //   duration: const Duration(days: 7),
+    // ),
+    // Achievement(
+    //   imageFile: 'assets/achievement/ic-free-smoking.png',
+    //   title: 'mock test',
+    //   description: '',
+    //   dialogDescription: "mock test",
+    //   duration: const Duration(days: 1),
+    // ),
   ];
 
   List<Achievement> loadAchievements() {

@@ -74,13 +74,17 @@ class ChartWidget extends StatelessWidget {
           ),
         ),
         minX: 1,
-        maxX: data
-            .reduce((current, next) => current.x > next.x ? current : next)
-            .x,
+        maxX: data.isNotEmpty
+            ? data
+                .reduce((current, next) => current.x > next.x ? current : next)
+                .x
+            : 1,
         minY: 0,
-        maxY: data
-            .reduce((current, next) => current.y > next.y ? current : next)
-            .y,
+        maxY: data.isNotEmpty
+            ? data
+                .reduce((current, next) => current.y > next.y ? current : next)
+                .y
+            : 0,
         lineBarsData: [
           LineChartBarData(
             spots: data,

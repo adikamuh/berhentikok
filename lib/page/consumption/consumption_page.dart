@@ -76,6 +76,7 @@ class _ConsumptionPageState extends State<ConsumptionPage> {
                       total: widget.smokingDetails
                           .totalFreeCigaretteOnRelapse(widget.user),
                     ),
+                    SizedBox(height: 10.h),
                     ElevatedButton(
                       style: ButtonStyleConst.danger(),
                       onPressed: () async {
@@ -133,7 +134,7 @@ class _ConsumptionPageState extends State<ConsumptionPage> {
                 builder: (context, state) {
                   return SizedBox(
                     width: 350.w,
-                    height: 300.h,
+                    height: 200.h,
                     child: SectionStatisticDetailWidget(
                       title: 'Statistik',
                       child: Expanded(

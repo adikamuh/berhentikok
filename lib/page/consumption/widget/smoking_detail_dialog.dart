@@ -25,22 +25,26 @@ class SmokingDetailDialog extends StatelessWidget {
         ),
         SizedBox(height: 8.h),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Jumlah Rokok: ',
               style: FontConst.body(fontWeight: FontWeight.w600),
             ),
-            Text("${smokingDetail.total.toString()} Rokok"),
+            Expanded(
+              child: Text("${smokingDetail.total.toString()} Rokok"),
+            ),
           ],
         ),
         SizedBox(height: 8.h),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Alasan: ',
               style: FontConst.body(fontWeight: FontWeight.w600),
             ),
-            Text(smokingDetail.excuse),
+            Expanded(child: Text(smokingDetail.excuse)),
           ],
         ),
         SizedBox(height: 16.h),

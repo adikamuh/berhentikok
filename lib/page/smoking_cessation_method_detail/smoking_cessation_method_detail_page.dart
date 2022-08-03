@@ -26,11 +26,7 @@ class SmokingCessationMethodDetailPage extends StatelessWidget {
             child: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(16.w),
-                child: Text(contentDetail +
-                    contentDetail +
-                    contentDetail +
-                    contentDetail +
-                    contentDetail),
+                child: Text(contentDetail),
               ),
             ),
           )
