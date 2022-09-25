@@ -5,7 +5,6 @@ import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/model/target_item.dart';
 import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/page/achievement/bloc/achievement_bloc.dart';
-import 'package:berhentikok/page/achievement/cubit/achievement_indicator_cubit.dart';
 import 'package:berhentikok/page/consumption/bloc/consumption_bloc.dart';
 import 'package:berhentikok/page/consumption/bloc/smoking_detail_bloc.dart';
 import 'package:berhentikok/page/consumption/cubit/consumption_chart_cubit.dart';
@@ -56,7 +55,7 @@ Future<void> _initHive() async {
     await Hive.openBox<User>(usersBoxName);
     await Hive.openBox<SmokingDetail>(smokingDetailsBoxName);
     await Hive.openBox<TargetItem>(targetItemsBoxName);
-    await Hive.openBox<Achievement>(achievementsAchievedBoxName);
+    await Hive.openBox<Achievement>(achievementsReadBoxName);
   } catch (e) {
     if (kDebugMode) {
       print(e.toString());
@@ -74,7 +73,7 @@ List<RepositoryProvider> _buildRepositories() {
   final HealthProgressRepository healthProgressRepository =
       HealthProgressRepository();
   final AchievementRepository achievementRepository = AchievementRepository(
-    Hive.box<Achievement>(achievementsAchievedBoxName),
+    Hive.box<Achievement>(achievementsReadBoxName),
   );
   return [
     RepositoryProvider<UserRepository>.value(value: userRepository),
@@ -206,8 +205,6 @@ class MyApp extends StatelessWidget {
           userRepository: RepositoryProvider.of<UserRepository>(context),
         ),
       ),
-      BlocProvider<AchievementIndicatorClickedCubit>(
-          create: (context) => AchievementIndicatorClickedCubit()),
     ];
   }
 }

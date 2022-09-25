@@ -101,4 +101,15 @@ extension Ex on List<SmokingDetail> {
     }
     return 0;
   }
+
+  Duration freeSmokingDuration(User user) {
+    DateTime lastDayOfSmoke;
+    if (isEmpty) {
+      lastDayOfSmoke = user.startDateStopSmoking;
+    } else {
+      lastDayOfSmoke = lastDaySmoke() ?? user.startDateStopSmoking;
+    }
+    final DateTime now = DateTime.now();
+    return now.difference(lastDayOfSmoke);
+  }
 }

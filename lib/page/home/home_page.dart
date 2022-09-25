@@ -1,10 +1,8 @@
 import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/font_const.dart';
-import 'package:berhentikok/page/achievement/cubit/achievement_indicator_cubit.dart';
 import 'package:berhentikok/page/home/widget/home_page_detail.dart';
 import 'package:berhentikok/page/statistic/statistic_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,17 +27,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     _pageViewController.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-
-    if (state == AppLifecycleState.detached ||
-        state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused) {
-      context.read<AchievementIndicatorClickedCubit>().unClick();
-    }
   }
 
   @override

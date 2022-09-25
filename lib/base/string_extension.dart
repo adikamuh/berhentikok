@@ -16,7 +16,10 @@ extension StringExtension on String {
   }
 
   int thousandFormatterToInt() {
-    return NumberFormat("#.###", "id_ID").parse(this).toInt();
+    if (isNotEmpty) {
+      return NumberFormat("#.###", "id_ID").parse(this).toInt();
+    }
+    return 0;
   }
 
   String getFirstWord() {

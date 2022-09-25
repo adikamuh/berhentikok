@@ -7,7 +7,6 @@ import 'package:berhentikok/widget/field_widget/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
 class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({Key? key}) : super(key: key);
@@ -18,8 +17,6 @@ class OnBoardingPage extends StatefulWidget {
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final _formKey = GlobalKey<FormState>();
-  static final DateFormat _dateFormat =
-      DateFormat("d MMMM yyyy, HH:mm", 'id_ID');
 
   String? _name;
   int? _tobaccoConsumption;
@@ -50,6 +47,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                     children: [
                       TextFieldWidget(
                         label: 'Nama',
+                        textInputAction: TextInputAction.next,
                         onChanged: (value) {
                           setState(() {
                             _name = value;
@@ -64,6 +62,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                       ),
                       TextFieldWidget(
                         label: 'Konsumsi rokok per hari',
+                        textInputAction: TextInputAction.next,
                         isNumber: true,
                         onChanged: (value) {
                           setState(() {
@@ -82,6 +81,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                       ),
                       TextFieldWidget(
                         label: 'Rata-rata harga rokok sebungkus',
+                        textInputAction: TextInputAction.next,
                         prefix: const Text('Rp'),
                         textAlign: TextAlign.end,
                         isNumber: true,
@@ -101,6 +101,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                       ),
                       TextFieldWidget(
                         label: 'Jumlah rokok sebungkus',
+                        textInputAction: TextInputAction.next,
                         isNumber: true,
                         onChanged: (value) {
                           setState(() {
@@ -119,14 +120,14 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                       DateTimeFieldWidget(
                         label: 'Mulai berhenti merokok',
                         onChanged: (value) {
-                          if (value != null && value.isNotEmpty) {
+                          if (value != null) {
                             setState(() {
-                              _startDateStopSmoking = _dateFormat.parse(value);
+                              _startDateStopSmoking = value;
                             });
                           }
                         },
                         validator: (value) {
-                          if (value == null) {
+                          if (value == null || value.isEmpty) {
                             return 'Harus diisi.';
                           }
                           return null;
@@ -134,14 +135,19 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                       ),
                       TextFieldWidget(
                         label: 'Motivasi untuk berhenti merokok',
-                        hintText:
+                        textInputAction: TextInputAction.done,
+                        initialValue: 'karena ingin ',
+                        helperText:
                             'Contoh: karena ingin uang saya dihabiskan dengan cukup baik',
                         maxLine: 3,
                         onChanged: (value) {
                           _motivation = value;
                         },
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null ||
+                              value.isEmpty ||
+                              value.toLowerCase() == 'karena ingin ' ||
+                              value.toLowerCase() == 'karena ingin') {
                             return 'Motivasi harus diisi.';
                           }
                           return null;
@@ -169,6 +175,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                       startDateStopSmoking:
                                           _startDateStopSmoking!,
                                       motivation: _motivation!,
+                                      isFistTime: true,
                                     );
                                     context
                                         .read<OnBoardingCubit>()

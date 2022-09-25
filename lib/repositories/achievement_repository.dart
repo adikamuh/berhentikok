@@ -1,27 +1,30 @@
 import 'package:berhentikok/model/achievement.dart';
+import 'package:collection/collection.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class AchievementRepository {
-  final Box<Achievement> achievementsAchievedBox;
+  final Box<Achievement> achievementsReadBox;
 
-  AchievementRepository(this.achievementsAchievedBox);
+  AchievementRepository(this.achievementsReadBox);
 
   static List<Achievement> achievements = [
-    Achievement(
+    const Achievement(
+      id: 0,
       imageFile: 'assets/achievement/ic-blood-pressure.png',
       title: 'Tekanan darahmu sudah kembali normal!',
       description: '',
       dialogDescription:
           'Tekanan darahmu sudah berhasil kembali normal, sedikit demi sedikit kamu akan lebih sehat! Lanjutkan!',
-      duration: const Duration(minutes: 20),
+      duration: Duration(minutes: 20),
     ),
-    Achievement(
+    const Achievement(
+      id: 1,
       imageFile: 'assets/achievement/ic-free-smoking.png',
       title: 'Kamu sudah tidak merokok selama 1 hari',
       description: '',
       dialogDescription:
           'Wow! prosess yang sudah bagus buatmu. Lanjutkan terus hari demi hari ya!',
-      duration: const Duration(days: 1),
+      duration: Duration(days: 1),
     ),
     // Achievement(
     //   imageFile: 'assets/achievement/ic-free-smoking.png',
@@ -51,29 +54,23 @@ class AchievementRepository {
     return achievements;
   }
 
-  List<Achievement> loadAchievementsAchieved() {
+  List<Achievement> loadAchievementsRead() {
     try {
-      List<Achievement> achievements = loadAchievements();
-      List<Achievement> achievementsOnAchieved = [];
-
-      for (var i = 0; i < achievements.length; i++) {
-        final Achievement achievement = achievements[i];
-        final bool isAchieved = achievementsAchievedBox.containsKey(i);
-        achievementsOnAchieved.add(achievement..isAchieved = isAchieved);
-      }
-
-      return achievementsOnAchieved;
+      return achievementsReadBox.values.toList();
     } catch (e) {
       throw Exception(e.toString());
     }
   }
 
-  bool addAchievementAchieved(Achievement achievement, int index) {
+  bool addAchievementRead(Achievement achievement) {
     try {
-      if (achievementsAchievedBox.containsKey(index)) {
+      if (achievementsReadBox.values.firstWhereOrNull(
+            (achievementRead) => achievementRead.id == achievement.id,
+          ) !=
+          null) {
         return false;
       } else {
-        achievementsAchievedBox.add(achievement);
+        achievementsReadBox.add(achievement);
         return true;
       }
     } catch (e) {
@@ -82,7 +79,7 @@ class AchievementRepository {
   }
 
   Future<void> deleteAll() async {
-    achievementsAchievedBox.deleteAll(achievementsAchievedBox.keys);
-    await achievementsAchievedBox.clear();
+    achievementsReadBox.deleteAll(achievementsReadBox.keys);
+    await achievementsReadBox.clear();
   }
 }

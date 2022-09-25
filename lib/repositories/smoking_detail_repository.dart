@@ -12,9 +12,9 @@ class SmokingDetailRepository {
     return smokingDetails;
   }
 
-  bool add(SmokingDetail smokingDetail) {
+  Future<bool> add(SmokingDetail smokingDetail) async{
     try {
-      smokingDetailsBox.add(smokingDetail);
+      await smokingDetailsBox.add(smokingDetail);
       return true;
     } catch (e) {
       throw Exception(e.toString());

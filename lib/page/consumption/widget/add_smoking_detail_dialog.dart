@@ -1,14 +1,17 @@
 import 'package:berhentikok/base/button_style_const.dart';
 import 'package:berhentikok/base/string_extension.dart';
+import 'package:berhentikok/model/resource.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/model/user.dart';
+import 'package:berhentikok/page/consumption/bloc/consumption_bloc.dart';
 import 'package:berhentikok/page/consumption/bloc/smoking_detail_bloc.dart';
+import 'package:berhentikok/page/finance/bloc/finance_bloc.dart';
+import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/widget/field_widget/date_time_field_widget.dart';
 import 'package:berhentikok/widget/field_widget/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
 class AddSmokingDetailDialog extends StatefulWidget {
   final User user;
@@ -21,21 +24,21 @@ class AddSmokingDetailDialog extends StatefulWidget {
 
 class _AddSmokingDetailDialogState extends State<AddSmokingDetailDialog> {
   final _formKey = GlobalKey<FormState>();
-  static final DateFormat _dateFormat =
-      DateFormat("d MMMM yyyy, HH:mm", 'id_ID');
 
   DateTime? _date;
   String? _excuse;
   int? _total;
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SmokingDetailBloc, SmokingDetailState>(
+    return BlocListener<SmokingDetailBloc, Resource<SmokingDetailState>>(
       listener: (context, state) {
-        if (state is SmokingDetailSubmitted) {
-          context.read<SmokingDetailBloc>().add(LoadSmokingDetails());
+        if (state is Success) {
+          context.read<HealthBloc>().add(LoadHealth());
+          context.read<FinanceBloc>().add(LoadFinance());
+          context.read<ConsumptionBloc>().add(LoadConsumption());
           Navigator.of(context).pop();
-        } else if (state is SmokingDetailFailed) {
-          state.errorMessage.showToast();
+        } else if (state is Error) {
+          state.inferredErrorMessage?.showToast();
         }
       },
       child: Form(
@@ -44,6 +47,7 @@ class _AddSmokingDetailDialogState extends State<AddSmokingDetailDialog> {
           children: [
             TextFieldWidget(
               label: 'Jumlah rokok yang kamu konsumsi',
+              textInputAction: TextInputAction.next,
               isNumber: true,
               onChanged: (value) {
                 setState(() {
@@ -65,9 +69,9 @@ class _AddSmokingDetailDialogState extends State<AddSmokingDetailDialog> {
               lastDate: DateTime.now(),
               suffix: const Icon(Icons.calendar_month),
               onChanged: (value) {
-                if (value != null && value.isNotEmpty) {
+                if (value != null) {
                   setState(() {
-                    _date = _dateFormat.parse(value);
+                    _date = value;
                   });
                 }
               },
@@ -80,6 +84,7 @@ class _AddSmokingDetailDialogState extends State<AddSmokingDetailDialog> {
             ),
             TextFieldWidget(
               label: 'Kenapa kamu merokok kembali',
+              textInputAction: TextInputAction.done,
               maxLine: 3,
               onChanged: (value) {
                 setState(() {

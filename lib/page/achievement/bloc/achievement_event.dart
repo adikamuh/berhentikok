@@ -8,3 +8,9 @@ abstract class AchievementEvent extends Equatable {
 }
 
 class LoadAchievement extends AchievementEvent {}
+
+class ReadAchievment extends AchievementEvent {
+  final Achievement achievement;
+
+  const ReadAchievment(this.achievement);
+}

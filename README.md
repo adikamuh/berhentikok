@@ -8,6 +8,6 @@ To download the package for this repo, run this
 
 `flutter pub get`
 
-Run this line on terminal to build generated file
+And run this to build the generated files
 
 `flutter packages pub run build_runner build --delete-conflicting-outputs`

@@ -22,17 +22,14 @@ class AchievementCardWidget extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 10.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          color: ColorConst.lightGreen,
+          color:
+              achievement.isRead ? ColorConst.lightGreen : ColorConst.darkGreen,
         ),
         child: Row(
           children: [
             Image.asset(
               achievement.imageFile,
               width: 45.w,
-              color: achievement.isAchieved
-                  ? null
-                  : ColorConst.lightGreen.withOpacity(0.5),
-              colorBlendMode: BlendMode.modulate,
             ),
             SizedBox(width: 18.w),
             Expanded(
@@ -44,9 +41,9 @@ class AchievementCardWidget extends StatelessWidget {
                     achievement.title,
                     textAlign: TextAlign.center,
                     style: FontConst.subtitle(
-                      color: achievement.isAchieved
+                      color: achievement.isRead
                           ? ColorConst.darkGreen
-                          : ColorConst.darkGreen.withOpacity(0.5),
+                          : ColorConst.lightGreen,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

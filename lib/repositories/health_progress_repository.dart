@@ -25,14 +25,14 @@ class HealthProgressRepository {
     const HealthProgress(
       imageFile: 'assets/health/ic-lungs.png',
       caption: 'Fungsi kerja paru-parumu sudah mulai meningkat loh',
-      startDuration: Duration(days: 28),
-      endDuration: Duration(days: 84),
+      startDuration: Duration(days: 30),
+      endDuration: Duration(days: 90),
     ),
     const HealthProgress(
       imageFile: 'assets/health/ic-cough.png',
       caption: 'Rasa batuk dan sesak nafasmu mulai berkurang',
       startDuration: Duration(days: 30),
-      endDuration: Duration(days: 365),
+      endDuration: Duration(days: 360),
     ),
     const HealthProgress(
       imageFile: 'assets/health/ic-heart-attack.png',

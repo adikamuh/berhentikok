@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  copy_with_extension: ^4.0.3
+  copy_with_extension_gen: ^4.0.3
   fl_chart: ^0.55.0
   flutter_bloc: ^8.0.0
   flutter_launcher_icons: "^0.9.2"

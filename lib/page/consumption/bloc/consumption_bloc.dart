@@ -1,3 +1,4 @@
+import 'package:berhentikok/model/resource.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/repositories/smoking_detail_repository.dart';
@@ -6,30 +7,47 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 part 'consumption_event.dart';
-part 'consumption_state.dart';
 
-class ConsumptionBloc extends Bloc<ConsumptionEvent, ConsumptionState> {
+class ConsumptionState extends Equatable {
+  final User user;
+  final List<SmokingDetail> smokingDetails;
+
+  const ConsumptionState({
+    required this.user,
+    required this.smokingDetails,
+  });
+
+  @override
+  List<Object> get props => [user, smokingDetails];
+}
+
+class ConsumptionBloc
+    extends Bloc<ConsumptionEvent, Resource<ConsumptionState>> {
   final UserRepository userRepository;
   final SmokingDetailRepository smokingDetailRepository;
   ConsumptionBloc({
     required this.userRepository,
     required this.smokingDetailRepository,
-  }) : super(ConsumptionInitial()) {
+  }) : super(Resource.idle()) {
     on<LoadConsumption>((event, emit) async {
       try {
         final user = userRepository.load();
         final List<SmokingDetail> smokingDetails =
             await smokingDetailRepository.loadAll();
         if (user != null) {
-          emit(ConsumptionLoaded(
-            user: user,
-            smokingDetails: smokingDetails,
-          ));
+          emit(
+            Resource.success(
+              ConsumptionState(
+                user: user,
+                smokingDetails: smokingDetails,
+              ),
+            ),
+          );
         } else {
-          emit(const ConsumptionFailed('User tidak ditemukan'));
+          emit(Resource.error('User tidak ditemukan'));
         }
       } catch (e) {
-        emit(ConsumptionFailed(e.toString()));
+        emit(Resource.error(e.toString()));
       }
     });
   }
