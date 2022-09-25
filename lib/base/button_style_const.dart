@@ -6,8 +6,8 @@ class ButtonStyleConst {
   static ButtonStyle primary() {
     return ElevatedButton.styleFrom(
       elevation: 0,
-      primary: ColorConst.darkGreen,
-      onPrimary: ColorConst.lightGreen,
+      backgroundColor: ColorConst.darkGreen,
+      foregroundColor: ColorConst.lightGreen,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.r),
       ),
@@ -17,8 +17,8 @@ class ButtonStyleConst {
   static ButtonStyle secondary() {
     return ElevatedButton.styleFrom(
       elevation: 0,
-      primary: ColorConst.lightGreen,
-      onPrimary: ColorConst.darkGreen,
+      backgroundColor: ColorConst.lightGreen,
+      foregroundColor: ColorConst.darkGreen,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.r),
       ),
@@ -28,8 +28,8 @@ class ButtonStyleConst {
   static ButtonStyle warning() {
     return ElevatedButton.styleFrom(
       elevation: 0,
-      primary: Colors.red.shade900,
-      onPrimary: Colors.white,
+      backgroundColor: Colors.red.shade900,
+      foregroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.r),
       ),
@@ -39,8 +39,8 @@ class ButtonStyleConst {
   static ButtonStyle danger() {
     return ElevatedButton.styleFrom(
       elevation: 0,
-      primary: ColorConst.lightRed,
-      onPrimary: ColorConst.darkRed,
+      backgroundColor: ColorConst.lightRed,
+      foregroundColor: ColorConst.darkRed,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.r),
       ),

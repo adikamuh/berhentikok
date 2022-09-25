@@ -8,3 +8,5 @@ abstract class HomePageEvent extends Equatable {
 }
 
 class FetchUser extends HomePageEvent {}
+
+class UserDoneFirstTime extends HomePageEvent {}

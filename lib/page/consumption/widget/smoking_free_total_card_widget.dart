@@ -22,10 +22,9 @@ class SmokingFreeTotalCardWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.smoke_free,
-              color: Colors.white,
-              size: 40.w,
+            Image.asset(
+              'assets/icons/ic-free-smoking.png',
+              width: 40.w,
             ),
             SizedBox(width: 18.w),
             Text(

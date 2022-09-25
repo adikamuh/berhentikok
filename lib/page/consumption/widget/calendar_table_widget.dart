@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/font_const.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
@@ -7,10 +5,11 @@ import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/page/consumption/widget/smoking_detail_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarTableWidget extends StatefulWidget {
-  final LinkedHashMap<DateTime, List<SmokingDetail>> smokingDetails;
+  final Map<DateTime, List<SmokingDetail>> smokingDetails;
   final User user;
   const CalendarTableWidget({
     Key? key,
@@ -23,7 +22,10 @@ class CalendarTableWidget extends StatefulWidget {
 }
 
 class _CalendarTableWidgetState extends State<CalendarTableWidget> {
+  final DateFormat _dateFormat = DateFormat("dd/MM/yyyy", 'id_ID');
+
   late final ValueNotifier<List<SmokingDetail>> _selectedEvents;
+  late final Map<String, List<SmokingDetail>> _smokingDetails;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -31,6 +33,7 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
   @override
   void initState() {
     super.initState();
+    _smokingDetails = _convertDate(widget.smokingDetails);
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getSmokingDetailsForDay(_selectedDay!));
   }
@@ -115,7 +118,7 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
   }
 
   List<SmokingDetail> _getSmokingDetailsForDay(DateTime day) {
-    return widget.smokingDetails[day] ?? [];
+    return _smokingDetails[_dateFormat.format(day)] ?? [];
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -135,6 +138,14 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
         _calendarFormat = format;
       });
     }
+  }
+
+  Map<String, List<SmokingDetail>> _convertDate(
+    Map<DateTime, List<SmokingDetail>> smokingDetails,
+  ) {
+    return smokingDetails.map(
+      (key, value) => MapEntry(_dateFormat.format(key), value),
+    );
   }
 
   List<Widget> _buildSmokingDetails(List<SmokingDetail> smokingDetails) {

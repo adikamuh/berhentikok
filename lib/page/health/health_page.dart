@@ -29,6 +29,7 @@ class HealthPage extends StatelessWidget {
         padding: SizeConst.pagePadding,
         itemCount: healthProgresses.length,
         itemBuilder: (context, index) {
+          final Duration freeSmokingDuration = smokingDetails.freeSmokingDuration(user);
           final HealthProgress healthProgress = healthProgresses[index];
           return Padding(
             padding: EdgeInsets.only(bottom: 10.h),
@@ -36,6 +37,10 @@ class HealthPage extends StatelessWidget {
               healthProgress: healthProgress,
               smokingDetails: smokingDetails,
               user: user,
+              freeSmokingDuration: freeSmokingDuration,
+              backgroundColor: ColorConst.lightGreen,
+              textColor: ColorConst.darkGreen,
+              linearValueColor: ColorConst.darkGreen,
             ),
           );
         },

@@ -12,17 +12,38 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+  final _pageViewController = PageController();
   int _selectedIndex = 0;
-  final List<Widget> _widgetOptions = <Widget>[
-    const HomePageDetail(),
-    const StatisticPage(),
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    _pageViewController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: _widgetOptions.elementAt(_selectedIndex)),
+      body: PageView(
+        controller: _pageViewController,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        children: const [
+          HomePageDetail(),
+          StatisticPage(),
+        ],
+      ),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(vertical: 5.h),
         decoration: BoxDecoration(
@@ -44,9 +65,11 @@ class _HomePageState extends State<HomePage> {
             ),
             currentIndex: _selectedIndex,
             onTap: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
+              _pageViewController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.bounceOut,
+              );
             },
             items: const [
               BottomNavigationBarItem(

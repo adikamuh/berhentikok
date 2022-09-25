@@ -14,9 +14,10 @@ class ConsumptionChartCubit extends Cubit<List<FlSpot>> {
     required this.smokingDetailRepository,
   }) : super([]);
 
-  void load() {
+  void load() async {
     try {
-      final smokingDetails = smokingDetailRepository.loadAll();
+      final List<SmokingDetail> smokingDetails =
+          await smokingDetailRepository.loadAll();
       final user = userRepository.load();
       if (user != null) {
         Map<DateTime, int> daysFromStopSmoking = {};

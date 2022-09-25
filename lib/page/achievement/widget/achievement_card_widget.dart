@@ -22,31 +22,29 @@ class AchievementCardWidget extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 10.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          color: ColorConst.lightGreen,
+          color:
+              achievement.isRead ? ColorConst.lightGreen : ColorConst.darkGreen,
         ),
         child: Row(
           children: [
-            Icon(
-              achievement.icon,
-              size: 45.w,
-              color: ColorConst.darkGreen,
+            Image.asset(
+              achievement.imageFile,
+              width: 45.w,
             ),
             SizedBox(width: 18.w),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     achievement.title,
+                    textAlign: TextAlign.center,
                     style: FontConst.subtitle(
-                      color: ColorConst.darkGreen,
+                      color: achievement.isRead
+                          ? ColorConst.darkGreen
+                          : ColorConst.lightGreen,
                       fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    achievement.description,
-                    style: FontConst.body(
-                      color: ColorConst.darkGreen,
                     ),
                   ),
                 ],

@@ -38,7 +38,7 @@ extension Ex on List<SmokingDetail> {
   int sumTotal() =>
       fold<int>(0, (previousValue, element) => element.total + previousValue);
 
-  DateTime lastDaySmoke() => last.date;
+  DateTime? lastDaySmoke() => isNotEmpty ? last.date : null;
 
   int totalFreeCigaretteOnRelapse(User user) {
     final total = user.totalFreeCigarette - sumTotal();
@@ -100,5 +100,16 @@ extension Ex on List<SmokingDetail> {
       return -totalMoneyCostOnDay(day, user);
     }
     return 0;
+  }
+
+  Duration freeSmokingDuration(User user) {
+    DateTime lastDayOfSmoke;
+    if (isEmpty) {
+      lastDayOfSmoke = user.startDateStopSmoking;
+    } else {
+      lastDayOfSmoke = lastDaySmoke() ?? user.startDateStopSmoking;
+    }
+    final DateTime now = DateTime.now();
+    return now.difference(lastDayOfSmoke);
   }
 }

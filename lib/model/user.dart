@@ -1,10 +1,12 @@
 import 'package:berhentikok/base/double_extension.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
+import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 
 part 'user.g.dart';
 
+@CopyWith()
 @HiveType(typeId: 0)
 class User extends Equatable {
   @HiveField(0)
@@ -19,6 +21,8 @@ class User extends Equatable {
   final DateTime startDateStopSmoking;
   @HiveField(5)
   final String motivation;
+  @HiveField(6)
+  final bool isFistTime;
 
   const User({
     required this.name,
@@ -27,6 +31,7 @@ class User extends Equatable {
     required this.cigarettesPerPack,
     required this.startDateStopSmoking,
     required this.motivation,
+    this.isFistTime = false,
   });
 
   @override
@@ -44,7 +49,7 @@ class User extends Equatable {
     if (smokingDetails.isEmpty) {
       lastDayOfSmoke = startDateStopSmoking;
     } else {
-      lastDayOfSmoke = smokingDetails.lastDaySmoke();
+      lastDayOfSmoke = smokingDetails.lastDaySmoke() ?? startDateStopSmoking;
     }
     return Stream.periodic(const Duration(seconds: 1), (int count) {
       final now = DateTime.now();

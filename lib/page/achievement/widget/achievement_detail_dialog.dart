@@ -1,5 +1,4 @@
 import 'package:berhentikok/base/button_style_const.dart';
-import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/font_const.dart';
 import 'package:berhentikok/model/achievement.dart';
 import 'package:flutter/material.dart';
@@ -21,17 +20,16 @@ class AchievementDetailDialog extends StatelessWidget {
         vertical: 25.h,
       ),
       children: [
-        Icon(
-          achievement.icon,
-          color: ColorConst.darkGreen,
-          size: 55.w,
+        Image.asset(
+          achievement.imageFile,
+          width: 45.w,
         ),
-        SizedBox(height: 10.h),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               achievement.title,
+              textAlign: TextAlign.center,
               style: FontConst.header3(),
             ),
             SizedBox(height: 5.h),

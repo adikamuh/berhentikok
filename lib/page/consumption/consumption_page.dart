@@ -3,6 +3,7 @@ import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/size_const.dart';
 import 'package:berhentikok/model/chart_type.dart';
 import 'package:berhentikok/model/projection.dart';
+import 'package:berhentikok/model/resource.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/page/consumption/bloc/smoking_detail_bloc.dart';
@@ -55,12 +56,12 @@ class _ConsumptionPageState extends State<ConsumptionPage> {
           padding: SizeConst.pagePadding,
           child: Column(
             children: [
-              BlocBuilder<SmokingDetailBloc, SmokingDetailState>(
+              BlocBuilder<SmokingDetailBloc, Resource<SmokingDetailState>>(
                 builder: (context, state) {
-                  if (state is SmokingDetailsLoaded) {
+                  if (state is Success) {
                     return SectionStatisticDetailWidget(
                       child: CalendarTableWidget(
-                        smokingDetails: state.smokingDetails,
+                        smokingDetails: state.inferredData!.smokingDetailsMap,
                         user: widget.user,
                       ),
                     );
@@ -76,6 +77,7 @@ class _ConsumptionPageState extends State<ConsumptionPage> {
                       total: widget.smokingDetails
                           .totalFreeCigaretteOnRelapse(widget.user),
                     ),
+                    SizedBox(height: 10.h),
                     ElevatedButton(
                       style: ButtonStyleConst.danger(),
                       onPressed: () async {
@@ -133,7 +135,7 @@ class _ConsumptionPageState extends State<ConsumptionPage> {
                 builder: (context, state) {
                   return SizedBox(
                     width: 350.w,
-                    height: 300.h,
+                    height: 200.h,
                     child: SectionStatisticDetailWidget(
                       title: 'Statistik',
                       child: Expanded(

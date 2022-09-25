@@ -15,7 +15,7 @@ class ChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _intervalX = chartType == ChartType.consumption ? 10 : 10000;
+    // double _intervalX = chartType == ChartType.consumption ? 10 : 10000;
 
     List<Color> gradientColors = [
       const Color(0xff23b6e6),
@@ -48,7 +48,7 @@ class ChartWidget extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 30,
-              interval: 5,
+              interval: 10,
               // getTitlesWidget: bottomTitleWidgets,
             ),
           ),
@@ -60,8 +60,8 @@ class ChartWidget extends StatelessWidget {
             axisNameSize: 20.w,
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 42,
-              interval: _intervalX,
+              reservedSize: 60.w,
+              // interval: _intervalX,
               // getTitlesWidget: leftTitleWidgets,
             ),
           ),
@@ -74,13 +74,17 @@ class ChartWidget extends StatelessWidget {
           ),
         ),
         minX: 1,
-        maxX: data
-            .reduce((current, next) => current.x > next.x ? current : next)
-            .x,
+        maxX: data.isNotEmpty
+            ? data
+                .reduce((current, next) => current.x > next.x ? current : next)
+                .x
+            : 1,
         minY: 0,
-        maxY: data
-            .reduce((current, next) => current.y > next.y ? current : next)
-            .y,
+        maxY: data.isNotEmpty
+            ? data
+                .reduce((current, next) => current.y > next.y ? current : next)
+                .y
+            : 0,
         lineBarsData: [
           LineChartBarData(
             spots: data,

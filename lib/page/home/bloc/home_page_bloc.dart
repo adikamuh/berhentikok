@@ -19,5 +19,19 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
         emit(const HomePageFailed('User tidak ditemukan'));
       }
     });
+
+    on<UserDoneFirstTime>((event, emit) {
+      try {
+        final User? user = userRepository.load();
+        if (user != null) {
+          userRepository.save(user.copyWith(isFistTime: false));
+          emit(UserLoaded(user));
+        } else {
+          emit(const HomePageFailed('User tidak ditemukan'));
+        }
+      } catch (e) {
+        emit(HomePageFailed(e.toString()));
+      }
+    });
   }
 }

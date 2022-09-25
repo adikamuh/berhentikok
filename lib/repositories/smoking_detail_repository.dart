@@ -6,15 +6,15 @@ class SmokingDetailRepository {
 
   SmokingDetailRepository(this.smokingDetailsBox);
 
-  List<SmokingDetail> loadAll() {
+  Future<List<SmokingDetail>> loadAll() async {
     List<SmokingDetail> smokingDetails = smokingDetailsBox.values.toList();
     smokingDetails.sort(((a, b) => a.date.compareTo(b.date)));
     return smokingDetails;
   }
 
-  bool add(SmokingDetail smokingDetail) {
+  Future<bool> add(SmokingDetail smokingDetail) async{
     try {
-      smokingDetailsBox.add(smokingDetail);
+      await smokingDetailsBox.add(smokingDetail);
       return true;
     } catch (e) {
       throw Exception(e.toString());

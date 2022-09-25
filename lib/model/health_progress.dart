@@ -1,16 +1,16 @@
 import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/model/user.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 class HealthProgress extends Equatable {
-  final IconData icon;
+  final String imageFile;
   final String caption;
   final Duration startDuration;
   final Duration endDuration;
 
   const HealthProgress({
-    required this.icon,
+    required this.imageFile,
     required this.caption,
     required this.startDuration,
     required this.endDuration,
@@ -18,7 +18,7 @@ class HealthProgress extends Equatable {
 
   @override
   List<Object?> get props => [
-        icon,
+        imageFile,
         caption,
         startDuration,
         endDuration,
@@ -28,14 +28,7 @@ class HealthProgress extends Equatable {
     required User user,
     required List<SmokingDetail> smokingDetails,
   }) {
-    DateTime lastDayOfSmoke;
-    if (smokingDetails.isEmpty) {
-      lastDayOfSmoke = user.startDateStopSmoking;
-    } else {
-      lastDayOfSmoke = smokingDetails.lastDaySmoke();
-    }
-    final DateTime now = DateTime.now();
-    final Duration difference = now.difference(lastDayOfSmoke);
+    final Duration difference = smokingDetails.freeSmokingDuration(user);
     int percentage = 0;
     if (startDuration.compareTo(endDuration) == 0) {
       percentage = _countTimeDifferencePercentage(difference, startDuration);
@@ -67,11 +60,43 @@ class HealthProgress extends Equatable {
 
   int _countTimeDifferencePercentage(Duration duration, Duration fullDuration) {
     if (fullDuration.inDays > 0) {
+      if(fullDuration.inHours == 24){
+        return _countPercentage(duration.inHours, fullDuration.inHours);
+      }
       return _countPercentage(duration.inDays, fullDuration.inDays);
     } else if (fullDuration.inHours > 0) {
       return _countPercentage(duration.inHours, fullDuration.inHours);
     } else {
       return _countPercentage(duration.inMinutes, fullDuration.inMinutes);
     }
+  }
+}
+
+extension ListOfHealthProgressEx on List<HealthProgress> {
+  HealthProgress? firstWhereOnProgress({
+    required User user,
+    required List<SmokingDetail> smokingDetails,
+  }) {
+    return firstWhereOrNull((healthProgress) =>
+        healthProgress.value(user: user, smokingDetails: smokingDetails) < 100);
+  }
+
+  List<HealthProgress> firstTwoOnProgress({
+    required User user,
+    required List<SmokingDetail> smokingDetails,
+  }) {
+    final HealthProgress? first = firstWhereOnProgress(
+      user: user,
+      smokingDetails: smokingDetails,
+    );
+    if (first != null) {
+      final int firstIndex = indexOf(first);
+      if ((firstIndex + 1) <= (length - 1)) {
+        return [this[firstIndex], this[firstIndex + 1]];
+      } else {
+        return [this[firstIndex]];
+      }
+    }
+    return [];
   }
 }
