@@ -18,7 +18,8 @@ import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/page/health/health_page.dart';
 import 'package:berhentikok/page/health/widget/health_card_widget.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
-import 'package:berhentikok/page/home/widget/tips_dialog.dart';
+import 'package:berhentikok/page/home/cubit/tips_cubit.dart';
+import 'package:berhentikok/page/home/widget/tips_widget.dart';
 import 'package:berhentikok/page/smoking_cessation_methods/smoking_cessation_methods_page.dart';
 import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
 import 'package:berhentikok/widget/card_widget/long_card_widget.dart';
@@ -39,6 +40,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
   late final ConsumptionBloc consumptionBloc;
   late final FinanceBloc financeBloc;
   late final AchievementBloc achievementBloc;
+  late final TipsCubit tipsCubit;
 
   @override
   void initState() {
@@ -48,6 +50,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
     consumptionBloc = context.read<ConsumptionBloc>()..add(LoadConsumption());
     financeBloc = context.read<FinanceBloc>()..add(LoadFinance());
     achievementBloc = context.read<AchievementBloc>()..add(LoadAchievement());
+    tipsCubit = context.read<TipsCubit>();
   }
 
   @override
@@ -362,25 +365,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
           style: FontConst.header2(color: ColorConst.blackColor2),
         ),
         SizedBox(height: 12.h),
-        LongCardWidget(
-          text: "Baca Tips",
-          backgroundColor: ColorConst.lightGreen,
-          textColor: ColorConst.darkGreen,
-          isSuffixIconOn: true,
-          onTap: () async {
-            await showDialog(
-              context: context,
-              builder: (context) {
-                return SimpleDialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  children: const [TipsDialog()],
-                );
-              },
-            );
-          },
-        ),
+        const TipsWidget(),
         SizedBox(height: 8.h),
         LongCardWidget(
           text: "Cara-cara untuk berhenti merokok",

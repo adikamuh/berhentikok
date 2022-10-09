@@ -13,6 +13,7 @@ import 'package:berhentikok/page/finance/bloc/finance_bloc.dart';
 import 'package:berhentikok/page/finance/cubit/finance_chart_cubit.dart';
 import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
+import 'package:berhentikok/page/home/cubit/tips_cubit.dart';
 import 'package:berhentikok/page/home/home_page.dart';
 import 'package:berhentikok/page/on_boarding/cubit/on_boarding_cubit.dart';
 import 'package:berhentikok/page/on_boarding/on_boarding_page.dart';
@@ -20,6 +21,7 @@ import 'package:berhentikok/repositories/achievement_repository.dart';
 import 'package:berhentikok/repositories/health_progress_repository.dart';
 import 'package:berhentikok/repositories/smoking_detail_repository.dart';
 import 'package:berhentikok/repositories/target_item_repository.dart';
+import 'package:berhentikok/repositories/tips_repository.dart';
 import 'package:berhentikok/repositories/user_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +58,7 @@ Future<void> _initHive() async {
     await Hive.openBox<SmokingDetail>(smokingDetailsBoxName);
     await Hive.openBox<TargetItem>(targetItemsBoxName);
     await Hive.openBox<Achievement>(achievementsReadBoxName);
+    await Hive.openBox<int>(tipsBoxName);
   } catch (e) {
     if (kDebugMode) {
       print(e.toString());
@@ -75,6 +78,8 @@ List<RepositoryProvider> _buildRepositories() {
   final AchievementRepository achievementRepository = AchievementRepository(
     Hive.box<Achievement>(achievementsReadBoxName),
   );
+  final TipsRepository tipsRepository =
+      TipsRepository(Hive.box<int>(tipsBoxName));
   return [
     RepositoryProvider<UserRepository>.value(value: userRepository),
     RepositoryProvider<SmokingDetailRepository>.value(
@@ -84,6 +89,7 @@ List<RepositoryProvider> _buildRepositories() {
         value: healthProgressRepository),
     RepositoryProvider<AchievementRepository>.value(
         value: achievementRepository),
+    RepositoryProvider<TipsRepository>.value(value: tipsRepository),
   ];
 }
 
@@ -205,6 +211,10 @@ class MyApp extends StatelessWidget {
           userRepository: RepositoryProvider.of<UserRepository>(context),
         ),
       ),
+      BlocProvider<TipsCubit>(
+        create: (context) =>
+            TipsCubit(RepositoryProvider.of<TipsRepository>(context)),
+      )
     ];
   }
 }
