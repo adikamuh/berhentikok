@@ -22,8 +22,11 @@ class AchievementDetailDialog extends StatelessWidget {
       children: [
         Image.asset(
           achievement.imageFile,
-          width: 45.w,
+          width: 150.w,
+          height: 150.w,
+          fit: BoxFit.contain,
         ),
+        SizedBox(height: 25.h),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

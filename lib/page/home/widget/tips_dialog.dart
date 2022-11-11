@@ -16,6 +16,8 @@ class TipsDialog extends StatefulWidget {
     required this.onNext,
   }) : super(key: key);
 
+  static const String routeName = 'tips-dialog';
+
   @override
   State<TipsDialog> createState() => _TipsDialogState();
 }

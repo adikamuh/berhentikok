@@ -6,6 +6,8 @@ import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/page/consumption/bloc/consumption_bloc.dart';
 import 'package:berhentikok/page/consumption/bloc/smoking_detail_bloc.dart';
 import 'package:berhentikok/page/consumption/widget/add_smoking_detail_dialog.dart';
+import 'package:berhentikok/page/finance/bloc/finance_bloc.dart';
+import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,6 +33,7 @@ class _SmokingFreeDurationCardState extends State<SmokingFreeDurationCard> {
       ..add(LoadSmokingDetails());
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SmokingDetailBloc, Resource<SmokingDetailState>>(
@@ -124,6 +127,8 @@ class _SmokingFreeDurationCardState extends State<SmokingFreeDurationCard> {
                     );
                   },
                 );
+                context.read<HealthBloc>().add(LoadHealth());
+                context.read<FinanceBloc>().add(LoadFinance());
                 context.read<ConsumptionBloc>().add(LoadConsumption());
               },
               child: Container(

@@ -5,6 +5,7 @@ import 'package:berhentikok/widget/card_widget/long_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:round_spot/round_spot.dart';
 
 class TipsWidget extends StatefulWidget {
   const TipsWidget({Key? key}) : super(key: key);
@@ -33,26 +34,21 @@ class _TipsWidgetState extends State<TipsWidget> {
         await showDialog<int>(
           context: context,
           builder: (context) {
-            return SimpleDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
+            return Detector(
+              areaID: 'tips-dialog',
+              child: SimpleDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                children: [
+                  TipsDialog(
+                    tips: context.read<TipsCubit>().tipsRepository.load(),
+                    indexTips: _indexTips,
+                    onPrev: _onNextPrev,
+                    onNext: _onNextPrev,
+                  )
+                ],
               ),
-              children: [
-                TipsDialog(
-                  tips: context.read<TipsCubit>().tipsRepository.load(),
-                  indexTips: _indexTips,
-                  onPrev: (int id) {
-                    setState(() {
-                      _indexTips = id;
-                    });
-                  },
-                  onNext: (int id) {
-                    setState(() {
-                      _indexTips = id;
-                    });
-                  },
-                )
-              ],
             );
           },
         ).then((value) async {
@@ -60,5 +56,11 @@ class _TipsWidgetState extends State<TipsWidget> {
         });
       },
     );
+  }
+
+  void _onNextPrev(int id) {
+    setState(() {
+      _indexTips = id;
+    });
   }
 }

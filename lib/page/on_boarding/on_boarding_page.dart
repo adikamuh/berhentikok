@@ -1,6 +1,7 @@
 import 'package:berhentikok/base/button_style_const.dart';
 import 'package:berhentikok/base/string_extension.dart';
 import 'package:berhentikok/model/user.dart';
+import 'package:berhentikok/page/home/home_page.dart';
 import 'package:berhentikok/page/on_boarding/cubit/on_boarding_cubit.dart';
 import 'package:berhentikok/widget/field_widget/date_time_field_widget.dart';
 import 'package:berhentikok/widget/field_widget/text_field_widget.dart';
@@ -10,6 +11,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({Key? key}) : super(key: key);
+
+  static const String routeName = 'intro';
 
   @override
   State<OnBoardingPage> createState() => _OnBoardingPageState();
@@ -36,7 +39,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               child: BlocListener<OnBoardingCubit, OnBoardingState>(
                 listener: (context, state) {
                   if (state is FormSubmitted) {
-                    Navigator.of(context).pushReplacementNamed('home');
+                    Navigator.of(context).pushReplacementNamed(HomePage.routeName);
                   }
                 },
                 child: Form(
