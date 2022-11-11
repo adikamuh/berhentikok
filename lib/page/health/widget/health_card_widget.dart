@@ -85,14 +85,7 @@ class HealthCardWidget extends StatelessWidget {
     String smokingFreeDurationCaption = "";
 
     if (freeSmokingDuration.compareTo(healthProgress.endDuration) < 0) {
-      if (healthProgress.startDuration.compareTo(healthProgress.endDuration) ==
-          0) {
-        smokingFreeDurationCaption = freeSmokingDuration.toStringDuration();
-      } else {
-        if (freeSmokingDuration.compareTo(healthProgress.startDuration) >= 0) {
-          smokingFreeDurationCaption = freeSmokingDuration.toStringDuration();
-        }
-      }
+      smokingFreeDurationCaption = freeSmokingDuration.toStringDuration();
     }
 
     if (healthProgress.startDuration.compareTo(healthProgress.endDuration) ==

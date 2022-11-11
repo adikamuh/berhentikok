@@ -18,6 +18,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:round_spot/round_spot.dart';
 
 class ConsumptionPage extends StatefulWidget {
   final User user;
@@ -27,6 +28,8 @@ class ConsumptionPage extends StatefulWidget {
     required this.user,
     required this.smokingDetails,
   }) : super(key: key);
+
+  static const routeName = 'consumption';
 
   @override
   State<ConsumptionPage> createState() => _ConsumptionPageState();
@@ -51,104 +54,115 @@ class _ConsumptionPageState extends State<ConsumptionPage> {
         title: const Text("Konsumsi Rokok"),
         backgroundColor: ColorConst.darkGreen,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: SizeConst.pagePadding,
-          child: Column(
-            children: [
-              BlocBuilder<SmokingDetailBloc, Resource<SmokingDetailState>>(
-                builder: (context, state) {
-                  if (state is Success) {
-                    return SectionStatisticDetailWidget(
-                      child: CalendarTableWidget(
-                        smokingDetails: state.inferredData!.smokingDetailsMap,
-                        user: widget.user,
+      body: Detector(
+        areaID: 'consumption',
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: SizeConst.pagePadding,
+            child: Column(
+              children: [
+                BlocBuilder<SmokingDetailBloc, Resource<SmokingDetailState>>(
+                  builder: (context, state) {
+                    if (state is Success) {
+                      return SectionStatisticDetailWidget(
+                        child: CalendarTableWidget(
+                          smokingDetails: state.inferredData!.smokingDetailsMap,
+                          user: widget.user,
+                        ),
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
+                SectionStatisticDetailWidget(
+                  title: 'Jumlah rokok yang berhasil kamu hindari',
+                  child: Column(
+                    children: [
+                      SmokingFreeTotalCardWidget(
+                        total: widget.smokingDetails
+                            .totalFreeCigaretteOnRelapse(widget.user),
                       ),
-                    );
-                  }
-                  return const SizedBox();
-                },
-              ),
-              SectionStatisticDetailWidget(
-                title: 'Jumlah rokok yang berhasil kamu hindari',
-                child: Column(
-                  children: [
-                    SmokingFreeTotalCardWidget(
-                      total: widget.smokingDetails
-                          .totalFreeCigaretteOnRelapse(widget.user),
-                    ),
-                    SizedBox(height: 10.h),
-                    ElevatedButton(
-                      style: ButtonStyleConst.danger(),
-                      onPressed: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return SimpleDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 30.w,
-                                vertical: 25.h,
-                              ),
-                              children: [
-                                AddSmokingDetailDialog(user: widget.user)
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      child: const Text("Saya merokok hari ini"),
-                    ),
-                  ],
+                      SizedBox(height: 10.h),
+                      ElevatedButton(
+                        style: ButtonStyleConst.danger(),
+                        onPressed: () async {
+                          await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return SimpleDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 30.w,
+                                  vertical: 25.h,
+                                ),
+                                children: [
+                                  AddSmokingDetailDialog(user: widget.user)
+                                ],
+                              );
+                            },
+                          );
+                          context
+                              .read<SmokingDetailBloc>()
+                              .add(LoadSmokingDetails());
+                          context.read<ConsumptionChartCubit>().load();
+                        },
+                        child: const Text("Saya merokok hari ini"),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SectionStatisticDetailWidget(
-                title: 'Proyeksi',
-                child: Column(
-                  children: [
-                    ProjectionChildWidget(
-                      projectionType: ProjectionType.day,
-                      user: widget.user,
-                      totalFreeCigaretteOnRelapse: _totalFreeCigaretteOnRelapse,
-                    ),
-                    ProjectionChildWidget(
-                      projectionType: ProjectionType.week,
-                      user: widget.user,
-                      totalFreeCigaretteOnRelapse: _totalFreeCigaretteOnRelapse,
-                    ),
-                    ProjectionChildWidget(
-                      projectionType: ProjectionType.month,
-                      user: widget.user,
-                      totalFreeCigaretteOnRelapse: _totalFreeCigaretteOnRelapse,
-                    ),
-                    ProjectionChildWidget(
-                      projectionType: ProjectionType.year,
-                      user: widget.user,
-                      totalFreeCigaretteOnRelapse: _totalFreeCigaretteOnRelapse,
-                    ),
-                  ],
+                SectionStatisticDetailWidget(
+                  title: 'Proyeksi',
+                  child: Column(
+                    children: [
+                      ProjectionChildWidget(
+                        projectionType: ProjectionType.day,
+                        user: widget.user,
+                        totalFreeCigaretteOnRelapse:
+                            _totalFreeCigaretteOnRelapse,
+                      ),
+                      ProjectionChildWidget(
+                        projectionType: ProjectionType.week,
+                        user: widget.user,
+                        totalFreeCigaretteOnRelapse:
+                            _totalFreeCigaretteOnRelapse,
+                      ),
+                      ProjectionChildWidget(
+                        projectionType: ProjectionType.month,
+                        user: widget.user,
+                        totalFreeCigaretteOnRelapse:
+                            _totalFreeCigaretteOnRelapse,
+                      ),
+                      ProjectionChildWidget(
+                        projectionType: ProjectionType.year,
+                        user: widget.user,
+                        totalFreeCigaretteOnRelapse:
+                            _totalFreeCigaretteOnRelapse,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              BlocBuilder<ConsumptionChartCubit, List<FlSpot>>(
-                builder: (context, state) {
-                  return SizedBox(
-                    width: 350.w,
-                    height: 200.h,
-                    child: SectionStatisticDetailWidget(
-                      title: 'Statistik',
-                      child: Expanded(
-                        child: ChartWidget(
-                          chartType: ChartType.consumption,
-                          data: state,
+                BlocBuilder<ConsumptionChartCubit, List<FlSpot>>(
+                  builder: (context, state) {
+                    return SizedBox(
+                      width: 350.w,
+                      height: 200.h,
+                      child: SectionStatisticDetailWidget(
+                        title: 'Statistik',
+                        child: Expanded(
+                          child: ChartWidget(
+                            chartType: ChartType.consumption,
+                            data: state,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

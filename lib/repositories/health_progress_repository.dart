@@ -62,7 +62,7 @@ class HealthProgressRepository {
       endDuration: Duration(days: 3650),
     ),
     const HealthProgress(
-      imageFile: 'assets/health/ic-coronary-free.png',
+      imageFile: 'assets/health/ic-bladder.png',
       caption: 'Risiko kanker kandung kemih, kerongkongan, dan ginjal menurun',
       startDuration: Duration(days: 3650),
       endDuration: Duration(days: 3650),

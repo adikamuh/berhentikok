@@ -4,26 +4,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TipsDialog extends StatefulWidget {
-  const TipsDialog({Key? key}) : super(key: key);
+  final List<Tips> tips;
+  final int indexTips;
+  final Function(int id) onPrev;
+  final Function(int id) onNext;
+  const TipsDialog({
+    Key? key,
+    required this.tips,
+    required this.indexTips,
+    required this.onPrev,
+    required this.onNext,
+  }) : super(key: key);
+
+  static const String routeName = 'tips-dialog';
 
   @override
   State<TipsDialog> createState() => _TipsDialogState();
 }
 
 class _TipsDialogState extends State<TipsDialog> {
-  final tips = <Tips>[
-    const Tips(
-      'Simpan atau buang semua barang-barang yang memiliki kandungan nikotin di ruanganmu',
-    ),
-    const Tips(
-      'middle',
-    ),
-    const Tips(
-      'end',
-    ),
-  ];
+  late int _indexTips;
 
-  int _indexTips = 0;
+  @override
+  void initState() {
+    super.initState();
+    _indexTips = widget.indexTips;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +44,7 @@ class _TipsDialogState extends State<TipsDialog> {
             children: [
               SizedBox(height: 20.h),
               Text(
-                tips[_indexTips].description,
+                widget.tips[_indexTips].description,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 20.h),
@@ -46,13 +52,14 @@ class _TipsDialogState extends State<TipsDialog> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
-                    onTap: () {
-                      if (_indexTips > 0) {
-                        setState(() {
-                          _indexTips = _indexTips - 1;
-                        });
-                      }
-                    },
+                    onTap: _indexTips > 0
+                        ? () {
+                            setState(() {
+                              _indexTips = _indexTips - 1;
+                            });
+                            widget.onPrev(_indexTips);
+                          }
+                        : null,
                     child: Container(
                       padding: EdgeInsets.all(8.w),
                       decoration: BoxDecoration(
@@ -70,17 +77,18 @@ class _TipsDialogState extends State<TipsDialog> {
                   SizedBox(width: 10.w),
                   InkWell(
                     radius: 0,
-                    onTap: () {
-                      if (_indexTips < (tips.length - 1)) {
-                        setState(() {
-                          _indexTips = _indexTips + 1;
-                        });
-                      }
-                    },
+                    onTap: _indexTips < (widget.tips.length - 1)
+                        ? () {
+                            setState(() {
+                              _indexTips = _indexTips + 1;
+                            });
+                            widget.onNext(_indexTips);
+                          }
+                        : null,
                     child: Container(
                       padding: EdgeInsets.all(8.w),
                       decoration: BoxDecoration(
-                        color: _indexTips == (tips.length - 1)
+                        color: _indexTips == (widget.tips.length - 1)
                             ? ColorConst.lightGreen.withOpacity(0.5)
                             : ColorConst.lightGreen,
                         shape: BoxShape.circle,

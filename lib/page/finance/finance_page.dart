@@ -19,6 +19,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:round_spot/round_spot.dart';
 
 class FinancePage extends StatefulWidget {
   final Finance finance;
@@ -30,6 +31,8 @@ class FinancePage extends StatefulWidget {
     required this.user,
     required this.moneySavedOnRelapse,
   }) : super(key: key);
+
+  static const routeName = 'finance';
 
   @override
   State<FinancePage> createState() => _FinancePageState();
@@ -50,124 +53,127 @@ class _FinancePageState extends State<FinancePage> {
         title: const Text("Uang Tersimpan"),
         backgroundColor: ColorConst.darkGreen,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: SizeConst.pagePadding,
-          child: Column(
-            children: [
-              SectionStatisticDetailWidget(
-                title: 'Kamu berhasil menghemat',
-                child: MoneySavedCardWidget(
-                  value: widget.moneySavedOnRelapse.toCurrencyFormatter(),
+      body: Detector(
+        areaID: 'finance',
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: SizeConst.pagePadding,
+            child: Column(
+              children: [
+                SectionStatisticDetailWidget(
+                  title: 'Kamu berhasil menghemat',
+                  child: MoneySavedCardWidget(
+                    value: widget.moneySavedOnRelapse.toCurrencyFormatter(),
+                  ),
                 ),
-              ),
-              SectionStatisticDetailWidget(
-                title: 'Target Barang',
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: BlocBuilder<AddItemBloc, AddItemState>(
-                        builder: (context, state) {
-                          if (state is ItemsLoaded) {
-                            return Row(
-                              children: state.targetItems
-                                  .map(
-                                    (item) => TargetItemCardWidget(
-                                      targetItem: TargetItem(
-                                        name: item.name,
-                                        price: item.price,
+                SectionStatisticDetailWidget(
+                  title: 'Target Barang',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: BlocBuilder<AddItemBloc, AddItemState>(
+                          builder: (context, state) {
+                            if (state is ItemsLoaded) {
+                              return Row(
+                                children: state.targetItems
+                                    .map(
+                                      (item) => TargetItemCardWidget(
+                                        targetItem: TargetItem(
+                                          name: item.name,
+                                          price: item.price,
+                                        ),
+                                        moneySaved: widget.moneySavedOnRelapse,
                                       ),
-                                      moneySaved: widget.moneySavedOnRelapse,
-                                    ),
-                                  )
-                                  .toList(),
-                            );
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          style: ButtonStyleConst.primary(),
-                          onPressed: () async {
-                            await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return SimpleDialog(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12.r),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 30.w,
-                                    vertical: 25.h,
-                                  ),
-                                  children: const [AddItemDialog()],
-                                );
-                              },
-                            );
+                                    )
+                                    .toList(),
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
                           },
-                          child: Row(
-                            children: const [
-                              Text('Tambah Barang'),
-                              Icon(Icons.add_rounded),
-                            ],
-                          ),
                         ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              SectionStatisticDetailWidget(
-                title: 'Proyeksi',
-                child: Column(
-                  children: [
-                    ProjectionChildWidget(
-                      projectionType: ProjectionType.day,
-                      moneySavedOnRelapse: widget.moneySavedOnRelapse,
-                      user: widget.user,
-                    ),
-                    ProjectionChildWidget(
-                      projectionType: ProjectionType.week,
-                      moneySavedOnRelapse: widget.moneySavedOnRelapse,
-                      user: widget.user,
-                    ),
-                    ProjectionChildWidget(
-                      projectionType: ProjectionType.month,
-                      moneySavedOnRelapse: widget.moneySavedOnRelapse,
-                      user: widget.user,
-                    ),
-                    ProjectionChildWidget(
-                      projectionType: ProjectionType.year,
-                      moneySavedOnRelapse: widget.moneySavedOnRelapse,
-                      user: widget.user,
-                    ),
-                  ],
-                ),
-              ),
-              BlocBuilder<FinanceChartCubit, List<FlSpot>>(
-                builder: (context, state) {
-                  return SectionStatisticDetailWidget(
-                    title: 'Statistik',
-                    child: SizedBox(
-                      width: 350.w,
-                      height: 200.h,
-                      child: ChartWidget(
-                        chartType: ChartType.finance,
-                        data: state,
                       ),
-                    ),
-                  );
-                },
-              ),
-            ],
+                      SizedBox(height: 8.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyleConst.primary(),
+                            onPressed: () async {
+                              await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return SimpleDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12.r),
+                                    ),
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 30.w,
+                                      vertical: 25.h,
+                                    ),
+                                    children: const [AddItemDialog()],
+                                  );
+                                },
+                              );
+                            },
+                            child: Row(
+                              children: const [
+                                Text('Tambah Barang'),
+                                Icon(Icons.add_rounded),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                SectionStatisticDetailWidget(
+                  title: 'Proyeksi',
+                  child: Column(
+                    children: [
+                      ProjectionChildWidget(
+                        projectionType: ProjectionType.day,
+                        moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                        user: widget.user,
+                      ),
+                      ProjectionChildWidget(
+                        projectionType: ProjectionType.week,
+                        moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                        user: widget.user,
+                      ),
+                      ProjectionChildWidget(
+                        projectionType: ProjectionType.month,
+                        moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                        user: widget.user,
+                      ),
+                      ProjectionChildWidget(
+                        projectionType: ProjectionType.year,
+                        moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                        user: widget.user,
+                      ),
+                    ],
+                  ),
+                ),
+                BlocBuilder<FinanceChartCubit, List<FlSpot>>(
+                  builder: (context, state) {
+                    return SectionStatisticDetailWidget(
+                      title: 'Statistik',
+                      child: SizedBox(
+                        width: 350.w,
+                        height: 200.h,
+                        child: ChartWidget(
+                          chartType: ChartType.finance,
+                          data: state,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

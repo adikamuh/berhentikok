@@ -61,16 +61,19 @@ extension Ex on List<SmokingDetail> {
     required User user,
     required DateTime day,
   }) {
-    if (day.difference(user.startDateStopSmoking).inHours > 24) {
+    final Duration _duration = day.difference(user.startDateStopSmoking);
+
+    if (_duration.inDays >= 1) {
       return user.tobaccoConsumption -
           totalSmokingOnDay(day) +
           totalFreeCigaretteToThisDay(
             user: user,
             day: day.subtract(const Duration(days: 1)),
           );
-    } else if (day.difference(user.startDateStopSmoking).inHours <= 24 &&
-        day.difference(user.startDateStopSmoking).inHours > 0) {
-      return -totalSmokingOnDay(day);
+    } else if (_duration.inDays < 1 && _duration.inHours > 0) {
+      return ((user.hoursPerCigarette * _duration.inHours) -
+              totalSmokingOnDay(day))
+          .toInt();
     }
     return 0;
   }

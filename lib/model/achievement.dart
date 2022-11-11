@@ -18,7 +18,12 @@ class Achievement extends Equatable {
   @HiveField(4)
   final String dialogDescription;
   @HiveField(5)
-  final Duration duration;
+  final Duration? duration;
+  @HiveField(6)
+  final int? smokeCount;
+  @HiveField(7)
+  final int? moneyCount;
+  final bool isAchieved;
   final bool isRead;
 
   const Achievement({
@@ -27,7 +32,10 @@ class Achievement extends Equatable {
     required this.title,
     required this.description,
     required this.dialogDescription,
-    required this.duration,
+    this.duration,
+    this.smokeCount,
+    this.moneyCount,
+    this.isAchieved = false,
     this.isRead = false,
   });
 

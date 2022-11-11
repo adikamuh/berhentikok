@@ -1,12 +1,16 @@
 import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/font_const.dart';
+import 'package:berhentikok/helper/permission_helper.dart';
 import 'package:berhentikok/page/home/widget/home_page_detail.dart';
 import 'package:berhentikok/page/statistic/statistic_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  static const routeName = 'home';
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -20,6 +24,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _checkPermission();
+  }
+
+  Future<void> _checkPermission() async {
+    bool _isPermissionGranted = await PermissionHelper.checkStatuses([
+      Permission.manageExternalStorage,
+      Permission.storage,
+    ]);
+    if (_isPermissionGranted) PermissionHelper.requestStoragePermissions();
   }
 
   @override

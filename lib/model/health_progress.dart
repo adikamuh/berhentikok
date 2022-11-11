@@ -30,20 +30,21 @@ class HealthProgress extends Equatable {
   }) {
     final Duration difference = smokingDetails.freeSmokingDuration(user);
     int percentage = 0;
-    if (startDuration.compareTo(endDuration) == 0) {
-      percentage = _countTimeDifferencePercentage(difference, startDuration);
-    } else {
-      if (difference.inDays < startDuration.inDays) {
-        percentage = 0;
-      } else {
-        final int fullDuration = endDuration.inDays - startDuration.inDays;
+    percentage = _countTimeDifferencePercentage(difference, endDuration);
+    // if (startDuration.compareTo(endDuration) == 0) {
+    //   percentage = _countTimeDifferencePercentage(difference, startDuration);
+    // } else {
+    //   // if (difference.inDays < startDuration.inDays) {
+    //   //   percentage = 0;
+    //   // } else {
+    //   final int fullDuration = endDuration.inDays;
 
-        percentage = _countPercentage(
-          difference.inDays - startDuration.inDays,
-          fullDuration,
-        );
-      }
-    }
+    //   percentage = _countPercentage(
+    //     difference.inDays,
+    //     fullDuration,
+    //   );
+    //   // }
+    // }
 
     if (percentage >= 100) {
       return 100;
@@ -59,16 +60,17 @@ class HealthProgress extends Equatable {
   }
 
   int _countTimeDifferencePercentage(Duration duration, Duration fullDuration) {
-    if (fullDuration.inDays > 0) {
-      if(fullDuration.inHours == 24){
-        return _countPercentage(duration.inHours, fullDuration.inHours);
-      }
-      return _countPercentage(duration.inDays, fullDuration.inDays);
-    } else if (fullDuration.inHours > 0) {
-      return _countPercentage(duration.inHours, fullDuration.inHours);
-    } else {
-      return _countPercentage(duration.inMinutes, fullDuration.inMinutes);
-    }
+    return _countPercentage(duration.inMinutes, fullDuration.inMinutes);
+    // if (fullDuration.inDays > 0) {
+    //   if (fullDuration.inHours == 24) {
+    //     return _countPercentage(duration.inHours, fullDuration.inHours);
+    //   }
+    //   return _countPercentage(duration.inDays, fullDuration.inDays);
+    // } else if (fullDuration.inHours > 0) {
+    //   return _countPercentage(duration.inHours, fullDuration.inHours);
+    // } else {
+    //   return _countPercentage(duration.inMinutes, fullDuration.inMinutes);
+    // }
   }
 }
 

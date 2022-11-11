@@ -1,6 +1,7 @@
 import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/font_const.dart';
 import 'package:berhentikok/base/int_extension.dart';
+import 'package:berhentikok/base/page_arguments.dart';
 import 'package:berhentikok/base/size_const.dart';
 import 'package:berhentikok/base/string_extension.dart';
 import 'package:berhentikok/model/health_progress.dart';
@@ -18,13 +19,15 @@ import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/page/health/health_page.dart';
 import 'package:berhentikok/page/health/widget/health_card_widget.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
-import 'package:berhentikok/page/home/widget/tips_dialog.dart';
+import 'package:berhentikok/page/home/cubit/tips_cubit.dart';
+import 'package:berhentikok/page/home/widget/tips_widget.dart';
 import 'package:berhentikok/page/smoking_cessation_methods/smoking_cessation_methods_page.dart';
 import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
 import 'package:berhentikok/widget/card_widget/long_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:round_spot/round_spot.dart';
 
 class HomePageDetail extends StatefulWidget {
   const HomePageDetail({Key? key}) : super(key: key);
@@ -39,6 +42,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
   late final ConsumptionBloc consumptionBloc;
   late final FinanceBloc financeBloc;
   late final AchievementBloc achievementBloc;
+  late final TipsCubit tipsCubit;
 
   @override
   void initState() {
@@ -48,53 +52,57 @@ class _HomePageDetailState extends State<HomePageDetail> {
     consumptionBloc = context.read<ConsumptionBloc>()..add(LoadConsumption());
     financeBloc = context.read<FinanceBloc>()..add(LoadFinance());
     achievementBloc = context.read<AchievementBloc>()..add(LoadAchievement());
+    tipsCubit = context.read<TipsCubit>();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: BlocConsumer<HomePageBloc, HomePageState>(
-        bloc: homePageBloc,
-        listener: (context, state) {
-          if (state is UserLoaded) {
-            if (state.user.isFistTime) {
-              _showSmokingCessationMethods(
-                context: context,
-                isFirst: true,
+    return Detector(
+      areaID: 'home',
+      child: SingleChildScrollView(
+        child: BlocConsumer<HomePageBloc, HomePageState>(
+          bloc: homePageBloc,
+          listener: (context, state) {
+            if (state is UserLoaded) {
+              if (state.user.isFistTime) {
+                _showSmokingCessationMethods(
+                  context: context,
+                  isFirst: true,
+                );
+              }
+            }
+          },
+          builder: (context, state) {
+            if (state is UserLoaded) {
+              final User user = state.user;
+              return Column(
+                children: [
+                  _buildHeader(context, user),
+                  SizedBox(height: 18.h),
+                  Padding(
+                    padding: SizeConst.pagePadding,
+                    child: Column(
+                      children: [
+                        _buildConsumptionSummary(context, user),
+                        SizedBox(height: 18.h),
+                        _buildOverallSummary(user),
+                        SizedBox(height: 18.h),
+                        _buildOthers(context),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            } else if (state is HomePageFailed) {
+              state.errorMessage.showToast();
+              return Text(
+                'Muat ulang',
+                style: FontConst.header3(color: ColorConst.darkRed),
               );
             }
-          }
-        },
-        builder: (context, state) {
-          if (state is UserLoaded) {
-            final User user = state.user;
-            return Column(
-              children: [
-                _buildHeader(context, user),
-                SizedBox(height: 18.h),
-                Padding(
-                  padding: SizeConst.pagePadding,
-                  child: Column(
-                    children: [
-                      _buildConsumptionSummary(context, user),
-                      SizedBox(height: 18.h),
-                      _buildOverallSummary(user),
-                      SizedBox(height: 18.h),
-                      _buildOthers(context),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          } else if (state is HomePageFailed) {
-            state.errorMessage.showToast();
-            return Text(
-              'Muat ulang',
-              style: FontConst.header3(color: ColorConst.darkRed),
-            );
-          }
-          return const SizedBox();
-        },
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }
@@ -148,10 +156,8 @@ class _HomePageDetailState extends State<HomePageDetail> {
                     if (state is Success) {
                       return InkWell(
                         onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: ((context) => const AchievementPage()),
-                            ),
+                          await Navigator.of(context).pushNamed(
+                            AchievementPage.routeName,
                           );
                         },
                         child: Stack(
@@ -227,14 +233,12 @@ class _HomePageDetailState extends State<HomePageDetail> {
                   state.inferredData!.smokingDetails.freeSmokingDuration(user);
               return InkWell(
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: ((context) => HealthPage(
-                            healthProgresses:
-                                state.inferredData!.healthProgresses,
-                            smokingDetails: state.inferredData!.smokingDetails,
-                            user: state.inferredData!.user,
-                          )),
+                  Navigator.of(context).pushNamed(
+                    HealthPage.routeName,
+                    arguments: HealthArguments(
+                      healthProgresses: state.inferredData!.healthProgresses,
+                      smokingDetails: state.inferredData!.smokingDetails,
+                      user: state.inferredData!.user,
                     ),
                   );
                 },
@@ -267,14 +271,13 @@ class _HomePageDetailState extends State<HomePageDetail> {
                   return Expanded(
                     child: InkWell(
                       onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => FinancePage(
-                              finance: state.inferredData!.finance,
-                              user: state.inferredData!.user,
-                              moneySavedOnRelapse:
-                                  state.inferredData!.moneySavedOnRelapse,
-                            ),
+                        Navigator.of(context).pushNamed(
+                          FinancePage.routeName,
+                          arguments: FinanceArguments(
+                            finance: state.inferredData!.finance,
+                            user: state.inferredData!.user,
+                            moneySavedOnRelapse:
+                                state.inferredData!.moneySavedOnRelapse,
                           ),
                         );
                       },
@@ -312,13 +315,11 @@ class _HomePageDetailState extends State<HomePageDetail> {
                   return Expanded(
                     child: InkWell(
                       onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ConsumptionPage(
-                              user: state.inferredData!.user,
-                              smokingDetails:
-                                  state.inferredData!.smokingDetails,
-                            ),
+                        Navigator.of(context).pushNamed(
+                          ConsumptionPage.routeName,
+                          arguments: ConsumptionArguemnts(
+                            user: state.inferredData!.user,
+                            smokingDetails: state.inferredData!.smokingDetails,
                           ),
                         );
                       },
@@ -362,25 +363,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
           style: FontConst.header2(color: ColorConst.blackColor2),
         ),
         SizedBox(height: 12.h),
-        LongCardWidget(
-          text: "Baca Tips",
-          backgroundColor: ColorConst.lightGreen,
-          textColor: ColorConst.darkGreen,
-          isSuffixIconOn: true,
-          onTap: () async {
-            await showDialog(
-              context: context,
-              builder: (context) {
-                return SimpleDialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  children: const [TipsDialog()],
-                );
-              },
-            );
-          },
-        ),
+        const TipsWidget(),
         SizedBox(height: 8.h),
         LongCardWidget(
           text: "Cara-cara untuk berhenti merokok",
@@ -402,7 +385,10 @@ class _HomePageDetailState extends State<HomePageDetail> {
     showDialog(
       barrierDismissible: isFirst ? false : true,
       context: context,
-      builder: (context) => SmokingCessationMethodsPage(isFirst: isFirst),
+      builder: (context) => Detector(
+        areaID: 'smoking-methods-page',
+        child: SmokingCessationMethodsPage(isFirst: isFirst),
+      ),
     );
   }
 }

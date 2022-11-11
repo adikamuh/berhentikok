@@ -1,4 +1,4 @@
-import 'package:berhentikok/model/date_time_extension.dart';
+import 'package:berhentikok/helper/count_helper.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/repositories/smoking_detail_repository.dart';
@@ -16,22 +16,13 @@ class FinanceChartCubit extends Cubit<List<FlSpot>> {
 
   void load() async {
     try {
-      final List<SmokingDetail> smokingDetails = await smokingDetailRepository.loadAll();
+      final List<SmokingDetail> smokingDetails =
+          await smokingDetailRepository.loadAll();
       final User? user = userRepository.load();
       if (user != null) {
-        Map<DateTime, int> daysFromStopSmoking = {};
-        DateTime day = user.startDateStopSmoking;
-        while (!(day.isSameDay(DateTime.now()))) {
-          daysFromStopSmoking[day] = smokingDetails.totalMoneySavedToThisDay(
-            day: day,
-            user: user,
-          );
-
-          day = day.add(const Duration(days: 1));
-        }
-        daysFromStopSmoking[day] = smokingDetails.totalMoneySavedToThisDay(
-          day: day,
+        Map<DateTime, int> daysFromStopSmoking = ChartHelper.financesToChart(
           user: user,
+          smokingDetails: smokingDetails,
         );
         emit(_toFlSpots(user: user, daysStopSmokingMap: daysFromStopSmoking));
       } else {

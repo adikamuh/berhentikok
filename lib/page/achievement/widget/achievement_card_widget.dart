@@ -16,20 +16,34 @@ class AchievementCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: achievement.isAchieved ? onTap : null,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         margin: EdgeInsets.only(bottom: 10.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          color:
-              achievement.isRead ? ColorConst.lightGreen : ColorConst.darkGreen,
+          color: achievement.isRead
+              ? ColorConst.lightGreen
+              : achievement.isAchieved
+                  ? ColorConst.darkGreen
+                  : Colors.grey.shade200,
         ),
         child: Row(
           children: [
-            Image.asset(
-              achievement.imageFile,
+            Container(
               width: 45.w,
+              height: 45.w,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(achievement.imageFile),
+                    fit: BoxFit.contain,
+                    colorFilter: achievement.isAchieved
+                        ? null
+                        : ColorFilter.mode(
+                            Colors.black.withOpacity(0.2),
+                            BlendMode.dstIn,
+                          )),
+              ),
             ),
             SizedBox(width: 18.w),
             Expanded(
@@ -43,7 +57,9 @@ class AchievementCardWidget extends StatelessWidget {
                     style: FontConst.subtitle(
                       color: achievement.isRead
                           ? ColorConst.darkGreen
-                          : ColorConst.lightGreen,
+                          : achievement.isAchieved
+                              ? ColorConst.lightGreen
+                              : Colors.black26,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:berhentikok/generate_routes.dart';
 import 'package:berhentikok/model/achievement.dart';
 import 'package:berhentikok/model/boxes_name.dart';
 import 'package:berhentikok/model/duration_adapter.dart';
@@ -13,6 +16,7 @@ import 'package:berhentikok/page/finance/bloc/finance_bloc.dart';
 import 'package:berhentikok/page/finance/cubit/finance_chart_cubit.dart';
 import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
+import 'package:berhentikok/page/home/cubit/tips_cubit.dart';
 import 'package:berhentikok/page/home/home_page.dart';
 import 'package:berhentikok/page/on_boarding/cubit/on_boarding_cubit.dart';
 import 'package:berhentikok/page/on_boarding/on_boarding_page.dart';
@@ -20,6 +24,7 @@ import 'package:berhentikok/repositories/achievement_repository.dart';
 import 'package:berhentikok/repositories/health_progress_repository.dart';
 import 'package:berhentikok/repositories/smoking_detail_repository.dart';
 import 'package:berhentikok/repositories/target_item_repository.dart';
+import 'package:berhentikok/repositories/tips_repository.dart';
 import 'package:berhentikok/repositories/user_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,15 +33,33 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:round_spot/round_spot.dart' as rs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // var dio = Dio();
   await _initHive();
   initializeDateFormatting('id_ID').then((_) {
     return runApp(
-      MultiRepositoryProvider(
-        providers: _buildRepositories(),
-        child: const MyApp(),
+      rs.initialize(
+        loggingLevel: rs.LogLevel.warning,
+        config: rs.Config(
+          outputType: rs.OutputType.localRender,
+        ),
+        localRenderCallback: (data, info) async {
+          var directory = await getExternalStorageDirectory();
+          var path = '${directory!.path}/${info.page}_${info.area}.png';
+          await File(path).writeAsBytes(data);
+        },
+        dataCallback: (data) {
+          debugPrint(data.toString());
+        },
+        child: MultiRepositoryProvider(
+          providers: _buildRepositories(),
+          child: const MyApp(),
+        ),
       ),
     );
   });
@@ -56,6 +79,7 @@ Future<void> _initHive() async {
     await Hive.openBox<SmokingDetail>(smokingDetailsBoxName);
     await Hive.openBox<TargetItem>(targetItemsBoxName);
     await Hive.openBox<Achievement>(achievementsReadBoxName);
+    await Hive.openBox<int>(tipsBoxName);
   } catch (e) {
     if (kDebugMode) {
       print(e.toString());
@@ -75,6 +99,8 @@ List<RepositoryProvider> _buildRepositories() {
   final AchievementRepository achievementRepository = AchievementRepository(
     Hive.box<Achievement>(achievementsReadBoxName),
   );
+  final TipsRepository tipsRepository =
+      TipsRepository(Hive.box<int>(tipsBoxName));
   return [
     RepositoryProvider<UserRepository>.value(value: userRepository),
     RepositoryProvider<SmokingDetailRepository>.value(
@@ -84,11 +110,31 @@ List<RepositoryProvider> _buildRepositories() {
         value: healthProgressRepository),
     RepositoryProvider<AchievementRepository>.value(
         value: achievementRepository),
+    RepositoryProvider<TipsRepository>.value(value: tipsRepository),
   ];
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final FinanceBloc financeBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    financeBloc = FinanceBloc(
+      userRepository: RepositoryProvider.of<UserRepository>(context),
+      targetItemRepository:
+          RepositoryProvider.of<TargetItemRepository>(context),
+      smokingDetailRepository:
+          RepositoryProvider.of<SmokingDetailRepository>(context),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +148,7 @@ class MyApp extends StatelessWidget {
         return MultiBlocProvider(
           providers: _buildBlocProviders(context),
           child: MaterialApp(
+            navigatorObservers: [rs.Observer()],
             debugShowCheckedModeBanner: false,
             title: 'BerhentiKok',
             builder: (context, widget) {
@@ -118,11 +165,10 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               textTheme: GoogleFonts.poppinsTextTheme(textTheme),
             ),
-            routes: <String, WidgetBuilder>{
-              'intro': (context) => const OnBoardingPage(),
-              'home': (context) => const HomePage(),
-            },
-            initialRoute: _checkIsRegistered(context) ? "home" : "intro",
+            onGenerateRoute: AppRoute.generateRoute,
+            initialRoute: _checkIsRegistered(context)
+                ? HomePage.routeName
+                : OnBoardingPage.routeName,
           ),
         );
       },
@@ -154,15 +200,7 @@ class MyApp extends StatelessWidget {
               RepositoryProvider.of<SmokingDetailRepository>(context),
         ),
       ),
-      BlocProvider<FinanceBloc>(
-        create: (context) => FinanceBloc(
-          userRepository: RepositoryProvider.of<UserRepository>(context),
-          targetItemRepository:
-              RepositoryProvider.of<TargetItemRepository>(context),
-          smokingDetailRepository:
-              RepositoryProvider.of<SmokingDetailRepository>(context),
-        ),
-      ),
+      BlocProvider<FinanceBloc>.value(value: financeBloc),
       BlocProvider<AddItemBloc>(
         create: (context) => AddItemBloc(
           targetItemRepository:
@@ -203,8 +241,13 @@ class MyApp extends StatelessWidget {
           smokingDetailRepository:
               RepositoryProvider.of<SmokingDetailRepository>(context),
           userRepository: RepositoryProvider.of<UserRepository>(context),
+          financeBloc: financeBloc,
         ),
       ),
+      BlocProvider<TipsCubit>(
+        create: (context) =>
+            TipsCubit(RepositoryProvider.of<TipsRepository>(context)),
+      )
     ];
   }
 }
