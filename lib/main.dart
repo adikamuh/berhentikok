@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'firebase_options.dart';
 
 import 'package:berhentikok/generate_routes.dart';
+import 'package:berhentikok/helper/permission_helper.dart';
 import 'package:berhentikok/model/achievement.dart';
 import 'package:berhentikok/model/boxes_name.dart';
 import 'package:berhentikok/model/duration_adapter.dart';
@@ -26,6 +28,7 @@ import 'package:berhentikok/repositories/smoking_detail_repository.dart';
 import 'package:berhentikok/repositories/target_item_repository.dart';
 import 'package:berhentikok/repositories/tips_repository.dart';
 import 'package:berhentikok/repositories/user_repository.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,13 +37,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:round_spot/round_spot.dart' as rs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // var dio = Dio();
   await _initHive();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   initializeDateFormatting('id_ID').then((_) {
     return runApp(
       rs.initialize(
@@ -49,6 +56,7 @@ void main() async {
           outputType: rs.OutputType.localRender,
         ),
         localRenderCallback: (data, info) async {
+          
           var directory = await getExternalStorageDirectory();
           var path = '${directory!.path}/${info.page}_${info.area}.png';
           await File(path).writeAsBytes(data);
@@ -134,6 +142,15 @@ class _MyAppState extends State<MyApp> {
       smokingDetailRepository:
           RepositoryProvider.of<SmokingDetailRepository>(context),
     );
+    _checkPermission();
+  }
+
+  Future<void> _checkPermission() async {
+    bool _isPermissionGranted = await PermissionHelper.checkStatuses([
+      Permission.manageExternalStorage,
+      Permission.storage,
+    ]);
+    if (_isPermissionGranted) PermissionHelper.requestStoragePermissions();
   }
 
   @override
