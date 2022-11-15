@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class FontConst {
   static TextStyle header1({
@@ -8,7 +7,8 @@ class FontConst {
     double? fontSize,
     FontWeight? fontWeight,
   }) {
-    return GoogleFonts.poppins(
+    return TextStyle(
+      fontFamily: 'Poppins',
       color: color,
       fontSize: fontSize ?? 36.sp,
       fontWeight: fontWeight ?? FontWeight.w700,
@@ -20,7 +20,8 @@ class FontConst {
     double? fontSize,
     FontWeight? fontWeight,
   }) {
-    return GoogleFonts.poppins(
+    return TextStyle(
+      fontFamily: 'Poppins',
       color: color,
       fontSize: fontSize ?? 22.sp,
       fontWeight: fontWeight ?? FontWeight.w700,
@@ -33,6 +34,7 @@ class FontConst {
     FontWeight? fontWeight,
   }) {
     return TextStyle(
+      fontFamily: 'Poppins',
       color: color,
       fontSize: fontSize ?? 18.sp,
       fontWeight: fontWeight ?? FontWeight.w600,
@@ -44,7 +46,8 @@ class FontConst {
     double? fontSize,
     FontWeight? fontWeight,
   }) {
-    return GoogleFonts.poppins(
+    return TextStyle(
+      fontFamily: 'Poppins',
       color: color,
       fontSize: fontSize ?? 16.sp,
       fontWeight: fontWeight ?? FontWeight.w400,
@@ -56,7 +59,8 @@ class FontConst {
     double? fontSize,
     FontWeight? fontWeight,
   }) {
-    return GoogleFonts.poppins(
+    return TextStyle(
+      fontFamily: 'Poppins',
       color: color,
       fontSize: fontSize ?? 14.sp,
       fontWeight: fontWeight ?? FontWeight.w400,
@@ -68,7 +72,8 @@ class FontConst {
     double? fontSize,
     FontWeight? fontWeight,
   }) {
-    return GoogleFonts.poppins(
+    return TextStyle(
+      fontFamily: 'Poppins',
       color: color,
       fontSize: fontSize ?? 12.sp,
       fontWeight: fontWeight ?? FontWeight.w400,
@@ -80,7 +85,8 @@ class FontConst {
     double? fontSize,
     FontWeight? fontWeight,
   }) {
-    return GoogleFonts.poppins(
+    return TextStyle(
+      fontFamily: 'Poppins',
       color: color,
       fontSize: fontSize ?? 10.sp,
       fontWeight: fontWeight ?? FontWeight.w400,

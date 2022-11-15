@@ -10,11 +10,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cloud_firestore: ^4.0.5
   cupertino_icons: ^1.0.2
   copy_with_extension: ^4.0.3
   copy_with_extension_gen: ^4.0.3
   dio: ^4.0.6
+  firebase_storage: ^11.0.5
   fl_chart: ^0.55.0
   flutter_bloc: ^8.0.0
   flutter_html: ^2.2.1
@@ -23,12 +23,8 @@ dependencies:
   fluttertoast: ^8.0.9
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  image_picker: ^0.8.6
   equatable: ^2.0.3
-  google_fonts: ^3.0.1
   intl: ^0.17.0
-  path_provider: ^2.0.11
-  permission_handler: ^10.2.0
   round_spot: ^0.5.0
   table_calendar: ^3.0.6
   firebase_core: ^2.2.0
@@ -50,6 +46,16 @@ flutter:
     - assets/icons/
     - assets/achievement/
     - assets/contents/
+  
+  fonts:
+    - family: Poppins
+      fonts: 
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
 
 flutter_icons:
   android: "launcher_icon"

@@ -24,11 +24,9 @@ import 'package:berhentikok/page/home/widget/tips_widget.dart';
 import 'package:berhentikok/page/smoking_cessation_methods/smoking_cessation_methods_page.dart';
 import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
 import 'package:berhentikok/widget/card_widget/long_card_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:round_spot/round_spot.dart';
 
 class HomePageDetail extends StatefulWidget {
@@ -81,37 +79,6 @@ class _HomePageDetailState extends State<HomePageDetail> {
                 children: [
                   _buildHeader(context, user),
                   SizedBox(height: 18.h),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final ImagePicker _picker = ImagePicker();
-
-                      final XFile? image =
-                          await _picker.pickImage(source: ImageSource.gallery);
-                      if (image != null) {
-                        final docImages = FirebaseFirestore.instance
-                            .collection('images')
-                            .doc();
-
-                        final imagesMap = <String, dynamic>{
-                          'id': docImages.id,
-                          'date': DateTime.now(),
-                          'image': await image.readAsBytes(),
-                        };
-
-                        await docImages.set(imagesMap);
-                      }
-
-                      // final docUser =
-                      //     FirebaseFirestore.instance.collection('users').doc();
-                      // final userMap = {
-                      //   'id': docUser.id,
-                      //   'name': 'john',
-                      // };
-
-                      // await docUser.set(userMap);
-                    },
-                    child: const Text('pick image'),
-                  ),
                   Padding(
                     padding: SizeConst.pagePadding,
                     child: Column(
