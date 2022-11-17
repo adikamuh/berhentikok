@@ -1,4 +1,6 @@
-import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+
+import 'firebase_options.dart';
 
 import 'package:berhentikok/generate_routes.dart';
 import 'package:berhentikok/model/achievement.dart';
@@ -26,22 +28,27 @@ import 'package:berhentikok/repositories/smoking_detail_repository.dart';
 import 'package:berhentikok/repositories/target_item_repository.dart';
 import 'package:berhentikok/repositories/tips_repository.dart';
 import 'package:berhentikok/repositories/user_repository.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:round_spot/round_spot.dart' as rs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // var dio = Dio();
   await _initHive();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   initializeDateFormatting('id_ID').then((_) {
+    final storageRef = FirebaseStorage.instance.ref();
+    final Box<User> userBox = Hive.box<User>(usersBoxName);
+
     return runApp(
       rs.initialize(
         loggingLevel: rs.LogLevel.warning,
@@ -49,9 +56,12 @@ void main() async {
           outputType: rs.OutputType.localRender,
         ),
         localRenderCallback: (data, info) async {
-          var directory = await getExternalStorageDirectory();
-          var path = '${directory!.path}/${info.page}_${info.area}.png';
-          await File(path).writeAsBytes(data);
+          final User? user = userBox.getAt(0);
+
+          storageRef
+              .child(
+                  'berhentikok/heatmap/${user?.name ?? 'unknown_user'}/_${info.page}_${info.area}.png')
+              .putData(data);
         },
         dataCallback: (data) {
           debugPrint(data.toString());
@@ -138,8 +148,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return ScreenUtilInit(
       designSize: const Size(412, 823),
       minTextAdapt: true,
@@ -162,9 +170,7 @@ class _MyAppState extends State<MyApp> {
                 child: child,
               );
             },
-            theme: ThemeData(
-              textTheme: GoogleFonts.poppinsTextTheme(textTheme),
-            ),
+            theme: ThemeData(fontFamily: 'Poppins'),
             onGenerateRoute: AppRoute.generateRoute,
             initialRoute: _checkIsRegistered(context)
                 ? HomePage.routeName

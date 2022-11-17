@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "383852995616",
+    "project_id": "berhentikok",
+    "storage_bucket": "berhentikok.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:383852995616:android:2c4d06c51f94252d554845",
+        "android_client_info": {
+          "package_name": "com.lbstudio12.berhentikok"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "383852995616-k56mb4t74ti3hqvhm2uidcb8g51r892k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaUDAeJ3GO49POhci6SqGh7DjGC64dcAo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "383852995616-k56mb4t74ti3hqvhm2uidcb8g51r892k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "383852995616-q6977soelrcfdj75s89t5lf2bmal848c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.berhentikok"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
