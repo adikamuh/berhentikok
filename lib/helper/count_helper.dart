@@ -30,26 +30,7 @@ class ChartHelper {
           _sumOnDay - smokingDetails.totalSmokingOnDay(day);
       day = day.add(const Duration(days: 1));
     }
-    int _sumToday = 0;
-    if (user.startDateStopSmoking.isSameDay(DateTime.now())) {
-      _sumToday = (user.hoursPerCigarette *
-              (now.difference(user.startDateStopSmoking).inHours))
-          .toInt();
-    } else {
-      _sumToday = (user.hoursPerCigarette *
-              (now
-                  .difference(
-                    DateTime(now.year, now.month, now.day, 0, 0, 0),
-                  )
-                  .inHours))
-          .toInt();
-      if (daysFromStopSmoking.values.isNotEmpty) {
-        final int _sumUntilYesterday = daysFromStopSmoking.values.last;
-        _sumToday = _sumToday + _sumUntilYesterday;
-      }
-    }
-    daysFromStopSmoking[day] =
-        _sumToday - smokingDetails.totalSmokingOnDay(day);
+    daysFromStopSmoking[day] = smokingDetails.totalFreeCigaretteOnRelapse(user);
 
     return daysFromStopSmoking.map(
       (date, total) => MapEntry(date, total < 0 ? 0 : total),

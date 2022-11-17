@@ -52,7 +52,7 @@ android {
 
     defaultConfig {
         applicationId "com.lbstudio12.berhentikok"
-        minSdkVersion 29
+        minSdkVersion 24
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
