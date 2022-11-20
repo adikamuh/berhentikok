@@ -1,5 +1,6 @@
 import 'package:berhentikok/model/date_time_extension.dart';
 import 'package:berhentikok/model/user.dart';
+import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,7 @@ import 'package:intl/intl.dart';
 part 'smoking_detail.g.dart';
 
 @HiveType(typeId: 1)
+@CopyWith()
 class SmokingDetail extends Equatable {
   @HiveField(0)
   final DateTime date;
