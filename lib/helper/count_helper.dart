@@ -16,7 +16,7 @@ class ChartHelper {
         final Duration _duration =
             DateTime(day.year, day.month, day.day, 24, 0, 0)
                 .difference(user.startDateStopSmoking);
-        _sumOnDay = (_duration.inHours * user.hoursPerCigarette).toInt();
+        _sumOnDay = (_duration.inHours ~/ user.hoursPerCigarette).toInt();
       } else {
         _sumOnDay = user.tobaccoConsumption;
       }
