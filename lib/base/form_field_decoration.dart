@@ -21,6 +21,7 @@ class FormDecoration {
       prefix: prefix,
       suffixIcon: suffixIcon,
       isDense: true,
+      errorMaxLines: 2,
     );
   }
 }
