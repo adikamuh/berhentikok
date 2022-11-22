@@ -1,4 +1,5 @@
 import 'package:berhentikok/base/button_style_const.dart';
+import 'package:berhentikok/base/date_format_const.dart';
 import 'package:berhentikok/base/string_extension.dart';
 import 'package:berhentikok/model/resource.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
@@ -75,6 +76,10 @@ class _AddSmokingDetailDialogState extends State<AddSmokingDetailDialog> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Tanggal kamu merokok harus diisi.';
+                  } else if (DateTime.now()
+                          .compareTo(AppDateFormat.dateFormat.parse(value)) <
+                      0) {
+                    return 'Nilai tanggal dan waktu maksimal adalah tanggal dan jam sekarang';
                   }
                   return null;
                 },
