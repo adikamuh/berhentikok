@@ -20,7 +20,7 @@ class UserRepository {
 
   User? load() {
     final User? user = usersBox.getAt(0);
-    return user?.copyWith(startDateStopSmoking: DateTime(2022, 11, 1));
+    return user;
   }
 
   bool isRegistered() {
