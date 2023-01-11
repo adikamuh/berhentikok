@@ -14,7 +14,7 @@ class MoneySavedCardWidget extends StatelessWidget {
       margin: EdgeInsets.zero,
       color: ColorConst.darkGreen,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.r),
+        borderRadius: BorderRadius.circular(16.r),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 20.h),

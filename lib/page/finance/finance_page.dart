@@ -1,5 +1,6 @@
 import 'package:berhentikok/base/button_style_const.dart';
 import 'package:berhentikok/base/color_const.dart';
+import 'package:berhentikok/base/font_const.dart';
 import 'package:berhentikok/base/int_extension.dart';
 import 'package:berhentikok/base/size_const.dart';
 import 'package:berhentikok/model/chart_type.dart';
@@ -59,41 +60,70 @@ class _FinancePageState extends State<FinancePage> {
           child: Padding(
             padding: SizeConst.pagePadding,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SectionStatisticDetailWidget(
-                  title: 'Kamu berhasil menghemat',
+                  showBorder: false,
                   child: MoneySavedCardWidget(
                     value: widget.moneySavedOnRelapse.toCurrencyFormatter(),
                   ),
                 ),
                 SectionStatisticDetailWidget(
                   title: 'Target Barang',
+                  iconData: Icons.shopping_cart_rounded,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: BlocBuilder<AddItemBloc, AddItemState>(
-                          builder: (context, state) {
-                            if (state is ItemsLoaded) {
-                              return Row(
-                                children: state.targetItems
-                                    .map(
-                                      (item) => TargetItemCardWidget(
+                      BlocBuilder<AddItemBloc, AddItemState>(
+                        builder: (context, state) {
+                          if (state is ItemsLoaded) {
+                            if (state.targetItems.isEmpty) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 3,
+                                      child: Image.asset(
+                                        'assets/icons/ic-shelves.png',
+                                        // width: 40.w,
+                                      ),
+                                    ),
+                                    SizedBox(width: 16.w),
+                                    Expanded(
+                                      flex: 12,
+                                      child: Text(
+                                        "Ayo tambah target barang impianmu!",
+                                        style: FontConst.body(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return Column(
+                              children: state.targetItems
+                                  .map(
+                                    (item) => Padding(
+                                      padding: EdgeInsets.only(bottom: 12.h),
+                                      child: TargetItemCardWidget(
                                         targetItem: TargetItem(
                                           name: item.name,
                                           price: item.price,
                                         ),
+                                        user: widget.user,
                                         moneySaved: widget.moneySavedOnRelapse,
                                       ),
-                                    )
-                                    .toList(),
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
-                          },
-                        ),
+                                    ),
+                                  )
+                                  .toList(),
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
                       ),
                       SizedBox(height: 8.h),
                       Row(
@@ -119,9 +149,16 @@ class _FinancePageState extends State<FinancePage> {
                               );
                             },
                             child: Row(
-                              children: const [
-                                Text('Tambah Barang'),
-                                Icon(Icons.add_rounded),
+                              children: [
+                                Text(
+                                  'Tambah Barang',
+                                  style: FontConst.body(color: Colors.white),
+                                ),
+                                Icon(
+                                  Icons.add_rounded,
+                                  size: 18.w,
+                                  color: Colors.white,
+                                ),
                               ],
                             ),
                           ),
@@ -130,47 +167,75 @@ class _FinancePageState extends State<FinancePage> {
                     ],
                   ),
                 ),
-                SectionStatisticDetailWidget(
-                  title: 'Proyeksi',
-                  child: Column(
-                    children: [
-                      ProjectionChildWidget(
-                        projectionType: ProjectionType.day,
-                        moneySavedOnRelapse: widget.moneySavedOnRelapse,
-                        user: widget.user,
-                      ),
-                      ProjectionChildWidget(
-                        projectionType: ProjectionType.week,
-                        moneySavedOnRelapse: widget.moneySavedOnRelapse,
-                        user: widget.user,
-                      ),
-                      ProjectionChildWidget(
-                        projectionType: ProjectionType.month,
-                        moneySavedOnRelapse: widget.moneySavedOnRelapse,
-                        user: widget.user,
-                      ),
-                      ProjectionChildWidget(
-                        projectionType: ProjectionType.year,
-                        moneySavedOnRelapse: widget.moneySavedOnRelapse,
-                        user: widget.user,
-                      ),
-                    ],
-                  ),
-                ),
                 BlocBuilder<FinanceChartCubit, List<FlSpot>>(
                   builder: (context, state) {
                     return SectionStatisticDetailWidget(
-                      title: 'Statistik',
+                      title: 'Penghematan uang',
+                      iconData: Icons.equalizer_rounded,
                       child: SizedBox(
                         width: 350.w,
-                        height: 200.h,
-                        child: ChartWidget(
-                          chartType: ChartType.finance,
-                          data: state,
+                        height: 230.h,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            top: 14.h,
+                            right: 32.w,
+                            left: 8.w,
+                          ),
+                          child: ChartWidget(
+                            chartType: ChartType.finance,
+                            data: state,
+                          ),
                         ),
                       ),
                     );
                   },
+                ),
+                SectionStatisticDetailWidget(
+                  title: 'Estimasi penghematan',
+                  iconData: Icons.payments_rounded,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ProjectionChildWidget(
+                              projectionType: ProjectionType.day,
+                              moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                              user: widget.user,
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          Expanded(
+                            child: ProjectionChildWidget(
+                              projectionType: ProjectionType.week,
+                              moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                              user: widget.user,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 12.w),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ProjectionChildWidget(
+                              projectionType: ProjectionType.month,
+                              moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                              user: widget.user,
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          Expanded(
+                            child: ProjectionChildWidget(
+                              projectionType: ProjectionType.year,
+                              moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                              user: widget.user,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

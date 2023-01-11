@@ -1,4 +1,5 @@
 import 'package:berhentikok/base/int_extension.dart';
+import 'package:berhentikok/model/user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 
@@ -25,5 +26,15 @@ class TargetItem extends Equatable {
     } else {
       return "${totalMoneySaved.toCurrencyFormatter()} / ${price.toCurrencyFormatter()}";
     }
+  }
+
+  int toPercentProgress(int totalMoneySaved) {
+    if (totalMoneySaved >= price) return 100;
+    return ((totalMoneySaved / price) * 100).toInt();
+  }
+
+  int estimateDays(int totalMoneySaved, User user) {
+    final int difference = price - totalMoneySaved;
+    return difference ~/ user.moneySavedEachDay;
   }
 }

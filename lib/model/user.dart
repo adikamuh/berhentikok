@@ -57,17 +57,17 @@ class User extends Equatable {
       if (duration.inDays > 0) {
         final String inHours =
             duration.inHours % 24 != 0 ? "${duration.inHours % 24} jam" : "";
-        return "${duration.inDays} hari\n$inHours";
+        return "${duration.inDays} hari $inHours";
       } else if (duration.inHours > 0) {
         final String inMinutes = duration.inMinutes % 60 != 0
             ? "${duration.inMinutes % 60} menit"
             : "";
-        return "${duration.inHours} jam\n$inMinutes";
+        return "${duration.inHours} jam $inMinutes";
       } else if (duration.inMinutes > 0) {
         final String inSeconds = duration.inSeconds % 60 != 0
             ? "${duration.inSeconds % 60} detik"
             : "";
-        return "${duration.inMinutes} menit\n$inSeconds";
+        return "${duration.inMinutes} menit $inSeconds";
       } else if (duration.inSeconds >= 0) {
         return "${duration.inSeconds} detik";
       } else {

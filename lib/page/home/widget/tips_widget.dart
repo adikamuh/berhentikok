@@ -26,7 +26,7 @@ class _TipsWidgetState extends State<TipsWidget> {
   @override
   Widget build(BuildContext context) {
     return LongCardWidget(
-      text: "Baca Tips",
+      text: "Tips Berhenti Merokok",
       backgroundColor: ColorConst.lightGreen,
       textColor: ColorConst.darkGreen,
       isSuffixIconOn: true,

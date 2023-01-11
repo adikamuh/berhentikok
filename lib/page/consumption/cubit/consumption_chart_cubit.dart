@@ -41,7 +41,7 @@ class ConsumptionChartCubit extends Cubit<List<FlSpot>> {
     List<FlSpot> _flSpots = [];
     daysStopSmokingMap.forEach((date, total) {
       final int whatDay = date.difference(user.startDateStopSmoking).inDays + 1;
-      _flSpots.add(FlSpot(whatDay.toDouble(), total.toDouble()));
+      _flSpots.add(FlSpot(whatDay.toDouble(), (total.toDouble() * -1)));
     });
     return _flSpots;
   }

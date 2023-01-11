@@ -65,7 +65,8 @@ class _StatisticPageState extends State<StatisticPage> {
                             arguments: HealthArguments(
                               healthProgresses:
                                   state.inferredData!.healthProgresses,
-                              smokingDetails: state.inferredData!.smokingDetails,
+                              smokingDetails:
+                                  state.inferredData!.smokingDetails,
                               user: state.inferredData!.user,
                             ),
                           );
@@ -110,8 +111,8 @@ class _StatisticPageState extends State<StatisticPage> {
                             arguments: FinanceArguments(
                               finance: financeState.inferredData!.finance,
                               user: financeState.inferredData!.user,
-                              moneySavedOnRelapse:
-                                  financeState.inferredData!.moneySavedOnRelapse,
+                              moneySavedOnRelapse: financeState
+                                  .inferredData!.moneySavedOnRelapse,
                             ),
                           );
                         },
@@ -134,16 +135,18 @@ class _StatisticPageState extends State<StatisticPage> {
                                       if (state.targetItems.isNotEmpty)
                                         TargetItemCardWidget(
                                           targetItem: state.targetItems.first,
-                                          moneySaved: financeState
-                                              .inferredData!.moneySavedOnRelapse,
+                                          moneySaved: financeState.inferredData!
+                                              .moneySavedOnRelapse,
                                           margin: EdgeInsets.zero,
+                                          user: financeState.inferredData!.user,
                                         ),
                                       if (state.targetItems.length >= 2)
                                         TargetItemCardWidget(
                                           targetItem: state.targetItems[1],
-                                          moneySaved: financeState
-                                              .inferredData!.moneySavedOnRelapse,
+                                          moneySaved: financeState.inferredData!
+                                              .moneySavedOnRelapse,
                                           margin: EdgeInsets.zero,
+                                          user: financeState.inferredData!.user,
                                         ),
                                     ],
                                   );
@@ -169,7 +172,8 @@ class _StatisticPageState extends State<StatisticPage> {
                             ConsumptionPage.routeName,
                             arguments: ConsumptionArguemnts(
                               user: state.inferredData!.user,
-                              smokingDetails: state.inferredData!.smokingDetails,
+                              smokingDetails:
+                                  state.inferredData!.smokingDetails,
                             ),
                           );
                         },

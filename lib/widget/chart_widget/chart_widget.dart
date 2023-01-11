@@ -1,4 +1,6 @@
 import 'package:berhentikok/base/color_const.dart';
+import 'package:berhentikok/base/font_const.dart';
+import 'package:berhentikok/base/int_extension.dart';
 import 'package:berhentikok/model/chart_type.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +17,6 @@ class ChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // double _intervalX = chartType == ChartType.consumption ? 10 : 10000;
-
     List<Color> gradientColors = [
       const Color(0xff23b6e6),
       const Color(0xff02d39a),
@@ -27,46 +27,88 @@ class ChartWidget extends StatelessWidget {
         gridData: FlGridData(
           show: true,
           drawVerticalLine: false,
-          drawHorizontalLine: false,
-          horizontalInterval: 1,
+          drawHorizontalLine: true,
           verticalInterval: 1,
+          getDrawingHorizontalLine: (value) {
+            return FlLine(
+              color: ColorConst.greyColor2,
+              strokeWidth: 1,
+            );
+          },
         ),
         titlesData: FlTitlesData(
           show: true,
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          bottomTitles: AxisTitles(
-            axisNameWidget: const Text(
-              "Hari",
-              textAlign: TextAlign.center,
-            ),
-            axisNameSize: 25.w,
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 30,
-              interval: 10,
-              // getTitlesWidget: bottomTitleWidgets,
-            ),
-          ),
+          topTitles: chartType == ChartType.consumption
+              ? AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 30,
+                    interval: 10,
+                    getTitlesWidget: bottomTitleWidgets,
+                  ),
+                )
+              : AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          bottomTitles: chartType == ChartType.finance
+              ? AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 30,
+                    interval: 10,
+                    getTitlesWidget: bottomTitleWidgets,
+                  ),
+                )
+              : AxisTitles(sideTitles: SideTitles(showTitles: false)),
           leftTitles: AxisTitles(
-            axisNameWidget: const Text(
-              'Jumlah',
-              textAlign: TextAlign.end,
-            ),
-            axisNameSize: 20.w,
+            axisNameWidget: chartType == ChartType.consumption
+                ? Text(
+                    'Jumlah',
+                    textAlign: TextAlign.start,
+                    style: FontConst.body(fontWeight: FontWeight.bold),
+                  )
+                : null,
+            axisNameSize: chartType == ChartType.consumption ? 35.w : null,
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 60.w,
-              // interval: _intervalX,
-              // getTitlesWidget: leftTitleWidgets,
+              getTitlesWidget: leftTitleWidgets,
             ),
+          ),
+        ),
+        lineTouchData: LineTouchData(
+          handleBuiltInTouches: true,
+          touchTooltipData: LineTouchTooltipData(
+            tooltipBgColor: ColorConst.lightGreen.withOpacity(0.5),
+            getTooltipItems: (touchedSpots) {
+              return touchedSpots.map(
+                (barSpot) {
+                  return LineTooltipItem(
+                    barSpot.y.toInt().toCompactThousandFormatter() + "\n",
+                    FontConst.small(fontWeight: FontWeight.w600),
+                    children: [
+                      TextSpan(
+                        text: "Hari ke-${barSpot.x.toInt()}",
+                        style: FontConst.small().copyWith(
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ).toList();
+            },
           ),
         ),
         borderData: FlBorderData(
           show: true,
-          border: const Border(
-            bottom: BorderSide(color: ColorConst.blackColor2),
-            left: BorderSide(color: ColorConst.blackColor2),
+          border: Border(
+            bottom: chartType == ChartType.finance
+                ? const BorderSide(color: ColorConst.greyColor2, width: 3)
+                : BorderSide.none,
+            top: chartType == ChartType.consumption
+                ? const BorderSide(color: ColorConst.greyColor2, width: 3)
+                : BorderSide.none,
+            // left: BorderSide(color: ColorConst.blackColor2),
           ),
         ),
         minX: 1,
@@ -75,7 +117,11 @@ class ChartWidget extends StatelessWidget {
                 .reduce((current, next) => current.x > next.x ? current : next)
                 .x
             : 1,
-        minY: 0,
+        minY: chartType == ChartType.consumption
+            ? data
+                .reduce((current, next) => current.y < next.y ? current : next)
+                .y
+            : data.first.y,
         maxY: data.isNotEmpty
             ? data
                 .reduce((current, next) => current.y > next.y ? current : next)
@@ -93,18 +139,18 @@ class ChartWidget extends StatelessWidget {
             barWidth: 5,
             isStrokeCapRound: false,
             dotData: FlDotData(
-              show: false,
-            ),
-            belowBarData: BarAreaData(
               show: true,
-              gradient: LinearGradient(
-                colors: gradientColors
-                    .map((color) => color.withOpacity(0.3))
-                    .toList(),
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
             ),
+            // belowBarData: BarAreaData(
+            //   show: true,
+            //   gradient: LinearGradient(
+            //     colors: gradientColors
+            //         .map((color) => color.withOpacity(0.3))
+            //         .toList(),
+            //     begin: Alignment.centerLeft,
+            //     end: Alignment.centerRight,
+            //   ),
+            // ),
           ),
         ],
       ),
@@ -112,55 +158,32 @@ class ChartWidget extends StatelessWidget {
   }
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff67727d),
-      fontWeight: FontWeight.bold,
-      fontSize: 15,
+    return Text(
+      chartType == ChartType.consumption
+          ? value.toInt().toCompactThousandFormatter()
+          : value.toInt().toCompactCurrencyFormatter(),
+      style: FontConst.small(
+        fontWeight: FontWeight.w600,
+        color: ColorConst.blackColor2,
+      ),
+      textAlign: TextAlign.center,
     );
-    String text;
-    switch (value.toInt()) {
-      case 1:
-        text = '10rb';
-        break;
-      case 3:
-        text = '30rb';
-        break;
-      case 5:
-        text = '50rb';
-        break;
-      default:
-        return Container();
-    }
-
-    return Text(text, style: style, textAlign: TextAlign.left);
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff68737d),
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
-    );
-    Widget text;
-    switch (value.toInt()) {
-      case 1:
-        text = const Text('1', style: style);
-        break;
-      case 2:
-        text = const Text('2', style: style);
-        break;
-      case 3:
-        text = const Text('3', style: style);
-        break;
-      default:
-        text = const Text('', style: style);
-        break;
-    }
-
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 8.0,
-      child: text,
+    return Padding(
+      padding: EdgeInsets.only(
+        top: chartType == ChartType.finance ? 12.h : 0,
+        bottom: chartType == ChartType.consumption ? 12.h : 0,
+      ),
+      child: Text(
+        "Hari ke-${value.toInt().toString()}",
+        style: FontConst.small(
+          fontWeight: FontWeight.w600,
+          color: ColorConst.darkGreen,
+        ),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 }

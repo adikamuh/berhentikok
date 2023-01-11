@@ -8,7 +8,6 @@ import 'package:berhentikok/model/health_progress.dart';
 import 'package:berhentikok/model/resource.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/model/user.dart';
-import 'package:berhentikok/page/achievement/achievement_page.dart';
 import 'package:berhentikok/page/achievement/bloc/achievement_bloc.dart';
 import 'package:berhentikok/page/consumption/bloc/consumption_bloc.dart';
 import 'package:berhentikok/page/consumption/consumption_page.dart';
@@ -20,10 +19,9 @@ import 'package:berhentikok/page/health/health_page.dart';
 import 'package:berhentikok/page/health/widget/health_card_widget.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
 import 'package:berhentikok/page/home/cubit/tips_cubit.dart';
-import 'package:berhentikok/page/home/widget/tips_widget.dart';
+import 'package:berhentikok/page/home/widget/custom_box_widget.dart';
 import 'package:berhentikok/page/smoking_cessation_methods/smoking_cessation_methods_page.dart';
 import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
-import 'package:berhentikok/widget/card_widget/long_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -84,10 +82,39 @@ class _HomePageDetailState extends State<HomePageDetail> {
                     child: Column(
                       children: [
                         _buildConsumptionSummary(context, user),
+                        SizedBox(height: 8.w),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomBoxWidget(
+                                text: "Tips berhenti merokok",
+                                icon: Icons.info_outline,
+                                backgroundColor: ColorConst.lightGreen,
+                                iconColor: Colors.blue.shade900,
+                                textColor: Colors.grey.shade800,
+                                onTap: () {},
+                              ),
+                            ),
+                            SizedBox(width: 8.w),
+                            Expanded(
+                              child: CustomBoxWidget(
+                                text: "Metode berhenti merokok",
+                                icon: Icons.import_contacts_outlined,
+                                backgroundColor: ColorConst.lightGreen,
+                                iconColor: ColorConst.darkGreen,
+                                textColor: Colors.grey.shade800,
+                                onTap: () {
+                                  _showSmokingCessationMethods(
+                                    context: context,
+                                    isFirst: false,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                         SizedBox(height: 18.h),
                         _buildOverallSummary(user),
-                        SizedBox(height: 18.h),
-                        _buildOthers(context),
                       ],
                     ),
                   ),
@@ -112,7 +139,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
       clipBehavior: Clip.antiAlias,
       padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.r)),
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.r)),
         color: ColorConst.darkGreen,
       ),
       child: Stack(
@@ -124,7 +151,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
               width: 250.w,
               height: 250.w,
               decoration: const BoxDecoration(
-                color: Color(0xff4B8A64),
+                color: Color.fromARGB(255, 55, 126, 83),
                 shape: BoxShape.circle,
               ),
             ),
@@ -150,49 +177,49 @@ class _HomePageDetailState extends State<HomePageDetail> {
                   ),
                 ),
                 SizedBox(width: 30.w),
-                BlocBuilder<AchievementBloc, Resource<AchievementState>>(
-                  bloc: achievementBloc,
-                  builder: (context, state) {
-                    if (state is Success) {
-                      return InkWell(
-                        onTap: () async {
-                          await Navigator.of(context).pushNamed(
-                            AchievementPage.routeName,
-                          );
-                        },
-                        child: Stack(
-                          children: [
-                            const Icon(
-                              Icons.stars_rounded,
-                              color: Colors.white,
-                            ),
-                            if (!state.inferredData!.isAllRead)
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: Container(
-                                  width: 10.w,
-                                  height: 10.w,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: ColorConst.secondaryColor2,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.5),
-                                        offset: const Offset(-1, 2),
-                                        blurRadius: 3,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              )
-                          ],
-                        ),
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
+                // BlocBuilder<AchievementBloc, Resource<AchievementState>>(
+                //   bloc: achievementBloc,
+                //   builder: (context, state) {
+                //     if (state is Success) {
+                //       return InkWell(
+                //         onTap: () async {
+                //           await Navigator.of(context).pushNamed(
+                //             AchievementPage.routeName,
+                //           );
+                //         },
+                //         child: Stack(
+                //           children: [
+                //             const Icon(
+                //               Icons.stars_rounded,
+                //               color: Colors.white,
+                //             ),
+                //             if (!state.inferredData!.isAllRead)
+                //               Positioned(
+                //                 top: 0,
+                //                 right: 0,
+                //                 child: Container(
+                //                   width: 10.w,
+                //                   height: 10.w,
+                //                   decoration: BoxDecoration(
+                //                     shape: BoxShape.circle,
+                //                     color: ColorConst.secondaryColor2,
+                //                     boxShadow: [
+                //                       BoxShadow(
+                //                         color: Colors.black.withOpacity(0.5),
+                //                         offset: const Offset(-1, 2),
+                //                         blurRadius: 3,
+                //                       )
+                //                     ],
+                //                   ),
+                //                 ),
+                //               )
+                //           ],
+                //         ),
+                //       );
+                //     }
+                //     return const SizedBox();
+                //   },
+                // ),
               ],
             ),
           ),
@@ -216,6 +243,10 @@ class _HomePageDetailState extends State<HomePageDetail> {
     );
   }
 
+  // Widget _buildTips() {
+  //   return
+  // }
+
   Widget _buildOverallSummary(User user) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,31 +262,34 @@ class _HomePageDetailState extends State<HomePageDetail> {
             if (state is Success) {
               final Duration freeSmokingDuration =
                   state.inferredData!.smokingDetails.freeSmokingDuration(user);
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed(
-                    HealthPage.routeName,
-                    arguments: HealthArguments(
-                      healthProgresses: state.inferredData!.healthProgresses,
-                      smokingDetails: state.inferredData!.smokingDetails,
-                      user: state.inferredData!.user,
-                    ),
-                  );
-                },
-                child: HealthCardWidget(
-                  healthProgress:
-                      state.inferredData!.healthProgresses.firstWhereOnProgress(
-                    user: user,
-                    smokingDetails: state.inferredData!.smokingDetails,
-                  ),
-                  smokingDetails: state.inferredData!.smokingDetails,
-                  user: user,
-                  freeSmokingDuration: freeSmokingDuration,
-                  backgroundColor: ColorConst.lightGreen,
-                  textColor: ColorConst.darkGreen,
-                  linearValueColor: ColorConst.darkGreen,
-                ),
+              final healthProgress =
+                  state.inferredData!.healthProgresses.firstWhereOnProgress(
+                user: user,
+                smokingDetails: state.inferredData!.smokingDetails,
               );
+              if (healthProgress != null) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      HealthPage.routeName,
+                      arguments: HealthArguments(
+                        healthProgresses: state.inferredData!.healthProgresses,
+                        smokingDetails: state.inferredData!.smokingDetails,
+                        user: state.inferredData!.user,
+                      ),
+                    );
+                  },
+                  child: HealthCardWidget(
+                    healthProgress: healthProgress,
+                    smokingDetails: state.inferredData!.smokingDetails,
+                    user: user,
+                    freeSmokingDuration: freeSmokingDuration,
+                    backgroundColor: ColorConst.lightGreen,
+                    textColor: ColorConst.darkGreen,
+                    linearValueColor: ColorConst.darkGreen,
+                  ),
+                );
+              }
             }
             return const SizedBox();
           },
@@ -354,29 +388,29 @@ class _HomePageDetailState extends State<HomePageDetail> {
     );
   }
 
-  Widget _buildOthers(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Lainnya",
-          style: FontConst.header2(color: ColorConst.blackColor2),
-        ),
-        SizedBox(height: 12.h),
-        const TipsWidget(),
-        SizedBox(height: 8.h),
-        LongCardWidget(
-          text: "Cara-cara untuk berhenti merokok",
-          backgroundColor: ColorConst.lightGreen,
-          textColor: ColorConst.darkGreen,
-          isSuffixIconOn: true,
-          onTap: () {
-            _showSmokingCessationMethods(context: context, isFirst: false);
-          },
-        ),
-      ],
-    );
-  }
+  // Widget _buildOthers(BuildContext context) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         "Lainnya",
+  //         style: FontConst.header2(color: ColorConst.blackColor2),
+  //       ),
+  //       SizedBox(height: 12.h),
+  //       const TipsWidget(),
+  //       SizedBox(height: 8.h),
+  //       LongCardWidget(
+  //         text: "Cara-cara untuk berhenti merokok",
+  //         backgroundColor: ColorConst.lightGreen,
+  //         textColor: ColorConst.darkGreen,
+  //         isSuffixIconOn: true,
+  //         onTap: () {
+  //           _showSmokingCessationMethods(context: context, isFirst: false);
+  //         },
+  //       ),
+  //     ],
+  //   );
+  // }
 
   void _showSmokingCessationMethods({
     required BuildContext context,
