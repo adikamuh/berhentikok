@@ -80,23 +80,17 @@ class _FinancePageState extends State<FinancePage> {
                             if (state.targetItems.isEmpty) {
                               return Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),
-                                child: Row(
+                                child: Column(
                                   children: [
-                                    Expanded(
-                                      flex: 3,
-                                      child: Image.asset(
-                                        'assets/icons/ic-shelves.png',
-                                        // width: 40.w,
-                                      ),
+                                    Image.asset(
+                                      'assets/icons/ic-shelves.png',
+                                      width: 200.w,
                                     ),
-                                    SizedBox(width: 16.w),
-                                    Expanded(
-                                      flex: 12,
-                                      child: Text(
-                                        "Ayo tambah target barang impianmu!",
-                                        style: FontConst.body(
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                    SizedBox(height: 12.h),
+                                    Text(
+                                      "Ayo tambah target barang impianmu!",
+                                      style: FontConst.body(
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],

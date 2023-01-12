@@ -1,4 +1,4 @@
-import 'package:firebase_storage/firebase_storage.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
 
 import 'firebase_options.dart';
 
@@ -18,7 +18,6 @@ import 'package:berhentikok/page/finance/bloc/finance_bloc.dart';
 import 'package:berhentikok/page/finance/cubit/finance_chart_cubit.dart';
 import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
-import 'package:berhentikok/page/home/cubit/tips_cubit.dart';
 import 'package:berhentikok/page/home/home_page.dart';
 import 'package:berhentikok/page/on_boarding/cubit/on_boarding_cubit.dart';
 import 'package:berhentikok/page/on_boarding/on_boarding_page.dart';
@@ -46,8 +45,8 @@ void main() async {
   );
 
   initializeDateFormatting('id_ID').then((_) {
-    final storageRef = FirebaseStorage.instance.ref();
-    final Box<User> userBox = Hive.box<User>(usersBoxName);
+    // final storageRef = FirebaseStorage.instance.ref();
+    // final Box<User> userBox = Hive.box<User>(usersBoxName);
 
     return runApp(
       rs.initialize(
@@ -56,12 +55,12 @@ void main() async {
           outputType: rs.OutputType.localRender,
         ),
         localRenderCallback: (data, info) async {
-          final User? user = userBox.getAt(0);
+          // final User? user = userBox.getAt(0);
 
-          storageRef
-              .child(
-                  'berhentikok/heatmap/${user?.name ?? 'unknown_user'}/_${info.page}_${info.area}.png')
-              .putData(data);
+          // storageRef
+          //     .child(
+          //         'berhentikok/heatmap/${user?.name ?? 'unknown_user'}/_${info.page}_${info.area}.png')
+          //     .putData(data);
         },
         dataCallback: (data) {
           debugPrint(data.toString());
@@ -250,10 +249,10 @@ class _MyAppState extends State<MyApp> {
           financeBloc: financeBloc,
         ),
       ),
-      BlocProvider<TipsCubit>(
-        create: (context) =>
-            TipsCubit(RepositoryProvider.of<TipsRepository>(context)),
-      )
+      // BlocProvider<TipsCubit>(
+      //   create: (context) =>
+      //       TipsCubit(RepositoryProvider.of<TipsRepository>(context)),
+      // )
     ];
   }
 }

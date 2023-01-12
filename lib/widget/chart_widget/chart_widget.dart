@@ -118,10 +118,16 @@ class ChartWidget extends StatelessWidget {
                 .x
             : 1,
         minY: chartType == ChartType.consumption
-            ? data
-                .reduce((current, next) => current.y < next.y ? current : next)
-                .y
-            : data.first.y,
+            ? data.isNotEmpty
+                ? data
+                    .reduce(
+                      (current, next) => current.y < next.y ? current : next,
+                    )
+                    .y
+                : 0
+            : data.isNotEmpty
+                ? data.first.y
+                : 0,
         maxY: data.isNotEmpty
             ? data
                 .reduce((current, next) => current.y > next.y ? current : next)

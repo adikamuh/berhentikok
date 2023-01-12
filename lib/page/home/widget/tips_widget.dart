@@ -1,11 +1,11 @@
 import 'package:berhentikok/base/color_const.dart';
-import 'package:berhentikok/page/home/cubit/tips_cubit.dart';
-import 'package:berhentikok/page/home/widget/tips_dialog.dart';
-import 'package:berhentikok/widget/card_widget/long_card_widget.dart';
+import 'package:berhentikok/model/tips.dart';
+import 'package:berhentikok/page/home/widget/custom_box_widget.dart';
+import 'package:berhentikok/repositories/tips_repository.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:round_spot/round_spot.dart';
 
 class TipsWidget extends StatefulWidget {
   const TipsWidget({Key? key}) : super(key: key);
@@ -15,52 +15,149 @@ class TipsWidget extends StatefulWidget {
 }
 
 class _TipsWidgetState extends State<TipsWidget> {
-  late int _indexTips;
+  // late int _indexTips;
+  late List<Tips> tips;
 
   @override
   void initState() {
     super.initState();
-    _indexTips = context.read<TipsCubit>().state.id;
+    tips = RepositoryProvider.of<TipsRepository>(context).load();
+    // _indexTips = context.read<TipsCubit>().state.id;
   }
 
   @override
   Widget build(BuildContext context) {
-    return LongCardWidget(
-      text: "Tips Berhenti Merokok",
+    return CustomBoxWidget(
+      text: "Tips berhenti merokok",
+      icon: Icons.info_outline,
       backgroundColor: ColorConst.lightGreen,
-      textColor: ColorConst.darkGreen,
-      isSuffixIconOn: true,
-      onTap: () async {
-        await showDialog<int>(
+      iconColor: Colors.blue.shade900,
+      textColor: Colors.grey.shade800,
+      onTap: () {
+        showDialog(
           context: context,
           builder: (context) {
-            return Detector(
-              areaID: 'tips-dialog',
-              child: SimpleDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                children: [
-                  TipsDialog(
-                    tips: context.read<TipsCubit>().tipsRepository.load(),
-                    indexTips: _indexTips,
-                    onPrev: _onNextPrev,
-                    onNext: _onNextPrev,
-                  )
-                ],
-              ),
+            return Swiper(
+              indicatorLayout: PageIndicatorLayout.WARM,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  padding: EdgeInsets.all(32.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.5),
+                        offset: const Offset(-1, 2),
+                        blurRadius: 3,
+                      )
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: 170.w,
+                        height: 200.h,
+                        child: Image.asset(
+                          'assets/tips/illustration-tips-$index.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      SizedBox(height: 12.h),
+                      Text(tips[index].description),
+                    ],
+                  ),
+                );
+              },
+              itemCount: tips.length,
+              itemWidth: 300.w,
+              itemHeight: 380.h,
+              layout: SwiperLayout.TINDER,
+              loop: true,
             );
           },
-        ).then((value) async {
-          await context.read<TipsCubit>().putLastState(_indexTips);
-        });
+        );
       },
     );
+    // return LongCardWidget(
+    //   text: "Tips Berhenti Merokok",
+    //   backgroundColor: ColorConst.lightGreen,
+    //   textColor: ColorConst.darkGreen,
+    //   isSuffixIconOn: true,
+    //   onTap: () async {
+    //     showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return Swiper(
+    //           indicatorLayout: PageIndicatorLayout.WARM,
+    //           itemBuilder: (BuildContext context, int index) {
+    //             return Container(
+    //               padding: EdgeInsets.all(32.w),
+    //               decoration: BoxDecoration(
+    //                 color: Colors.white,
+    //                 borderRadius: BorderRadius.circular(16.r),
+    //                 boxShadow: [
+    //                   BoxShadow(
+    //                     color: Colors.black.withOpacity(0.5),
+    //                     offset: const Offset(-1, 2),
+    //                     blurRadius: 3,
+    //                   )
+    //                 ],
+    //               ),
+    //               child: Column(
+    //                 children: [
+    //                   SizedBox(
+    //                     width: 170.w,
+    //                     height: 200.h,
+    //                     child: Image.asset(
+    //                       'assets/tips/illustration-tips-$index.png',
+    //                       fit: BoxFit.contain,
+    //                     ),
+    //                   ),
+    //                   SizedBox(height: 12.h),
+    //                   Text(tips[index].description),
+    //                 ],
+    //               ),
+    //             );
+    //           },
+    //           itemCount: tips.length,
+    //           itemWidth: 300.w,
+    //           itemHeight: 380.h,
+    //           layout: SwiperLayout.TINDER,
+    //           loop: true,
+    //         );
+    //       },
+    //     );
+    //     // await showDialog<int>(
+    //     //   context: context,
+    //     //   builder: (context) {
+    //     //     return Detector(
+    //     //       areaID: 'tips-dialog',
+    //     //       child: SimpleDialog(
+    //     //         shape: RoundedRectangleBorder(
+    //     //           borderRadius: BorderRadius.circular(12.r),
+    //     //         ),
+    //     //         children: [
+    //     //           TipsDialog(
+    //     //             tips: context.read<TipsCubit>().tipsRepository.load(),
+    //     //             indexTips: _indexTips,
+    //     //             onPrev: _onNextPrev,
+    //     //             onNext: _onNextPrev,
+    //     //           )
+    //     //         ],
+    //     //       ),
+    //     //     );
+    //     //   },
+    //     // ).then((value) async {
+    //     //   await context.read<TipsCubit>().putLastState(_indexTips);
+    //     // });
+    //   },
+    // );
   }
 
-  void _onNextPrev(int id) {
-    setState(() {
-      _indexTips = id;
-    });
-  }
+  // void _onNextPrev(int id) {
+  //   setState(() {
+  //     _indexTips = id;
+  //   });
+  // }
 }

@@ -18,8 +18,8 @@ import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/page/health/health_page.dart';
 import 'package:berhentikok/page/health/widget/health_card_widget.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
-import 'package:berhentikok/page/home/cubit/tips_cubit.dart';
 import 'package:berhentikok/page/home/widget/custom_box_widget.dart';
+import 'package:berhentikok/page/home/widget/tips_widget.dart';
 import 'package:berhentikok/page/smoking_cessation_methods/smoking_cessation_methods_page.dart';
 import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
   late final ConsumptionBloc consumptionBloc;
   late final FinanceBloc financeBloc;
   late final AchievementBloc achievementBloc;
-  late final TipsCubit tipsCubit;
+  // late final TipsCubit tipsCubit;
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
     consumptionBloc = context.read<ConsumptionBloc>()..add(LoadConsumption());
     financeBloc = context.read<FinanceBloc>()..add(LoadFinance());
     achievementBloc = context.read<AchievementBloc>()..add(LoadAchievement());
-    tipsCubit = context.read<TipsCubit>();
+    // tipsCubit = context.read<TipsCubit>();
   }
 
   @override
@@ -85,16 +85,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
                         SizedBox(height: 8.w),
                         Row(
                           children: [
-                            Expanded(
-                              child: CustomBoxWidget(
-                                text: "Tips berhenti merokok",
-                                icon: Icons.info_outline,
-                                backgroundColor: ColorConst.lightGreen,
-                                iconColor: Colors.blue.shade900,
-                                textColor: Colors.grey.shade800,
-                                onTap: () {},
-                              ),
-                            ),
+                            const Expanded(child: TipsWidget()),
                             SizedBox(width: 8.w),
                             Expanded(
                               child: CustomBoxWidget(
@@ -409,6 +400,29 @@ class _HomePageDetailState extends State<HomePageDetail> {
   //         },
   //       ),
   //     ],
+  //   );
+  // }
+
+  // void _showTips() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Swiper(
+  //         indicatorLayout: PageIndicatorLayout.WARM,
+  //         itemBuilder: (BuildContext context, int index) {
+  //           return Column(
+  //             children: [
+  //               // Text(data)
+  //             ],
+  //           );
+  //         },
+  //         itemCount: 10,
+  //         itemWidth: 300.w,
+  //         itemHeight: 500.h,
+  //         layout: SwiperLayout.STACK,
+  //         loop: false,
+  //       );
+  //     },
   //   );
   // }
 

@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  card_swiper: ^2.0.4
   cupertino_icons: ^1.0.2
   copy_with_extension: ^4.0.3
   copy_with_extension_gen: ^4.0.3
@@ -47,6 +48,7 @@ flutter:
     - assets/icons/
     - assets/achievement/
     - assets/contents/
+    - assets/tips/
   
   fonts:
     - family: Poppins
