@@ -43,8 +43,7 @@ class ChartWidget extends StatelessWidget {
               ? AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    reservedSize: 30,
-                    interval: 10,
+                    reservedSize: 50,
                     getTitlesWidget: bottomTitleWidgets,
                   ),
                 )
@@ -54,7 +53,6 @@ class ChartWidget extends StatelessWidget {
                   sideTitles: SideTitles(
                     showTitles: true,
                     reservedSize: 30,
-                    interval: 10,
                     getTitlesWidget: bottomTitleWidgets,
                   ),
                 )
@@ -183,7 +181,7 @@ class ChartWidget extends StatelessWidget {
         bottom: chartType == ChartType.consumption ? 12.h : 0,
       ),
       child: Text(
-        "Hari ke-${value.toInt().toString()}",
+        "Hari\nke-${value.toInt().toString()}",
         style: FontConst.small(
           fontWeight: FontWeight.w600,
           color: ColorConst.darkGreen,

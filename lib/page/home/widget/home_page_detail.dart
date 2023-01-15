@@ -19,6 +19,8 @@ import 'package:berhentikok/page/health/health_page.dart';
 import 'package:berhentikok/page/health/widget/health_card_widget.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
 import 'package:berhentikok/page/home/widget/custom_box_widget.dart';
+import 'package:berhentikok/page/home/widget/smoking_cessation_strategy_dialog.dart';
+import 'package:berhentikok/page/home/widget/smoking_quota_widget.dart';
 import 'package:berhentikok/page/home/widget/tips_widget.dart';
 import 'package:berhentikok/page/smoking_cessation_methods/smoking_cessation_methods_page.dart';
 import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
@@ -63,7 +65,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
           listener: (context, state) {
             if (state is UserLoaded) {
               if (state.user.isFistTime) {
-                _showSmokingCessationMethods(
+                _showSmokingCessationStrategy(
                   context: context,
                   isFirst: true,
                 );
@@ -83,19 +85,21 @@ class _HomePageDetailState extends State<HomePageDetail> {
                       children: [
                         _buildConsumptionSummary(context, user),
                         SizedBox(height: 8.w),
+                        const SmokingQuotaWidget(),
+                        SizedBox(height: 8.w),
                         Row(
                           children: [
                             const Expanded(child: TipsWidget()),
                             SizedBox(width: 8.w),
                             Expanded(
                               child: CustomBoxWidget(
-                                text: "Metode berhenti merokok",
-                                icon: Icons.import_contacts_outlined,
+                                text: "Strategimu untuk Berhenti Merokok",
+                                icon: Icons.insights_rounded,
                                 backgroundColor: ColorConst.lightGreen,
                                 iconColor: ColorConst.darkGreen,
                                 textColor: Colors.grey.shade800,
                                 onTap: () {
-                                  _showSmokingCessationMethods(
+                                  _showSmokingCessationStrategy(
                                     context: context,
                                     isFirst: false,
                                   );
@@ -426,7 +430,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
   //   );
   // }
 
-  void _showSmokingCessationMethods({
+  void _showSmokingCessationStrategy({
     required BuildContext context,
     bool isFirst = true,
   }) {
@@ -435,7 +439,16 @@ class _HomePageDetailState extends State<HomePageDetail> {
       context: context,
       builder: (context) => Detector(
         areaID: 'smoking-methods-page',
-        child: SmokingCessationMethodsPage(isFirst: isFirst),
+        child: SimpleDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 30.w,
+            vertical: 25.h,
+          ),
+          children: const [SmokingCessationStrategyDialog()],
+        ),
       ),
     );
   }

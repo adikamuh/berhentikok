@@ -85,7 +85,7 @@ class _SmokingFreeDurationCardState extends State<SmokingFreeDurationCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Kamu sudah berhenti merokok selama",
+                      "Kamu sudah tidak merokok selama",
                       style: FontConst.small(
                         color: ColorConst.lightGreen,
                       ),

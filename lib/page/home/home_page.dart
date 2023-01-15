@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 context.read<FinanceBloc>().add(LoadFinance());
                 context.read<ConsumptionBloc>().add(LoadConsumption());
               },
-              backgroundColor: ColorConst.darkGreen,
+              backgroundColor: ColorConst.darkRed,
               child: Image.asset(
                 'assets/icons/ic_add_smoking.png',
                 width: 28.w,
