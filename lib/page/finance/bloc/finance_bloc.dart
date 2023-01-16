@@ -31,6 +31,7 @@ class FinanceBloc extends Bloc<FinanceEvent, Resource<FinanceState>> {
     required SmokingDetailRepository smokingDetailRepository,
   }) : super(Resource.idle()) {
     on<LoadFinance>((event, emit) async {
+      emit(Resource.loading());
       try {
         final User? user = userRepository.load();
         if (user != null) {

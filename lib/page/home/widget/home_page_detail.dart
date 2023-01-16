@@ -18,11 +18,11 @@ import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/page/health/health_page.dart';
 import 'package:berhentikok/page/health/widget/health_card_widget.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
+import 'package:berhentikok/page/home/cubit/smoking_strategy_cubit.dart';
 import 'package:berhentikok/page/home/widget/custom_box_widget.dart';
 import 'package:berhentikok/page/home/widget/smoking_cessation_strategy_dialog.dart';
 import 'package:berhentikok/page/home/widget/smoking_quota_widget.dart';
 import 'package:berhentikok/page/home/widget/tips_widget.dart';
-import 'package:berhentikok/page/smoking_cessation_methods/smoking_cessation_methods_page.dart';
 import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,7 +52,6 @@ class _HomePageDetailState extends State<HomePageDetail> {
     consumptionBloc = context.read<ConsumptionBloc>()..add(LoadConsumption());
     financeBloc = context.read<FinanceBloc>()..add(LoadFinance());
     achievementBloc = context.read<AchievementBloc>()..add(LoadAchievement());
-    // tipsCubit = context.read<TipsCubit>();
   }
 
   @override
@@ -83,9 +82,9 @@ class _HomePageDetailState extends State<HomePageDetail> {
                     padding: SizeConst.pagePadding,
                     child: Column(
                       children: [
-                        _buildConsumptionSummary(context, user),
+                        _buildSokingQuota(),
                         SizedBox(height: 8.w),
-                        const SmokingQuotaWidget(),
+                        _buildConsumptionSummary(context, user),
                         SizedBox(height: 8.w),
                         Row(
                           children: [
@@ -223,6 +222,17 @@ class _HomePageDetailState extends State<HomePageDetail> {
     );
   }
 
+  Widget _buildSokingQuota() {
+    return BlocBuilder<SmokingStrategyCubit, Resource<SmokingStrategyState>>(
+      builder: (context, state) {
+        if ((state is! Success)) return const SizedBox();
+        return SmokingQuotaWidget(
+          smokingQuota: state.inferredData!.smokingQuota,
+        );
+      },
+    );
+  }
+
   Widget _buildConsumptionSummary(BuildContext context, User user) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,6 +292,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
                     backgroundColor: ColorConst.lightGreen,
                     textColor: ColorConst.darkGreen,
                     linearValueColor: ColorConst.darkGreen,
+                    linearBackgroundColor: ColorConst.lightGlowingGreen,
                   ),
                 );
               }

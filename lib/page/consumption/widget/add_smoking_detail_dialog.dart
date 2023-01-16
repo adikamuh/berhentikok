@@ -48,9 +48,11 @@ class _AddSmokingDetailDialogState extends State<AddSmokingDetailDialog> {
                 textInputAction: TextInputAction.next,
                 isNumber: true,
                 onChanged: (value) {
-                  setState(() {
-                    _total = int.parse(value);
-                  });
+                  if (value.isNotEmpty) {
+                    setState(() {
+                      _total = int.parse(value);
+                    });
+                  }
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {

@@ -1,3 +1,4 @@
+import 'package:berhentikok/base/font_const.dart';
 import 'package:berhentikok/base/form_field_decoration.dart';
 import 'package:berhentikok/base/text_input_formatter_extension.dart';
 import 'package:flutter/material.dart';
@@ -62,10 +63,14 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             decoration: FormDecoration.style(
               hintText: widget.hintText,
               prefix: widget.prefix,
-              helperText: widget.helperText,
             ),
             textInputAction: widget.textInputAction,
           ),
+          if (widget.helperText != null)
+            Text(
+              widget.helperText!,
+              style: FontConst.small(color: Colors.grey.shade600),
+            ),
         ],
       ),
     );

@@ -92,10 +92,6 @@ class _ConsumptionPageState extends State<ConsumptionPage> {
                               );
                             },
                           );
-                          context
-                              .read<SmokingDetailBloc>()
-                              .add(LoadSmokingDetails());
-                          context.read<ConsumptionChartCubit>().load();
                         },
                         icon: const Icon(Icons.add),
                         label: const Text("Saya merokok hari ini"),

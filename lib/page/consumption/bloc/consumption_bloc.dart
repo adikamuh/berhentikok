@@ -30,6 +30,7 @@ class ConsumptionBloc
     required this.smokingDetailRepository,
   }) : super(Resource.idle()) {
     on<LoadConsumption>((event, emit) async {
+      emit(Resource.loading());
       try {
         final user = userRepository.load();
         final List<SmokingDetail> smokingDetails =

@@ -16,6 +16,7 @@ class HealthCardWidget extends StatefulWidget {
   final Duration freeSmokingDuration;
   final int value;
   final Color? linearValueColor;
+  final Color? linearBackgroundColor;
   final Color? backgroundColor;
   final Color? textColor;
 
@@ -26,6 +27,7 @@ class HealthCardWidget extends StatefulWidget {
     required this.user,
     required this.freeSmokingDuration,
     this.linearValueColor,
+    this.linearBackgroundColor,
     this.backgroundColor,
     this.textColor,
   })  : value = healthProgress.value(
@@ -52,11 +54,12 @@ class _HealthCardWidgetState extends State<HealthCardWidget> {
   @override
   Widget build(BuildContext context) {
     return BoxCardWidget(
-      backgroundColor: isComplete
-          ? ColorConst.darkGreen
-          : isStarted
-              ? ColorConst.lightGreen
-              : Colors.grey.shade200,
+      backgroundColor: widget.backgroundColor ??
+          (isComplete
+              ? ColorConst.darkGreen
+              : isStarted
+                  ? ColorConst.lightGreen
+                  : Colors.grey.shade200),
       child: Column(
         children: [
           Row(
@@ -73,11 +76,12 @@ class _HealthCardWidgetState extends State<HealthCardWidget> {
                     Text(
                       widget.healthProgress.caption,
                       style: FontConst.subtitle(
-                        color: isComplete
-                            ? Colors.white
-                            : isStarted
-                                ? ColorConst.darkGreen
-                                : Colors.grey.shade800,
+                        color: widget.textColor ??
+                            (isComplete
+                                ? Colors.white
+                                : isStarted
+                                    ? ColorConst.darkGreen
+                                    : Colors.grey.shade800),
                         fontWeight: FontWeight.w600,
                       ),
                       textAlign: TextAlign.left,
@@ -87,13 +91,14 @@ class _HealthCardWidgetState extends State<HealthCardWidget> {
                       children: [
                         Expanded(
                           child: LinearIndicator(
-                            valueColor: isComplete
-                                ? ColorConst.glowingGreen
-                                : isStarted
-                                    ? ColorConst.darkGreen
-                                    : Colors.grey.shade200,
-                            backgroundColor:
-                                isStarted ? null : Colors.grey.shade300,
+                            valueColor: widget.linearValueColor ??
+                                (isComplete
+                                    ? ColorConst.glowingGreen
+                                    : isStarted
+                                        ? ColorConst.darkGreen
+                                        : Colors.grey.shade200),
+                            backgroundColor: widget.linearBackgroundColor ??
+                                (isStarted ? null : Colors.grey.shade300),
                             value: widget.value,
                           ),
                         ),

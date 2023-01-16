@@ -15,6 +15,7 @@ class ConsumptionChartCubit extends Cubit<List<FlSpot>> {
   }) : super([]);
 
   void load() async {
+    emit([]);
     try {
       final List<SmokingDetail> smokingDetails =
           await smokingDetailRepository.loadAll();

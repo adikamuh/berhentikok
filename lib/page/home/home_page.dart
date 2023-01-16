@@ -1,8 +1,5 @@
 import 'package:berhentikok/base/color_const.dart';
-import 'package:berhentikok/page/consumption/bloc/consumption_bloc.dart';
 import 'package:berhentikok/page/consumption/widget/add_smoking_detail_dialog.dart';
-import 'package:berhentikok/page/finance/bloc/finance_bloc.dart';
-import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
 import 'package:berhentikok/page/home/widget/home_page_detail.dart';
 import 'package:flutter/material.dart';
@@ -58,9 +55,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     );
                   },
                 );
-                context.read<HealthBloc>().add(LoadHealth());
-                context.read<FinanceBloc>().add(LoadFinance());
-                context.read<ConsumptionBloc>().add(LoadConsumption());
+                // reloadAll(context);
               },
               backgroundColor: ColorConst.darkRed,
               child: Image.asset(

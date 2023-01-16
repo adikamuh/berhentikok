@@ -52,7 +52,7 @@ class ChartWidget extends StatelessWidget {
               ? AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    reservedSize: 30,
+                    reservedSize: 50,
                     getTitlesWidget: bottomTitleWidgets,
                   ),
                 )

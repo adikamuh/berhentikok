@@ -1,41 +1,83 @@
+import 'package:berhentikok/base/button_style_const.dart';
 import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/base/font_const.dart';
+import 'package:berhentikok/model/date_time_extension.dart';
+import 'package:berhentikok/model/resource.dart';
+import 'package:berhentikok/model/user.dart';
+import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
+import 'package:berhentikok/page/home/cubit/smoking_strategy_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-enum StrategyWeeks { week1, week5, week9 }
 
 class SmokingCessationStrategyDialog extends StatelessWidget {
   const SmokingCessationStrategyDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Strategimu untuk Berhenti Merokok!",
-          style: FontConst.header2(),
-        ),
-        SizedBox(height: 24.h),
-        // WHEN
-        ..._buildStrategy(
-          isCompleted: true,
-          isOnprogress: false,
-          weeks: StrategyWeeks.week1,
-        ),
-        ..._buildStrategy(
-          isCompleted: false,
-          isOnprogress: true,
-          weeks: StrategyWeeks.week5,
-        ),
-        ..._buildStrategy(
-          isCompleted: false,
-          isOnprogress: false,
-          weeks: StrategyWeeks.week9,
-          showLine: false,
-        ),
-      ],
+    return BlocBuilder<SmokingStrategyCubit, Resource<SmokingStrategyState>>(
+      builder: (context, state) {
+        if (state is! Success) return const SizedBox();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Strategimu untuk Berhenti Merokok!",
+              style: FontConst.header2(),
+            ),
+            SizedBox(height: 24.h),
+            // WHEN
+            ..._buildStrategy(
+              isCompleted:
+                  state.inferredData!.strategyWeeks != StrategyWeeks.week1,
+              isOnprogress:
+                  state.inferredData!.strategyWeeks == StrategyWeeks.week1,
+              weeks: StrategyWeeks.week1,
+              user: state.inferredData!.user,
+            ),
+            ..._buildStrategy(
+              isCompleted:
+                  state.inferredData!.strategyWeeks != StrategyWeeks.week1 &&
+                      state.inferredData!.strategyWeeks != StrategyWeeks.week5,
+              isOnprogress:
+                  state.inferredData!.strategyWeeks == StrategyWeeks.week5,
+              weeks: StrategyWeeks.week5,
+              user: state.inferredData!.user,
+            ),
+            ..._buildStrategy(
+              isCompleted: state.inferredData!.strategyWeeks !=
+                      StrategyWeeks.week1 &&
+                  state.inferredData!.strategyWeeks != StrategyWeeks.week5 &&
+                  state.inferredData!.strategyWeeks != StrategyWeeks.week9,
+              isOnprogress:
+                  state.inferredData!.strategyWeeks == StrategyWeeks.week9,
+              weeks: StrategyWeeks.week9,
+              user: state.inferredData!.user,
+              showLine: false,
+            ),
+            SizedBox(height: 24.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ButtonStyleConst.primary(),
+                  onPressed: () {
+                    context.read<HomePageBloc>().add(UserDoneFirstTime());
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Oke!',
+                    style: FontConst.body(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -43,6 +85,7 @@ class SmokingCessationStrategyDialog extends StatelessWidget {
     required bool isCompleted,
     required bool isOnprogress,
     required StrategyWeeks weeks,
+    required User user,
     bool showLine = true,
   }) {
     return [
@@ -82,11 +125,11 @@ class SmokingCessationStrategyDialog extends StatelessWidget {
                 ),
                 Text(
                   weeks == StrategyWeeks.week1
-                      ? "25 Januari - 29 Januari 2023"
+                      ? "${user.startDateStopSmoking.dateToString()} - ${user.startDateStopSmoking.add(const Duration(days: 28)).dateToString()}"
                       : weeks == StrategyWeeks.week5
-                          ? "30 Januari - 9 Februari 2023"
+                          ? "${user.startDateStopSmoking.add(const Duration(days: 29)).dateToString()} - ${user.startDateStopSmoking.add(const Duration(days: 56)).dateToString()}"
                           : weeks == StrategyWeeks.week9
-                              ? "10 Februari - 15 Februari 2023"
+                              ? "${user.startDateStopSmoking.add(const Duration(days: 57)).dateToString()} - ${user.startDateStopSmoking.add(const Duration(days: 84)).dateToString()}"
                               : "",
                   style: FontConst.small(color: ColorConst.darkGreen),
                 ),
@@ -130,9 +173,9 @@ class SmokingCessationStrategyDialog extends StatelessWidget {
                 ),
                 Text(
                   weeks == StrategyWeeks.week1
-                      ? "8 Rokok / hari"
+                      ? "${user.tobaccoConsumption ~/ 2} Rokok / hari"
                       : weeks == StrategyWeeks.week5
-                          ? "4 Rokok / hari"
+                          ? "${user.tobaccoConsumption ~/ 4} Rokok / hari"
                           : weeks == StrategyWeeks.week9
                               ? "0 Rokok / hari"
                               : "",

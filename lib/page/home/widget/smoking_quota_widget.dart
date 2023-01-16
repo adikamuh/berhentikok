@@ -4,17 +4,67 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SmokingQuotaWidget extends StatelessWidget {
-  const SmokingQuotaWidget({Key? key}) : super(key: key);
+  final int smokingQuota;
+  const SmokingQuotaWidget({Key? key, required this.smokingQuota})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (smokingQuota > 0) {
+      return Card(
+        clipBehavior: Clip.antiAlias,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        elevation: 0,
+        margin: EdgeInsets.zero,
+        child: Container(
+          decoration: BoxDecoration(color: Colors.yellow.shade500),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 18.w,
+              horizontal: 18.w,
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.smoking_rooms_rounded,
+                  color: Colors.black,
+                  size: 80.w,
+                ),
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Batas konsumsi rokokmu hari ini",
+                        style: FontConst.small(
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        "$smokingQuota Rokok",
+                        style: FontConst.header2(
+                          color: Colors.black,
+                          fontSize: 26.sp,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     return Card(
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       elevation: 0,
       margin: EdgeInsets.zero,
       child: Container(
-        decoration: const BoxDecoration(color: Color(0xffF5EFE8)),
+        decoration: const BoxDecoration(color: ColorConst.darkRed),
         child: Padding(
           padding: EdgeInsets.symmetric(
             vertical: 18.w,
@@ -23,8 +73,8 @@ class SmokingQuotaWidget extends StatelessWidget {
           child: Row(
             children: [
               Icon(
-                Icons.smoking_rooms_rounded,
-                color: Colors.black,
+                Icons.sentiment_dissatisfied_rounded,
+                color: Colors.white,
                 size: 80.w,
               ),
               SizedBox(width: 12.w),
@@ -33,16 +83,10 @@ class SmokingQuotaWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Batas konsumsi rokokmu hari ini",
-                      style: FontConst.small(
-                        color: Colors.black,
-                      ),
-                    ),
-                    Text(
-                      "8 Rokok",
-                      style: FontConst.header2(
-                        color: Colors.black,
-                        fontSize: 26.sp,
+                      "Yah kamu sudah melewati batas konsumsi rokokmu hari ini!",
+                      style: FontConst.header3(
+                        color: Colors.white,
+                        fontSize: 18.sp,
                       ),
                     ),
                   ],
