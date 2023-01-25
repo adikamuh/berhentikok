@@ -6,6 +6,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:round_spot/round_spot.dart';
 
 class TipsWidget extends StatefulWidget {
   const TipsWidget({Key? key}) : super(key: key);
@@ -37,43 +38,46 @@ class _TipsWidgetState extends State<TipsWidget> {
         showDialog(
           context: context,
           builder: (context) {
-            return Swiper(
-              indicatorLayout: PageIndicatorLayout.WARM,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  padding: EdgeInsets.all(32.w),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        offset: const Offset(-1, 2),
-                        blurRadius: 3,
-                      )
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: 170.w,
-                        height: 200.h,
-                        child: Image.asset(
-                          'assets/tips/illustration-tips-$index.png',
-                          fit: BoxFit.contain,
+            return Detector(
+              areaID: 'tips-swiper',
+              child: Swiper(
+                indicatorLayout: PageIndicatorLayout.WARM,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    padding: EdgeInsets.all(32.w),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.5),
+                          offset: const Offset(-1, 2),
+                          blurRadius: 3,
+                        )
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: 170.w,
+                          height: 200.h,
+                          child: Image.asset(
+                            'assets/tips/illustration-tips-$index.png',
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 12.h),
-                      Text(tips[index].description),
-                    ],
-                  ),
-                );
-              },
-              itemCount: tips.length,
-              itemWidth: 300.w,
-              itemHeight: 380.h,
-              layout: SwiperLayout.TINDER,
-              loop: true,
+                        SizedBox(height: 12.h),
+                        Text(tips[index].description),
+                      ],
+                    ),
+                  );
+                },
+                itemCount: tips.length,
+                itemWidth: 300.w,
+                itemHeight: 380.h,
+                layout: SwiperLayout.TINDER,
+                loop: true,
+              ),
             );
           },
         );

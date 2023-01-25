@@ -1,4 +1,4 @@
-// import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:berhentikok/page/home/cubit/smoking_strategy_cubit.dart';
 
@@ -47,8 +47,8 @@ void main() async {
   );
 
   initializeDateFormatting('id_ID').then((_) {
-    // final storageRef = FirebaseStorage.instance.ref();
-    // final Box<User> userBox = Hive.box<User>(usersBoxName);
+    final storageRef = FirebaseStorage.instance.ref();
+    final Box<User> userBox = Hive.box<User>(usersBoxName);
 
     return runApp(
       rs.initialize(
@@ -57,12 +57,12 @@ void main() async {
           outputType: rs.OutputType.localRender,
         ),
         localRenderCallback: (data, info) async {
-          // final User? user = userBox.getAt(0);
+          final User? user = userBox.getAt(0);
 
-          // storageRef
-          //     .child(
-          //         'berhentikok/heatmap/${user?.name ?? 'unknown_user'}/_${info.page}_${info.area}.png')
-          //     .putData(data);
+          storageRef
+              .child(
+                  'berhentikok/heatmap-2/${user?.name ?? 'unknown_user'}/${info.area}.png')
+              .putData(data);
         },
         dataCallback: (data) {
           debugPrint(data.toString());
