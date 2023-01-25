@@ -1,4 +1,6 @@
-import 'package:firebase_storage/firebase_storage.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:berhentikok/page/home/cubit/smoking_strategy_cubit.dart';
 
 import 'firebase_options.dart';
 
@@ -18,7 +20,6 @@ import 'package:berhentikok/page/finance/bloc/finance_bloc.dart';
 import 'package:berhentikok/page/finance/cubit/finance_chart_cubit.dart';
 import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
-import 'package:berhentikok/page/home/cubit/tips_cubit.dart';
 import 'package:berhentikok/page/home/home_page.dart';
 import 'package:berhentikok/page/on_boarding/cubit/on_boarding_cubit.dart';
 import 'package:berhentikok/page/on_boarding/on_boarding_page.dart';
@@ -46,8 +47,8 @@ void main() async {
   );
 
   initializeDateFormatting('id_ID').then((_) {
-    final storageRef = FirebaseStorage.instance.ref();
-    final Box<User> userBox = Hive.box<User>(usersBoxName);
+    // final storageRef = FirebaseStorage.instance.ref();
+    // final Box<User> userBox = Hive.box<User>(usersBoxName);
 
     return runApp(
       rs.initialize(
@@ -56,15 +57,15 @@ void main() async {
           outputType: rs.OutputType.localRender,
         ),
         localRenderCallback: (data, info) async {
-          final User? user = userBox.getAt(0);
+          // final User? user = userBox.getAt(0);
 
-          storageRef
-              .child(
-                  'berhentikok/heatmap/${user?.name ?? 'unknown_user'}/_${info.page}_${info.area}.png')
-              .putData(data);
+          // storageRef
+          //     .child(
+          //         'berhentikok/heatmap-2/${user?.name ?? 'unknown_user'}/${info.area}.png')
+          //     .putData(data);
         },
         dataCallback: (data) {
-          debugPrint(data.toString());
+          // debugPrint(data.toString());
         },
         child: MultiRepositoryProvider(
           providers: _buildRepositories(),
@@ -132,17 +133,53 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late final HealthBloc healthBloc;
   late final FinanceBloc financeBloc;
+  late final ConsumptionBloc consumptionBloc;
+  late final SmokingStrategyCubit smokingStrategyCubit;
+  late final ConsumptionChartCubit consumptionChartCubit;
+  late final SmokingDetailBloc smokingDetailBloc;
 
   @override
   void initState() {
     super.initState();
+    healthBloc = HealthBloc(
+      healthProgressRepository:
+          RepositoryProvider.of<HealthProgressRepository>(context),
+      userRepository: RepositoryProvider.of<UserRepository>(context),
+      smokingDetailRepository:
+          RepositoryProvider.of<SmokingDetailRepository>(context),
+    );
     financeBloc = FinanceBloc(
       userRepository: RepositoryProvider.of<UserRepository>(context),
       targetItemRepository:
           RepositoryProvider.of<TargetItemRepository>(context),
       smokingDetailRepository:
           RepositoryProvider.of<SmokingDetailRepository>(context),
+    );
+    consumptionBloc = ConsumptionBloc(
+      userRepository: RepositoryProvider.of<UserRepository>(context),
+      smokingDetailRepository:
+          RepositoryProvider.of<SmokingDetailRepository>(context),
+    );
+    smokingStrategyCubit = SmokingStrategyCubit(
+      userRepository: RepositoryProvider.of<UserRepository>(context),
+      smokingDetailRepository:
+          RepositoryProvider.of<SmokingDetailRepository>(context),
+    );
+    consumptionChartCubit = ConsumptionChartCubit(
+      userRepository: RepositoryProvider.of<UserRepository>(context),
+      smokingDetailRepository:
+          RepositoryProvider.of<SmokingDetailRepository>(context),
+    );
+    smokingDetailBloc = SmokingDetailBloc(
+      smokingDetailRepository:
+          RepositoryProvider.of<SmokingDetailRepository>(context),
+      healthBloc: healthBloc,
+      financeBloc: financeBloc,
+      consumptionBloc: consumptionBloc,
+      smokingStrategyCubit: smokingStrategyCubit,
+      consumptionChartCubit: consumptionChartCubit,
     );
   }
 
@@ -190,6 +227,7 @@ class _MyAppState extends State<MyApp> {
       BlocProvider<OnBoardingCubit>(
         create: (context) => OnBoardingCubit(
           userRepository: RepositoryProvider.of<UserRepository>(context),
+          smokingStrategyCubit: smokingStrategyCubit,
         ),
       ),
       BlocProvider<HomePageBloc>(
@@ -197,15 +235,7 @@ class _MyAppState extends State<MyApp> {
           userRepository: RepositoryProvider.of<UserRepository>(context),
         ),
       ),
-      BlocProvider<HealthBloc>(
-        create: (context) => HealthBloc(
-          healthProgressRepository:
-              RepositoryProvider.of<HealthProgressRepository>(context),
-          userRepository: RepositoryProvider.of<UserRepository>(context),
-          smokingDetailRepository:
-              RepositoryProvider.of<SmokingDetailRepository>(context),
-        ),
-      ),
+      BlocProvider<HealthBloc>.value(value: healthBloc),
       BlocProvider<FinanceBloc>.value(value: financeBloc),
       BlocProvider<AddItemBloc>(
         create: (context) => AddItemBloc(
@@ -213,26 +243,9 @@ class _MyAppState extends State<MyApp> {
               RepositoryProvider.of<TargetItemRepository>(context),
         ),
       ),
-      BlocProvider<SmokingDetailBloc>(
-        create: (context) => SmokingDetailBloc(
-          smokingDetailRepository:
-              RepositoryProvider.of<SmokingDetailRepository>(context),
-        ),
-      ),
-      BlocProvider<ConsumptionBloc>(
-        create: (context) => ConsumptionBloc(
-          userRepository: RepositoryProvider.of<UserRepository>(context),
-          smokingDetailRepository:
-              RepositoryProvider.of<SmokingDetailRepository>(context),
-        ),
-      ),
-      BlocProvider<ConsumptionChartCubit>(
-        create: (context) => ConsumptionChartCubit(
-          userRepository: RepositoryProvider.of<UserRepository>(context),
-          smokingDetailRepository:
-              RepositoryProvider.of<SmokingDetailRepository>(context),
-        ),
-      ),
+      BlocProvider<SmokingDetailBloc>.value(value: smokingDetailBloc),
+      BlocProvider<ConsumptionBloc>.value(value: consumptionBloc),
+      BlocProvider<ConsumptionChartCubit>.value(value: consumptionChartCubit),
       BlocProvider<FinanceChartCubit>(
         create: (context) => FinanceChartCubit(
           userRepository: RepositoryProvider.of<UserRepository>(context),
@@ -250,10 +263,11 @@ class _MyAppState extends State<MyApp> {
           financeBloc: financeBloc,
         ),
       ),
-      BlocProvider<TipsCubit>(
-        create: (context) =>
-            TipsCubit(RepositoryProvider.of<TipsRepository>(context)),
-      )
+      BlocProvider<SmokingStrategyCubit>.value(value: smokingStrategyCubit),
+      // BlocProvider<TipsCubit>(
+      //   create: (context) =>
+      //       TipsCubit(RepositoryProvider.of<TipsRepository>(context)),
+      // )
     ];
   }
 }

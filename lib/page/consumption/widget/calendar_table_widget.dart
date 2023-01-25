@@ -26,7 +26,7 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
 
   late final ValueNotifier<List<SmokingDetail>> _selectedEvents;
   late final Map<String, List<SmokingDetail>> _smokingDetails;
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
@@ -67,6 +67,18 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
             CalendarFormat.twoWeeks: 'Bulan',
             CalendarFormat.week: '2 Minggu',
           },
+          availableGestures: AvailableGestures.horizontalSwipe,
+          headerStyle: HeaderStyle(
+            titleCentered: true,
+            titleTextStyle: FontConst.subtitle(
+              fontWeight: FontWeight.w600,
+            ),
+            formatButtonTextStyle: FontConst.small(),
+            formatButtonDecoration: BoxDecoration(
+              color: ColorConst.lightGreen,
+              borderRadius: BorderRadius.circular(50),
+            ),
+          ),
           calendarStyle: const CalendarStyle(
             selectedDecoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -183,6 +195,10 @@ class _CalendarTableWidgetState extends State<CalendarTableWidget> {
           title: Text(
             smokingDetail.toString(),
             style: FontConst.subtitle(color: ColorConst.darkGreen),
+          ),
+          trailing: const Icon(
+            Icons.keyboard_arrow_right_rounded,
+            color: ColorConst.darkGreen,
           ),
         ),
       );

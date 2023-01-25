@@ -31,11 +31,11 @@ class TipsRepository {
       description:
           'Kalau kamu kesulitan untuk berhenti secara total, cobalah untuk mengurangi konsumsi rokokmu per-harinya',
     ),
-    const Tips(
-      id: 5,
-      description:
-          'Jika kamu adalah orang yang cukup susah untuk tidak merokok, cobalah gunakan alat pengganti nikotin seperti niccotine gum',
-    ),
+    // const Tips(
+    //   id: 5,
+    //   description:
+    //       'Jika kamu adalah orang yang cukup susah untuk tidak merokok, cobalah gunakan alat pengganti nikotin seperti niccotine gum',
+    // ),
     const Tips(
       id: 6,
       description:

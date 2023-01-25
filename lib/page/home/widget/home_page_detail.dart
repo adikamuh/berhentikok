@@ -8,7 +8,6 @@ import 'package:berhentikok/model/health_progress.dart';
 import 'package:berhentikok/model/resource.dart';
 import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/model/user.dart';
-import 'package:berhentikok/page/achievement/achievement_page.dart';
 import 'package:berhentikok/page/achievement/bloc/achievement_bloc.dart';
 import 'package:berhentikok/page/consumption/bloc/consumption_bloc.dart';
 import 'package:berhentikok/page/consumption/consumption_page.dart';
@@ -19,11 +18,12 @@ import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/page/health/health_page.dart';
 import 'package:berhentikok/page/health/widget/health_card_widget.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
-import 'package:berhentikok/page/home/cubit/tips_cubit.dart';
+import 'package:berhentikok/page/home/cubit/smoking_strategy_cubit.dart';
+import 'package:berhentikok/page/home/widget/custom_box_widget.dart';
+import 'package:berhentikok/page/home/widget/smoking_cessation_strategy_dialog.dart';
+import 'package:berhentikok/page/home/widget/smoking_quota_widget.dart';
 import 'package:berhentikok/page/home/widget/tips_widget.dart';
-import 'package:berhentikok/page/smoking_cessation_methods/smoking_cessation_methods_page.dart';
 import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
-import 'package:berhentikok/widget/card_widget/long_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,7 +42,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
   late final ConsumptionBloc consumptionBloc;
   late final FinanceBloc financeBloc;
   late final AchievementBloc achievementBloc;
-  late final TipsCubit tipsCubit;
+  // late final TipsCubit tipsCubit;
 
   @override
   void initState() {
@@ -52,7 +52,6 @@ class _HomePageDetailState extends State<HomePageDetail> {
     consumptionBloc = context.read<ConsumptionBloc>()..add(LoadConsumption());
     financeBloc = context.read<FinanceBloc>()..add(LoadFinance());
     achievementBloc = context.read<AchievementBloc>()..add(LoadAchievement());
-    tipsCubit = context.read<TipsCubit>();
   }
 
   @override
@@ -65,7 +64,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
           listener: (context, state) {
             if (state is UserLoaded) {
               if (state.user.isFistTime) {
-                _showSmokingCessationMethods(
+                _showSmokingCessationStrategy(
                   context: context,
                   isFirst: true,
                 );
@@ -83,11 +82,33 @@ class _HomePageDetailState extends State<HomePageDetail> {
                     padding: SizeConst.pagePadding,
                     child: Column(
                       children: [
+                        _buildSokingQuota(),
+                        SizedBox(height: 8.w),
                         _buildConsumptionSummary(context, user),
+                        SizedBox(height: 8.w),
+                        Row(
+                          children: [
+                            const Expanded(child: TipsWidget()),
+                            SizedBox(width: 8.w),
+                            Expanded(
+                              child: CustomBoxWidget(
+                                text: "Strategimu untuk Berhenti Merokok",
+                                icon: Icons.insights_rounded,
+                                backgroundColor: ColorConst.lightGreen,
+                                iconColor: ColorConst.darkGreen,
+                                textColor: Colors.grey.shade800,
+                                onTap: () {
+                                  _showSmokingCessationStrategy(
+                                    context: context,
+                                    isFirst: false,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                         SizedBox(height: 18.h),
                         _buildOverallSummary(user),
-                        SizedBox(height: 18.h),
-                        _buildOthers(context),
                       ],
                     ),
                   ),
@@ -112,7 +133,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
       clipBehavior: Clip.antiAlias,
       padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.r)),
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.r)),
         color: ColorConst.darkGreen,
       ),
       child: Stack(
@@ -124,7 +145,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
               width: 250.w,
               height: 250.w,
               decoration: const BoxDecoration(
-                color: Color(0xff4B8A64),
+                color: Color.fromARGB(255, 55, 126, 83),
                 shape: BoxShape.circle,
               ),
             ),
@@ -150,54 +171,65 @@ class _HomePageDetailState extends State<HomePageDetail> {
                   ),
                 ),
                 SizedBox(width: 30.w),
-                BlocBuilder<AchievementBloc, Resource<AchievementState>>(
-                  bloc: achievementBloc,
-                  builder: (context, state) {
-                    if (state is Success) {
-                      return InkWell(
-                        onTap: () async {
-                          await Navigator.of(context).pushNamed(
-                            AchievementPage.routeName,
-                          );
-                        },
-                        child: Stack(
-                          children: [
-                            const Icon(
-                              Icons.stars_rounded,
-                              color: Colors.white,
-                            ),
-                            if (!state.inferredData!.isAllRead)
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: Container(
-                                  width: 10.w,
-                                  height: 10.w,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: ColorConst.secondaryColor2,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.5),
-                                        offset: const Offset(-1, 2),
-                                        blurRadius: 3,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              )
-                          ],
-                        ),
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
+                // BlocBuilder<AchievementBloc, Resource<AchievementState>>(
+                //   bloc: achievementBloc,
+                //   builder: (context, state) {
+                //     if (state is Success) {
+                //       return InkWell(
+                //         onTap: () async {
+                //           await Navigator.of(context).pushNamed(
+                //             AchievementPage.routeName,
+                //           );
+                //         },
+                //         child: Stack(
+                //           children: [
+                //             const Icon(
+                //               Icons.stars_rounded,
+                //               color: Colors.white,
+                //             ),
+                //             if (!state.inferredData!.isAllRead)
+                //               Positioned(
+                //                 top: 0,
+                //                 right: 0,
+                //                 child: Container(
+                //                   width: 10.w,
+                //                   height: 10.w,
+                //                   decoration: BoxDecoration(
+                //                     shape: BoxShape.circle,
+                //                     color: ColorConst.secondaryColor2,
+                //                     boxShadow: [
+                //                       BoxShadow(
+                //                         color: Colors.black.withOpacity(0.5),
+                //                         offset: const Offset(-1, 2),
+                //                         blurRadius: 3,
+                //                       )
+                //                     ],
+                //                   ),
+                //                 ),
+                //               )
+                //           ],
+                //         ),
+                //       );
+                //     }
+                //     return const SizedBox();
+                //   },
+                // ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildSokingQuota() {
+    return BlocBuilder<SmokingStrategyCubit, Resource<SmokingStrategyState>>(
+      builder: (context, state) {
+        if ((state is! Success)) return const SizedBox();
+        return SmokingQuotaWidget(
+          smokingQuota: state.inferredData!.smokingQuota,
+        );
+      },
     );
   }
 
@@ -216,6 +248,10 @@ class _HomePageDetailState extends State<HomePageDetail> {
     );
   }
 
+  // Widget _buildTips() {
+  //   return
+  // }
+
   Widget _buildOverallSummary(User user) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,31 +267,35 @@ class _HomePageDetailState extends State<HomePageDetail> {
             if (state is Success) {
               final Duration freeSmokingDuration =
                   state.inferredData!.smokingDetails.freeSmokingDuration(user);
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed(
-                    HealthPage.routeName,
-                    arguments: HealthArguments(
-                      healthProgresses: state.inferredData!.healthProgresses,
-                      smokingDetails: state.inferredData!.smokingDetails,
-                      user: state.inferredData!.user,
-                    ),
-                  );
-                },
-                child: HealthCardWidget(
-                  healthProgress:
-                      state.inferredData!.healthProgresses.firstWhereOnProgress(
-                    user: user,
-                    smokingDetails: state.inferredData!.smokingDetails,
-                  ),
-                  smokingDetails: state.inferredData!.smokingDetails,
-                  user: user,
-                  freeSmokingDuration: freeSmokingDuration,
-                  backgroundColor: ColorConst.lightGreen,
-                  textColor: ColorConst.darkGreen,
-                  linearValueColor: ColorConst.darkGreen,
-                ),
+              final healthProgress =
+                  state.inferredData!.healthProgresses.firstWhereOnProgress(
+                user: user,
+                smokingDetails: state.inferredData!.smokingDetails,
               );
+              if (healthProgress != null) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      HealthPage.routeName,
+                      arguments: HealthArguments(
+                        healthProgresses: state.inferredData!.healthProgresses,
+                        smokingDetails: state.inferredData!.smokingDetails,
+                        user: state.inferredData!.user,
+                      ),
+                    );
+                  },
+                  child: HealthCardWidget(
+                    healthProgress: healthProgress,
+                    smokingDetails: state.inferredData!.smokingDetails,
+                    user: user,
+                    freeSmokingDuration: freeSmokingDuration,
+                    backgroundColor: ColorConst.lightGreen,
+                    textColor: ColorConst.darkGreen,
+                    linearValueColor: ColorConst.darkGreen,
+                    linearBackgroundColor: ColorConst.lightGlowingGreen,
+                  ),
+                );
+              }
             }
             return const SizedBox();
           },
@@ -354,31 +394,54 @@ class _HomePageDetailState extends State<HomePageDetail> {
     );
   }
 
-  Widget _buildOthers(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Lainnya",
-          style: FontConst.header2(color: ColorConst.blackColor2),
-        ),
-        SizedBox(height: 12.h),
-        const TipsWidget(),
-        SizedBox(height: 8.h),
-        LongCardWidget(
-          text: "Cara-cara untuk berhenti merokok",
-          backgroundColor: ColorConst.lightGreen,
-          textColor: ColorConst.darkGreen,
-          isSuffixIconOn: true,
-          onTap: () {
-            _showSmokingCessationMethods(context: context, isFirst: false);
-          },
-        ),
-      ],
-    );
-  }
+  // Widget _buildOthers(BuildContext context) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         "Lainnya",
+  //         style: FontConst.header2(color: ColorConst.blackColor2),
+  //       ),
+  //       SizedBox(height: 12.h),
+  //       const TipsWidget(),
+  //       SizedBox(height: 8.h),
+  //       LongCardWidget(
+  //         text: "Cara-cara untuk berhenti merokok",
+  //         backgroundColor: ColorConst.lightGreen,
+  //         textColor: ColorConst.darkGreen,
+  //         isSuffixIconOn: true,
+  //         onTap: () {
+  //           _showSmokingCessationMethods(context: context, isFirst: false);
+  //         },
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  void _showSmokingCessationMethods({
+  // void _showTips() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Swiper(
+  //         indicatorLayout: PageIndicatorLayout.WARM,
+  //         itemBuilder: (BuildContext context, int index) {
+  //           return Column(
+  //             children: [
+  //               // Text(data)
+  //             ],
+  //           );
+  //         },
+  //         itemCount: 10,
+  //         itemWidth: 300.w,
+  //         itemHeight: 500.h,
+  //         layout: SwiperLayout.STACK,
+  //         loop: false,
+  //       );
+  //     },
+  //   );
+  // }
+
+  void _showSmokingCessationStrategy({
     required BuildContext context,
     bool isFirst = true,
   }) {
@@ -387,7 +450,16 @@ class _HomePageDetailState extends State<HomePageDetail> {
       context: context,
       builder: (context) => Detector(
         areaID: 'smoking-methods-page',
-        child: SmokingCessationMethodsPage(isFirst: isFirst),
+        child: SimpleDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 30.w,
+            vertical: 25.h,
+          ),
+          children: const [SmokingCessationStrategyDialog()],
+        ),
       ),
     );
   }

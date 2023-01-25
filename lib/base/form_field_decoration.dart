@@ -13,6 +13,7 @@ class FormDecoration {
       labelText: label,
       hintText: hintText,
       helperText: helperText,
+      helperStyle: const TextStyle(),
       helperMaxLines: 3,
       alignLabelWithHint: true,
       border: OutlineInputBorder(
@@ -21,6 +22,7 @@ class FormDecoration {
       prefix: prefix,
       suffixIcon: suffixIcon,
       isDense: true,
+      errorMaxLines: 2,
     );
   }
 }

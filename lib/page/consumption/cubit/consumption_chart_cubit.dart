@@ -15,6 +15,7 @@ class ConsumptionChartCubit extends Cubit<List<FlSpot>> {
   }) : super([]);
 
   void load() async {
+    emit([]);
     try {
       final List<SmokingDetail> smokingDetails =
           await smokingDetailRepository.loadAll();
@@ -41,7 +42,7 @@ class ConsumptionChartCubit extends Cubit<List<FlSpot>> {
     List<FlSpot> _flSpots = [];
     daysStopSmokingMap.forEach((date, total) {
       final int whatDay = date.difference(user.startDateStopSmoking).inDays + 1;
-      _flSpots.add(FlSpot(whatDay.toDouble(), total.toDouble()));
+      _flSpots.add(FlSpot(whatDay.toDouble(), (total.toDouble() * -1)));
     });
     return _flSpots;
   }

@@ -70,6 +70,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                         TextFieldWidget(
                           label: 'Konsumsi rokok per hari',
                           textInputAction: TextInputAction.next,
+                          helperText:
+                              'Jumlah rata-rata batang rokok yang kamu konsumsi per hari',
                           isNumber: true,
                           onChanged: (value) {
                             setState(() {
@@ -90,6 +92,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                           label: 'Rata-rata harga rokok sebungkus',
                           textInputAction: TextInputAction.next,
                           prefix: const Text('Rp'),
+                          helperText:
+                              'Harga rokok sebungkus yang paling sering kamu beli',
                           textAlign: TextAlign.end,
                           isNumber: true,
                           onChanged: (value) {
@@ -109,6 +113,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                         TextFieldWidget(
                           label: 'Jumlah rokok sebungkus',
                           textInputAction: TextInputAction.next,
+                          helperText:
+                              'Jumlah batang rokok sebungkus dari rokok yang paling sering kamu beli',
                           isNumber: true,
                           onChanged: (value) {
                             setState(() {
