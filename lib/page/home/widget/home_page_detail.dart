@@ -92,9 +92,10 @@ class _HomePageDetailState extends State<HomePageDetail> {
                             SizedBox(width: 8.w),
                             Expanded(
                               child: CustomBoxWidget(
-                                text: "Strategimu untuk Berhenti Merokok",
+                                text: "Strategi Berhenti Merokok",
                                 icon: Icons.insights_rounded,
-                                backgroundColor: ColorConst.lightGreen,
+                                backgroundColor: Colors.transparent,
+                                outlineBorderColor: ColorConst.lightGreen,
                                 iconColor: ColorConst.darkGreen,
                                 textColor: Colors.grey.shade800,
                                 onTap: () {
@@ -171,49 +172,6 @@ class _HomePageDetailState extends State<HomePageDetail> {
                   ),
                 ),
                 SizedBox(width: 30.w),
-                // BlocBuilder<AchievementBloc, Resource<AchievementState>>(
-                //   bloc: achievementBloc,
-                //   builder: (context, state) {
-                //     if (state is Success) {
-                //       return InkWell(
-                //         onTap: () async {
-                //           await Navigator.of(context).pushNamed(
-                //             AchievementPage.routeName,
-                //           );
-                //         },
-                //         child: Stack(
-                //           children: [
-                //             const Icon(
-                //               Icons.stars_rounded,
-                //               color: Colors.white,
-                //             ),
-                //             if (!state.inferredData!.isAllRead)
-                //               Positioned(
-                //                 top: 0,
-                //                 right: 0,
-                //                 child: Container(
-                //                   width: 10.w,
-                //                   height: 10.w,
-                //                   decoration: BoxDecoration(
-                //                     shape: BoxShape.circle,
-                //                     color: ColorConst.secondaryColor2,
-                //                     boxShadow: [
-                //                       BoxShadow(
-                //                         color: Colors.black.withOpacity(0.5),
-                //                         offset: const Offset(-1, 2),
-                //                         blurRadius: 3,
-                //                       )
-                //                     ],
-                //                   ),
-                //                 ),
-                //               )
-                //           ],
-                //         ),
-                //       );
-                //     }
-                //     return const SizedBox();
-                //   },
-                // ),
               ],
             ),
           ),
@@ -247,10 +205,6 @@ class _HomePageDetailState extends State<HomePageDetail> {
       ],
     );
   }
-
-  // Widget _buildTips() {
-  //   return
-  // }
 
   Widget _buildOverallSummary(User user) {
     return Column(
@@ -292,7 +246,9 @@ class _HomePageDetailState extends State<HomePageDetail> {
                     backgroundColor: ColorConst.lightGreen,
                     textColor: ColorConst.darkGreen,
                     linearValueColor: ColorConst.darkGreen,
-                    linearBackgroundColor: ColorConst.lightGlowingGreen,
+                    linearBackgroundColor: ColorConst.lightGreen,
+                    isOutlined: true,
+                    showMoreCaption: true,
                   ),
                 );
               }
@@ -322,7 +278,9 @@ class _HomePageDetailState extends State<HomePageDetail> {
                         );
                       },
                       child: BoxCardWidget(
-                        backgroundColor: ColorConst.lightGreen,
+                        backgroundColor: Colors.transparent,
+                        outlineBorderColor: ColorConst.lightGreen,
+                        showMoreCaption: true,
                         child: Column(
                           children: [
                             Image.asset(
@@ -364,7 +322,9 @@ class _HomePageDetailState extends State<HomePageDetail> {
                         );
                       },
                       child: BoxCardWidget(
-                        backgroundColor: ColorConst.lightGreen,
+                        backgroundColor: Colors.transparent,
+                        outlineBorderColor: ColorConst.lightGreen,
+                        showMoreCaption: true,
                         child: Column(
                           children: [
                             Image.asset(
@@ -393,53 +353,6 @@ class _HomePageDetailState extends State<HomePageDetail> {
       ],
     );
   }
-
-  // Widget _buildOthers(BuildContext context) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(
-  //         "Lainnya",
-  //         style: FontConst.header2(color: ColorConst.blackColor2),
-  //       ),
-  //       SizedBox(height: 12.h),
-  //       const TipsWidget(),
-  //       SizedBox(height: 8.h),
-  //       LongCardWidget(
-  //         text: "Cara-cara untuk berhenti merokok",
-  //         backgroundColor: ColorConst.lightGreen,
-  //         textColor: ColorConst.darkGreen,
-  //         isSuffixIconOn: true,
-  //         onTap: () {
-  //           _showSmokingCessationMethods(context: context, isFirst: false);
-  //         },
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // void _showTips() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return Swiper(
-  //         indicatorLayout: PageIndicatorLayout.WARM,
-  //         itemBuilder: (BuildContext context, int index) {
-  //           return Column(
-  //             children: [
-  //               // Text(data)
-  //             ],
-  //           );
-  //         },
-  //         itemCount: 10,
-  //         itemWidth: 300.w,
-  //         itemHeight: 500.h,
-  //         layout: SwiperLayout.STACK,
-  //         loop: false,
-  //       );
-  //     },
-  //   );
-  // }
 
   void _showSmokingCessationStrategy({
     required BuildContext context,

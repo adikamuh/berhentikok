@@ -15,6 +15,24 @@ class ChartWidget extends StatelessWidget {
     required this.chartType,
   }) : super(key: key);
 
+  double get _getIntervalX {
+    if (data.isEmpty) return 1;
+
+    final _interval = data.length / 3;
+    if (_interval <= 1) return 1;
+
+    return _interval.toDouble();
+  }
+
+  double get _getIntervalY {
+    if (data.isEmpty) return 1;
+
+    final _interval =
+        data.last.y < 0 ? (data.last.y * -1) ~/ 3 : (data.last.y ~/ 3);
+    if (_interval < 1) return 1;
+    return _interval.toDouble();
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Color> gradientColors = [
@@ -45,6 +63,7 @@ class ChartWidget extends StatelessWidget {
                     showTitles: true,
                     reservedSize: 50,
                     getTitlesWidget: bottomTitleWidgets,
+                    interval: _getIntervalX,
                   ),
                 )
               : AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -54,6 +73,7 @@ class ChartWidget extends StatelessWidget {
                     showTitles: true,
                     reservedSize: 50,
                     getTitlesWidget: bottomTitleWidgets,
+                    interval: _getIntervalX,
                   ),
                 )
               : AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -70,6 +90,7 @@ class ChartWidget extends StatelessWidget {
               showTitles: true,
               reservedSize: 60.w,
               getTitlesWidget: leftTitleWidgets,
+              interval: _getIntervalY,
             ),
           ),
         ),
