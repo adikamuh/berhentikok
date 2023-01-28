@@ -16,6 +16,7 @@ import 'package:berhentikok/page/finance/widget/target_item_card_widget.dart';
 import 'package:berhentikok/widget/chart_widget/chart_widget.dart';
 import 'package:berhentikok/widget/section_widget/projection_child_widget.dart';
 import 'package:berhentikok/widget/section_widget/section_statistic_detail_widget.dart';
+import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -98,21 +99,33 @@ class _FinancePageState extends State<FinancePage> {
                               );
                             }
                             return Column(
-                              children: state.targetItems
-                                  .map(
-                                    (item) => Padding(
-                                      padding: EdgeInsets.only(bottom: 12.h),
-                                      child: TargetItemCardWidget(
-                                        targetItem: TargetItem(
-                                          name: item.name,
-                                          price: item.price,
-                                        ),
-                                        user: widget.user,
-                                        moneySaved: widget.moneySavedOnRelapse,
+                              children: state.targetItems.mapIndexed(
+                                (index, item) {
+                                  final int _moneySaved = index == 0
+                                      ? widget.moneySavedOnRelapse
+                                      : widget.moneySavedOnRelapse -
+                                          state.targetItems
+                                              .sublist(0, index)
+                                              .fold(
+                                                0,
+                                                (previousValue, element) =>
+                                                    element.price +
+                                                    previousValue,
+                                              );
+                                  return Padding(
+                                    padding: EdgeInsets.only(bottom: 12.h),
+                                    child: TargetItemCardWidget(
+                                      targetItem: TargetItem(
+                                        name: item.name,
+                                        price: item.price,
                                       ),
+                                      user: widget.user,
+                                      moneySaved:
+                                          _moneySaved >= 0 ? _moneySaved : 0,
                                     ),
-                                  )
-                                  .toList(),
+                                  );
+                                },
+                              ).toList(),
                             );
                           } else {
                             return const SizedBox();

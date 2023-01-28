@@ -19,6 +19,8 @@ class HealthCardWidget extends StatefulWidget {
   final Color? linearBackgroundColor;
   final Color? backgroundColor;
   final Color? textColor;
+  final bool isOutlined;
+  final bool showMoreCaption;
 
   HealthCardWidget({
     Key? key,
@@ -30,10 +32,14 @@ class HealthCardWidget extends StatefulWidget {
     this.linearBackgroundColor,
     this.backgroundColor,
     this.textColor,
+    bool? isOutlined,
+    bool? showMoreCaption,
   })  : value = healthProgress.value(
           user: user,
           smokingDetails: smokingDetails,
         ),
+        isOutlined = isOutlined ?? false,
+        showMoreCaption = showMoreCaption ?? false,
         super(key: key);
 
   @override
@@ -54,12 +60,16 @@ class _HealthCardWidgetState extends State<HealthCardWidget> {
   @override
   Widget build(BuildContext context) {
     return BoxCardWidget(
-      backgroundColor: widget.backgroundColor ??
-          (isComplete
-              ? ColorConst.darkGreen
-              : isStarted
-                  ? ColorConst.lightGreen
-                  : Colors.grey.shade200),
+      showMoreCaption: widget.showMoreCaption,
+      backgroundColor: widget.isOutlined
+          ? Colors.transparent
+          : widget.backgroundColor ??
+              (isComplete
+                  ? ColorConst.darkGreen
+                  : isStarted
+                      ? ColorConst.lightGreen
+                      : Colors.grey.shade200),
+      outlineBorderColor: widget.isOutlined ? widget.backgroundColor : null,
       child: Column(
         children: [
           Row(

@@ -20,6 +20,13 @@ class TargetItemDetailDialog extends StatelessWidget {
     required this.user,
   }) : super(key: key);
 
+  String get _moneyProgress {
+    if (moneySaved >= targetItem.price) {
+      return targetItem.price.toCurrencyFormatter();
+    }
+    return moneySaved.toCurrencyFormatter();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Detector(
@@ -40,7 +47,7 @@ class TargetItemDetailDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  moneySaved.toCurrencyFormatter(),
+                  _moneyProgress,
                   style: FontConst.small(
                     fontWeight: FontWeight.w600,
                     color: Colors.blue.shade700,
@@ -65,9 +72,26 @@ class TargetItemDetailDialog extends StatelessWidget {
             backgroundColor: ColorConst.lightGreen,
           ),
           SizedBox(height: 40.h),
-          Text(
-            'Estimasi tercapai ${targetItem.estimateDays(moneySaved, user)} hari lagi jika kamu terus berhenti merokok',
-          ),
+          if (moneySaved >= targetItem.price)
+            Text(
+              'Sudah Tercapai!',
+              style: FontConst.header3(color: ColorConst.darkGreen),
+            ),
+          if (moneySaved < targetItem.price)
+            RichText(
+              text: TextSpan(
+                text: "Estimasi tercapai ",
+                style: FontConst.body(color: Colors.black),
+                children: [
+                  TextSpan(
+                    text:
+                        "${targetItem.estimateDays(moneySaved, user).toString()} hari lagi ",
+                    style: FontConst.body(fontWeight: FontWeight.bold),
+                  ),
+                  const TextSpan(text: "jika kamu terus berhenti merokok."),
+                ],
+              ),
+            ),
           SizedBox(height: 16.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

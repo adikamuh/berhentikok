@@ -2,6 +2,7 @@ import 'package:berhentikok/base/color_const.dart';
 import 'package:berhentikok/page/consumption/widget/add_smoking_detail_dialog.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
 import 'package:berhentikok/page/home/widget/home_page_detail.dart';
+import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,29 +39,31 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       floatingActionButton: BlocBuilder<HomePageBloc, HomePageState>(
         builder: (context, state) {
           if (state is UserLoaded) {
-            return FloatingActionButton(
-              onPressed: () async {
-                await showDialog(
-                  context: context,
-                  builder: (context) {
-                    return SimpleDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 30.w,
-                        vertical: 25.h,
-                      ),
-                      children: [AddSmokingDetailDialog(user: state.user)],
-                    );
-                  },
-                );
-                // reloadAll(context);
-              },
-              backgroundColor: ColorConst.darkRed,
-              child: Image.asset(
-                'assets/icons/ic_add_smoking.png',
-                width: 28.w,
+            return DraggableFab(
+              child: FloatingActionButton(
+                onPressed: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return SimpleDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 30.w,
+                          vertical: 25.h,
+                        ),
+                        children: [AddSmokingDetailDialog(user: state.user)],
+                      );
+                    },
+                  );
+                  // reloadAll(context);
+                },
+                backgroundColor: ColorConst.darkRed,
+                child: Image.asset(
+                  'assets/icons/ic_add_smoking.png',
+                  width: 28.w,
+                ),
               ),
             );
           }
