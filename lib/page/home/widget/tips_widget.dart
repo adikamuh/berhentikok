@@ -42,22 +42,22 @@ class _TipsWidgetState extends State<TipsWidget> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Material(
-                //   borderRadius: BorderRadius.circular(100),
-                //   color: ColorConst.darkRed,
-                //   child: Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: InkWell(
-                //       onTap: () {
-                //         Navigator.of(context).pop();
-                //       },
-                //       child: const Icon(
-                //         Icons.close_rounded,
-                //         color: Colors.white,
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                Material(
+                  borderRadius: BorderRadius.circular(100),
+                  color: ColorConst.lightRed,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Icon(
+                        Icons.close_rounded,
+                        color: ColorConst.darkRed,
+                      ),
+                    ),
+                  ),
+                ),
                 Swiper(
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
