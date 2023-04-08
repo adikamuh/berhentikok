@@ -27,7 +27,6 @@ import 'package:berhentikok/widget/card_widget/box_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:round_spot/round_spot.dart';
 
 class HomePageDetail extends StatefulWidget {
   const HomePageDetail({Key? key}) : super(key: key);
@@ -56,75 +55,72 @@ class _HomePageDetailState extends State<HomePageDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Detector(
-      areaID: 'home',
-      child: SingleChildScrollView(
-        child: BlocConsumer<HomePageBloc, HomePageState>(
-          bloc: homePageBloc,
-          listener: (context, state) {
-            if (state is UserLoaded) {
-              if (state.user.isFistTime) {
-                _showSmokingCessationStrategy(
-                  context: context,
-                  isFirst: true,
-                );
-              }
+    return SingleChildScrollView(
+      child: BlocConsumer<HomePageBloc, HomePageState>(
+        bloc: homePageBloc,
+        listener: (context, state) {
+          if (state is UserLoaded) {
+            if (state.user.isFistTime) {
+              _showSmokingCessationStrategy(
+                context: context,
+                isFirst: true,
+              );
             }
-          },
-          builder: (context, state) {
-            if (state is UserLoaded) {
-              final User user = state.user;
-              return Column(
-                children: [
-                  _buildHeader(context, user),
-                  SizedBox(height: 18.h),
-                  Padding(
-                    padding: SizeConst.pagePadding,
-                    child: Column(
-                      children: [
-                        _buildSokingQuota(),
-                        SizedBox(height: 8.w),
-                        _buildConsumptionSummary(context, user),
-                        SizedBox(height: 8.w),
-                        Row(
-                          children: [
-                            const Expanded(child: TipsWidget()),
-                            SizedBox(width: 8.w),
-                            Expanded(
-                              child: CustomBoxWidget(
-                                text: "Strategi Berhenti Merokok",
-                                icon: Icons.insights_rounded,
-                                backgroundColor: Colors.transparent,
-                                outlineBorderColor: ColorConst.lightGreen,
-                                iconColor: ColorConst.darkGreen,
-                                textColor: Colors.grey.shade800,
-                                onTap: () {
-                                  _showSmokingCessationStrategy(
-                                    context: context,
-                                    isFirst: false,
-                                  );
-                                },
-                              ),
+          }
+        },
+        builder: (context, state) {
+          if (state is UserLoaded) {
+            final User user = state.user;
+            return Column(
+              children: [
+                _buildHeader(context, user),
+                SizedBox(height: 18.h),
+                Padding(
+                  padding: SizeConst.pagePadding,
+                  child: Column(
+                    children: [
+                      _buildSokingQuota(),
+                      SizedBox(height: 8.w),
+                      _buildConsumptionSummary(context, user),
+                      SizedBox(height: 8.w),
+                      Row(
+                        children: [
+                          const Expanded(child: TipsWidget()),
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: CustomBoxWidget(
+                              text: "Strategi Berhenti Merokok",
+                              icon: Icons.insights_rounded,
+                              backgroundColor: Colors.transparent,
+                              outlineBorderColor: ColorConst.lightGreen,
+                              iconColor: ColorConst.darkGreen,
+                              textColor: Colors.grey.shade800,
+                              onTap: () {
+                                _showSmokingCessationStrategy(
+                                  context: context,
+                                  isFirst: false,
+                                );
+                              },
                             ),
-                          ],
-                        ),
-                        SizedBox(height: 18.h),
-                        _buildOverallSummary(user),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 18.h),
+                      _buildOverallSummary(user),
+                    ],
                   ),
-                ],
-              );
-            } else if (state is HomePageFailed) {
-              state.errorMessage.showToast();
-              return Text(
-                'Muat ulang',
-                style: FontConst.header3(color: ColorConst.darkRed),
-              );
-            }
-            return const SizedBox();
-          },
-        ),
+                ),
+              ],
+            );
+          } else if (state is HomePageFailed) {
+            state.errorMessage.showToast();
+            return Text(
+              'Muat ulang',
+              style: FontConst.header3(color: ColorConst.darkRed),
+            );
+          }
+          return const SizedBox();
+        },
       ),
     );
   }
@@ -361,18 +357,15 @@ class _HomePageDetailState extends State<HomePageDetail> {
     showDialog(
       barrierDismissible: isFirst ? false : true,
       context: context,
-      builder: (context) => Detector(
-        areaID: 'smoking-methods-page',
-        child: SimpleDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 30.w,
-            vertical: 25.h,
-          ),
-          children: const [SmokingCessationStrategyDialog()],
+      builder: (context) => SimpleDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
         ),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 30.w,
+          vertical: 25.h,
+        ),
+        children: const [SmokingCessationStrategyDialog()],
       ),
     );
   }

@@ -21,7 +21,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:round_spot/round_spot.dart';
 
 class FinancePage extends StatefulWidget {
   final Finance finance;
@@ -55,197 +54,193 @@ class _FinancePageState extends State<FinancePage> {
         title: const Text("Uang Tersimpan"),
         backgroundColor: ColorConst.darkGreen,
       ),
-      body: Detector(
-        areaID: 'finance',
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: SizeConst.pagePadding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SectionStatisticDetailWidget(
-                  showBorder: false,
-                  child: MoneySavedCardWidget(
-                    value: widget.moneySavedOnRelapse.toCurrencyFormatter(),
-                  ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: SizeConst.pagePadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SectionStatisticDetailWidget(
+                showBorder: false,
+                child: MoneySavedCardWidget(
+                  value: widget.moneySavedOnRelapse.toCurrencyFormatter(),
                 ),
-                SectionStatisticDetailWidget(
-                  title: 'Target Barang',
-                  iconData: Icons.shopping_cart_rounded,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BlocBuilder<AddItemBloc, AddItemState>(
-                        builder: (context, state) {
-                          if (state is ItemsLoaded) {
-                            if (state.targetItems.isEmpty) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 30.w),
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/ic-shelves.png',
-                                      width: 200.w,
+              ),
+              SectionStatisticDetailWidget(
+                title: 'Target Barang',
+                iconData: Icons.shopping_cart_rounded,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BlocBuilder<AddItemBloc, AddItemState>(
+                      builder: (context, state) {
+                        if (state is ItemsLoaded) {
+                          if (state.targetItems.isEmpty) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 30.w),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    'assets/icons/ic-shelves.png',
+                                    width: 200.w,
+                                  ),
+                                  SizedBox(height: 12.h),
+                                  Text(
+                                    "Ayo tambah target barang impianmu!",
+                                    style: FontConst.body(
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                    SizedBox(height: 12.h),
-                                    Text(
-                                      "Ayo tambah target barang impianmu!",
-                                      style: FontConst.body(
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                            return Column(
-                              children: state.targetItems.mapIndexed(
-                                (index, item) {
-                                  final int _moneySaved = index == 0
-                                      ? widget.moneySavedOnRelapse
-                                      : widget.moneySavedOnRelapse -
-                                          state.targetItems
-                                              .sublist(0, index)
-                                              .fold(
-                                                0,
-                                                (previousValue, element) =>
-                                                    element.price +
-                                                    previousValue,
-                                              );
-                                  return Padding(
-                                    padding: EdgeInsets.only(bottom: 12.h),
-                                    child: TargetItemCardWidget(
-                                      targetItem: TargetItem(
-                                        name: item.name,
-                                        price: item.price,
-                                      ),
-                                      user: widget.user,
-                                      moneySaved:
-                                          _moneySaved >= 0 ? _moneySaved : 0,
-                                    ),
-                                  );
-                                },
-                              ).toList(),
+                                  ),
+                                ],
+                              ),
                             );
-                          } else {
-                            return const SizedBox();
                           }
-                        },
-                      ),
-                      SizedBox(height: 8.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            style: ButtonStyleConst.primary(),
-                            onPressed: () async {
-                              await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return SimpleDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12.r),
+                          return Column(
+                            children: state.targetItems.mapIndexed(
+                              (index, item) {
+                                final int _moneySaved = index == 0
+                                    ? widget.moneySavedOnRelapse
+                                    : widget.moneySavedOnRelapse -
+                                        state.targetItems
+                                            .sublist(0, index)
+                                            .fold(
+                                              0,
+                                              (previousValue, element) =>
+                                                  element.price + previousValue,
+                                            );
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 12.h),
+                                  child: TargetItemCardWidget(
+                                    targetItem: TargetItem(
+                                      name: item.name,
+                                      price: item.price,
                                     ),
-                                    contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 30.w,
-                                      vertical: 25.h,
-                                    ),
-                                    children: const [AddItemDialog()],
-                                  );
-                                },
-                              );
-                            },
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Tambah Barang',
-                                  style: FontConst.body(color: Colors.white),
-                                ),
-                                Icon(
-                                  Icons.add_rounded,
-                                  size: 18.w,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                BlocBuilder<FinanceChartCubit, List<FlSpot>>(
-                  builder: (context, state) {
-                    return SectionStatisticDetailWidget(
-                      title: 'Penghematan uang',
-                      iconData: Icons.equalizer_rounded,
-                      child: SizedBox(
-                        width: 350.w,
-                        height: 230.h,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            top: 14.h,
-                            right: 32.w,
-                            left: 8.w,
-                          ),
-                          child: ChartWidget(
-                            chartType: ChartType.finance,
-                            data: state,
+                                    user: widget.user,
+                                    moneySaved:
+                                        _moneySaved >= 0 ? _moneySaved : 0,
+                                  ),
+                                );
+                              },
+                            ).toList(),
+                          );
+                        } else {
+                          return const SizedBox();
+                        }
+                      },
+                    ),
+                    SizedBox(height: 8.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          style: ButtonStyleConst.primary(),
+                          onPressed: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SimpleDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 30.w,
+                                    vertical: 25.h,
+                                  ),
+                                  children: const [AddItemDialog()],
+                                );
+                              },
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                'Tambah Barang',
+                                style: FontConst.body(color: Colors.white),
+                              ),
+                              Icon(
+                                Icons.add_rounded,
+                                size: 18.w,
+                                color: Colors.white,
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      ],
+                    )
+                  ],
                 ),
-                SectionStatisticDetailWidget(
-                  title: 'Estimasi penghematan',
-                  iconData: Icons.payments_rounded,
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ProjectionChildWidget(
-                              projectionType: ProjectionType.day,
-                              moneySavedOnRelapse: widget.moneySavedOnRelapse,
-                              user: widget.user,
-                            ),
-                          ),
-                          SizedBox(width: 12.w),
-                          Expanded(
-                            child: ProjectionChildWidget(
-                              projectionType: ProjectionType.week,
-                              moneySavedOnRelapse: widget.moneySavedOnRelapse,
-                              user: widget.user,
-                            ),
-                          ),
-                        ],
+              ),
+              BlocBuilder<FinanceChartCubit, List<FlSpot>>(
+                builder: (context, state) {
+                  return SectionStatisticDetailWidget(
+                    title: 'Penghematan uang',
+                    iconData: Icons.equalizer_rounded,
+                    child: SizedBox(
+                      width: 350.w,
+                      height: 230.h,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: 14.h,
+                          right: 32.w,
+                          left: 8.w,
+                        ),
+                        child: ChartWidget(
+                          chartType: ChartType.finance,
+                          data: state,
+                        ),
                       ),
-                      SizedBox(height: 12.w),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ProjectionChildWidget(
-                              projectionType: ProjectionType.month,
-                              moneySavedOnRelapse: widget.moneySavedOnRelapse,
-                              user: widget.user,
-                            ),
+                    ),
+                  );
+                },
+              ),
+              SectionStatisticDetailWidget(
+                title: 'Estimasi penghematan',
+                iconData: Icons.payments_rounded,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ProjectionChildWidget(
+                            projectionType: ProjectionType.day,
+                            moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                            user: widget.user,
                           ),
-                          SizedBox(width: 12.w),
-                          Expanded(
-                            child: ProjectionChildWidget(
-                              projectionType: ProjectionType.year,
-                              moneySavedOnRelapse: widget.moneySavedOnRelapse,
-                              user: widget.user,
-                            ),
+                        ),
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: ProjectionChildWidget(
+                            projectionType: ProjectionType.week,
+                            moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                            user: widget.user,
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12.w),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ProjectionChildWidget(
+                            projectionType: ProjectionType.month,
+                            moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                            user: widget.user,
+                          ),
+                        ),
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: ProjectionChildWidget(
+                            projectionType: ProjectionType.year,
+                            moneySavedOnRelapse: widget.moneySavedOnRelapse,
+                            user: widget.user,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

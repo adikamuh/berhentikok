@@ -1,9 +1,3 @@
-// import 'package:firebase_storage/firebase_storage.dart';
-
-import 'package:berhentikok/page/home/cubit/smoking_strategy_cubit.dart';
-
-import 'firebase_options.dart';
-
 import 'package:berhentikok/generate_routes.dart';
 import 'package:berhentikok/model/achievement.dart';
 import 'package:berhentikok/model/boxes_name.dart';
@@ -20,6 +14,7 @@ import 'package:berhentikok/page/finance/bloc/finance_bloc.dart';
 import 'package:berhentikok/page/finance/cubit/finance_chart_cubit.dart';
 import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/page/home/bloc/home_page_bloc.dart';
+import 'package:berhentikok/page/home/cubit/smoking_strategy_cubit.dart';
 import 'package:berhentikok/page/home/home_page.dart';
 import 'package:berhentikok/page/on_boarding/cubit/on_boarding_cubit.dart';
 import 'package:berhentikok/page/on_boarding/on_boarding_page.dart';
@@ -29,51 +24,28 @@ import 'package:berhentikok/repositories/smoking_detail_repository.dart';
 import 'package:berhentikok/repositories/target_item_repository.dart';
 import 'package:berhentikok/repositories/tips_repository.dart';
 import 'package:berhentikok/repositories/user_repository.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:round_spot/round_spot.dart' as rs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await _initHive();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 
-  initializeDateFormatting('id_ID').then((_) {
-    // final storageRef = FirebaseStorage.instance.ref();
-    // final Box<User> userBox = Hive.box<User>(usersBoxName);
-
-    return runApp(
-      rs.initialize(
-        loggingLevel: rs.LogLevel.warning,
-        config: rs.Config(
-          outputType: rs.OutputType.localRender,
-        ),
-        localRenderCallback: (data, info) async {
-          // final User? user = userBox.getAt(0);
-
-          // storageRef
-          //     .child(
-          //         'berhentikok/heatmap-2/${user?.name ?? 'unknown_user'}/${info.area}.png')
-          //     .putData(data);
-        },
-        dataCallback: (data) {
-          // debugPrint(data.toString());
-        },
-        child: MultiRepositoryProvider(
+  initializeDateFormatting('id_ID').then(
+    (_) {
+      return runApp(
+        MultiRepositoryProvider(
           providers: _buildRepositories(),
           child: const MyApp(),
         ),
-      ),
-    );
-  });
+      );
+    },
+  );
 }
 
 Future<void> _initHive() async {
@@ -193,7 +165,6 @@ class _MyAppState extends State<MyApp> {
         return MultiBlocProvider(
           providers: _buildBlocProviders(context),
           child: MaterialApp(
-            navigatorObservers: [rs.Observer()],
             debugShowCheckedModeBanner: false,
             title: 'BerhentiKok',
             builder: (context, widget) {

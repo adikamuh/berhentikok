@@ -14,12 +14,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   copy_with_extension: ^4.0.3
   copy_with_extension_gen: ^4.0.3
-  dio: ^4.0.6
   draggable_fab: ^0.1.4
-  firebase_storage: ^11.0.5
   fl_chart: ^0.55.0
   flutter_bloc: ^8.1.1
-  flutter_html: ^2.2.1
   flutter_launcher_icons: "^0.9.2"
   flutter_screenutil: ^5.5.3+2
   fluttertoast: ^8.0.9
@@ -28,9 +25,7 @@ dependencies:
   equatable: ^2.0.5
   intl: ^0.17.0
   percent_indicator: ^4.2.2
-  round_spot: ^0.5.0
   table_calendar: ^3.0.6
-  firebase_core: ^2.2.0
 
 dev_dependencies:
   flutter_test:

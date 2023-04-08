@@ -8,7 +8,6 @@ import 'package:berhentikok/page/achievement/widget/achievement_card_widget.dart
 import 'package:berhentikok/page/achievement/widget/achievement_detail_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:round_spot/round_spot.dart';
 
 class AchievementPage extends StatefulWidget {
   const AchievementPage({Key? key}) : super(key: key);
@@ -41,35 +40,29 @@ class _AchievementPageState extends State<AchievementPage> {
         },
         builder: (context, state) {
           if (state is Success) {
-            return Detector(
-              areaID: 'achievement',
-              child: ListView.builder(
-                padding: SizeConst.pagePadding,
-                itemCount: state.inferredData!.achievements.length,
-                itemBuilder: (context, index) {
-                  final Achievement achievement =
-                      state.inferredData!.achievements[index];
-                  return AchievementCardWidget(
-                    onTap: () async {
-                      context
-                          .read<AchievementBloc>()
-                          .add(ReadAchievment(achievement));
-                      await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Detector(
-                            areaID: 'achievement-dialog',
-                            child: AchievementDetailDialog(
-                              achievement: achievement,
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    achievement: achievement,
-                  );
-                },
-              ),
+            return ListView.builder(
+              padding: SizeConst.pagePadding,
+              itemCount: state.inferredData!.achievements.length,
+              itemBuilder: (context, index) {
+                final Achievement achievement =
+                    state.inferredData!.achievements[index];
+                return AchievementCardWidget(
+                  onTap: () async {
+                    context
+                        .read<AchievementBloc>()
+                        .add(ReadAchievment(achievement));
+                    await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AchievementDetailDialog(
+                          achievement: achievement,
+                        );
+                      },
+                    );
+                  },
+                  achievement: achievement,
+                );
+              },
             );
           }
           return const SizedBox();

@@ -9,7 +9,6 @@ import 'package:berhentikok/page/home/cubit/smoking_strategy_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:round_spot/round_spot.dart';
 
 class SmokingCessationStrategyDialog extends StatelessWidget {
   const SmokingCessationStrategyDialog({Key? key}) : super(key: key);
@@ -19,67 +18,64 @@ class SmokingCessationStrategyDialog extends StatelessWidget {
     return BlocBuilder<SmokingStrategyCubit, Resource<SmokingStrategyState>>(
       builder: (context, state) {
         if (state is! Success) return const SizedBox();
-        return Detector(
-          areaID: "smoking-cessation-strategy-dialog",
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Strategimu untuk Berhenti Merokok!",
-                style: FontConst.header2(),
-              ),
-              SizedBox(height: 24.h),
-              // WHEN
-              ..._buildStrategy(
-                isCompleted:
-                    state.inferredData!.strategyWeeks != StrategyWeeks.week1,
-                isOnprogress:
-                    state.inferredData!.strategyWeeks == StrategyWeeks.week1,
-                weeks: StrategyWeeks.week1,
-                user: state.inferredData!.user,
-              ),
-              ..._buildStrategy(
-                isCompleted:
-                    state.inferredData!.strategyWeeks != StrategyWeeks.week1 &&
-                        state.inferredData!.strategyWeeks != StrategyWeeks.week5,
-                isOnprogress:
-                    state.inferredData!.strategyWeeks == StrategyWeeks.week5,
-                weeks: StrategyWeeks.week5,
-                user: state.inferredData!.user,
-              ),
-              ..._buildStrategy(
-                isCompleted: state.inferredData!.strategyWeeks !=
-                        StrategyWeeks.week1 &&
-                    state.inferredData!.strategyWeeks != StrategyWeeks.week5 &&
-                    state.inferredData!.strategyWeeks != StrategyWeeks.week9,
-                isOnprogress:
-                    state.inferredData!.strategyWeeks == StrategyWeeks.week9,
-                weeks: StrategyWeeks.week9,
-                user: state.inferredData!.user,
-                showLine: false,
-              ),
-              SizedBox(height: 24.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ButtonStyleConst.primary(),
-                    onPressed: () {
-                      context.read<HomePageBloc>().add(UserDoneFirstTime());
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      'Oke!',
-                      style: FontConst.body(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Strategimu untuk Berhenti Merokok!",
+              style: FontConst.header2(),
+            ),
+            SizedBox(height: 24.h),
+            // WHEN
+            ..._buildStrategy(
+              isCompleted:
+                  state.inferredData!.strategyWeeks != StrategyWeeks.week1,
+              isOnprogress:
+                  state.inferredData!.strategyWeeks == StrategyWeeks.week1,
+              weeks: StrategyWeeks.week1,
+              user: state.inferredData!.user,
+            ),
+            ..._buildStrategy(
+              isCompleted:
+                  state.inferredData!.strategyWeeks != StrategyWeeks.week1 &&
+                      state.inferredData!.strategyWeeks != StrategyWeeks.week5,
+              isOnprogress:
+                  state.inferredData!.strategyWeeks == StrategyWeeks.week5,
+              weeks: StrategyWeeks.week5,
+              user: state.inferredData!.user,
+            ),
+            ..._buildStrategy(
+              isCompleted: state.inferredData!.strategyWeeks !=
+                      StrategyWeeks.week1 &&
+                  state.inferredData!.strategyWeeks != StrategyWeeks.week5 &&
+                  state.inferredData!.strategyWeeks != StrategyWeeks.week9,
+              isOnprogress:
+                  state.inferredData!.strategyWeeks == StrategyWeeks.week9,
+              weeks: StrategyWeeks.week9,
+              user: state.inferredData!.user,
+              showLine: false,
+            ),
+            SizedBox(height: 24.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ButtonStyleConst.primary(),
+                  onPressed: () {
+                    context.read<HomePageBloc>().add(UserDoneFirstTime());
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Oke!',
+                    style: FontConst.body(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         );
       },
     );
