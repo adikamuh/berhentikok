@@ -28,7 +28,7 @@ class ChartWidget extends StatelessWidget {
     if (data.isEmpty) return 1;
 
     final _interval =
-        data.last.y < 0 ? (data.last.y * -1) ~/ 3 : (data.last.y ~/ 3);
+        data.last.y < 0 ? (data.last.y * -1) ~/ 2 : (data.last.y ~/ 2);
     if (_interval < 1) return 1;
     return _interval.toDouble();
   }
