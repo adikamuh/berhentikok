@@ -6,8 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AchievementDetailDialog extends StatelessWidget {
   final Achievement achievement;
-  const AchievementDetailDialog({Key? key, required this.achievement})
-      : super(key: key);
+  const AchievementDetailDialog({super.key, required this.achievement});
 
   @override
   Widget build(BuildContext context) {

@@ -8,8 +8,8 @@ import 'package:berhentikok/page/finance/bloc/finance_bloc.dart';
 import 'package:berhentikok/page/health/bloc/health_bloc.dart';
 import 'package:berhentikok/page/home/cubit/smoking_strategy_cubit.dart';
 import 'package:berhentikok/repositories/smoking_detail_repository.dart';
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 part 'smoking_detail_event.dart';
@@ -58,9 +58,9 @@ class SmokingDetailBloc
             await smokingDetailRepository.loadAll();
         LinkedHashMap<DateTime, List<SmokingDetail>> smokingDetailsMap =
             LinkedHashMap<DateTime, List<SmokingDetail>>(
-          equals: isSameDay,
-          hashCode: SmokingDetail.getHashCode,
-        );
+              equals: isSameDay,
+              hashCode: SmokingDetail.getHashCode,
+            );
         smokingDetails.forEach(((smokingDetail) {
           final currentSmokingDetailMap = smokingDetailsMap[smokingDetail.date];
           if (currentSmokingDetailMap != null) {
@@ -78,7 +78,7 @@ class SmokingDetailBloc
     });
   }
 
-  _reloadAll() {
+  void _reloadAll() {
     healthBloc.add(LoadHealth());
     financeBloc.add(LoadFinance());
     consumptionBloc.add(LoadConsumption());

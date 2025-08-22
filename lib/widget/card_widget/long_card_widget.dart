@@ -10,13 +10,13 @@ class LongCardWidget extends StatelessWidget {
   final bool isSuffixIconOn;
   final Function()? onTap;
   const LongCardWidget({
-    Key? key,
+    super.key,
     required this.text,
     this.backgroundColor,
     this.textColor,
     this.isSuffixIconOn = false,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

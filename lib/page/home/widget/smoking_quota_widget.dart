@@ -5,25 +5,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SmokingQuotaWidget extends StatelessWidget {
   final int smokingQuota;
-  const SmokingQuotaWidget({Key? key, required this.smokingQuota})
-      : super(key: key);
+  const SmokingQuotaWidget({super.key, required this.smokingQuota});
 
   @override
   Widget build(BuildContext context) {
     if (smokingQuota > 0) {
       return Card(
         clipBehavior: Clip.antiAlias,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
         elevation: 0,
         margin: EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(color: Colors.yellow.shade500),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: 18.w,
-              horizontal: 18.w,
-            ),
+            padding: EdgeInsets.symmetric(vertical: 18.w, horizontal: 18.w),
             child: Row(
               children: [
                 Icon(
@@ -38,9 +35,7 @@ class SmokingQuotaWidget extends StatelessWidget {
                     children: [
                       Text(
                         "Batas konsumsi rokokmu hari ini",
-                        style: FontConst.small(
-                          color: Colors.black,
-                        ),
+                        style: FontConst.small(color: Colors.black),
                       ),
                       Text(
                         "$smokingQuota Rokok",
@@ -66,10 +61,7 @@ class SmokingQuotaWidget extends StatelessWidget {
       child: Container(
         decoration: const BoxDecoration(color: ColorConst.darkRed),
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 18.w,
-            horizontal: 18.w,
-          ),
+          padding: EdgeInsets.symmetric(vertical: 18.w, horizontal: 18.w),
           child: Row(
             children: [
               Icon(

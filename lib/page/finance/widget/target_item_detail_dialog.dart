@@ -7,18 +7,17 @@ import 'package:berhentikok/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:round_spot/round_spot.dart';
 
 class TargetItemDetailDialog extends StatelessWidget {
   final TargetItem targetItem;
   final int moneySaved;
   final User user;
   const TargetItemDetailDialog({
-    Key? key,
+    super.key,
     required this.targetItem,
     required this.moneySaved,
     required this.user,
-  }) : super(key: key);
+  });
 
   String get _moneyProgress {
     if (moneySaved >= targetItem.price) {
@@ -29,85 +28,79 @@ class TargetItemDetailDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Detector(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            targetItem.name,
-            style: FontConst.header2(),
-          ),
-          SizedBox(height: 40.h),
-          CircularPercentIndicator(
-            radius: 80.w,
-            lineWidth: 18,
-            circularStrokeCap: CircularStrokeCap.round,
-            percent: targetItem.toPercentProgress(moneySaved) / 100,
-            center: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  _moneyProgress,
-                  style: FontConst.small(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.blue.shade700,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 2.h),
-                  width: 40.w,
-                  height: 1,
-                  color: ColorConst.greyColor2,
-                ),
-                Text(
-                  targetItem.price.toCurrencyFormatter(),
-                  style: FontConst.body(
-                    fontWeight: FontWeight.w600,
-                    color: ColorConst.darkGreen,
-                  ),
-                ),
-              ],
-            ),
-            progressColor: ColorConst.darkGreen,
-            backgroundColor: ColorConst.lightGreen,
-          ),
-          SizedBox(height: 40.h),
-          if (moneySaved >= targetItem.price)
-            Text(
-              'Sudah Tercapai!',
-              style: FontConst.header3(color: ColorConst.darkGreen),
-            ),
-          if (moneySaved < targetItem.price)
-            RichText(
-              text: TextSpan(
-                text: "Estimasi tercapai ",
-                style: FontConst.body(color: Colors.black),
-                children: [
-                  TextSpan(
-                    text:
-                        "${targetItem.estimateDays(moneySaved, user).toString()} hari lagi ",
-                    style: FontConst.body(fontWeight: FontWeight.bold),
-                  ),
-                  const TextSpan(text: "jika kamu terus berhenti merokok."),
-                ],
-              ),
-            ),
-          SizedBox(height: 16.h),
-          Row(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(targetItem.name, style: FontConst.header2()),
+        SizedBox(height: 40.h),
+        CircularPercentIndicator(
+          radius: 80.w,
+          lineWidth: 18,
+          circularStrokeCap: CircularStrokeCap.round,
+          percent: targetItem.toPercentProgress(moneySaved) / 100,
+          center: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                style: ButtonStyleConst.danger(),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Tutup'),
+              Text(
+                _moneyProgress,
+                style: FontConst.small(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.blue.shade700,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 2.h),
+                width: 40.w,
+                height: 1,
+                color: ColorConst.greyColor2,
+              ),
+              Text(
+                targetItem.price.toCurrencyFormatter(),
+                style: FontConst.body(
+                  fontWeight: FontWeight.w600,
+                  color: ColorConst.darkGreen,
+                ),
               ),
             ],
           ),
-        ],
-      ),
-      areaID: "target-item-detail-dialog",
+          progressColor: ColorConst.darkGreen,
+          backgroundColor: ColorConst.lightGreen,
+        ),
+        SizedBox(height: 40.h),
+        if (moneySaved >= targetItem.price)
+          Text(
+            'Sudah Tercapai!',
+            style: FontConst.header3(color: ColorConst.darkGreen),
+          ),
+        if (moneySaved < targetItem.price)
+          RichText(
+            text: TextSpan(
+              text: "Estimasi tercapai ",
+              style: FontConst.body(color: Colors.black),
+              children: [
+                TextSpan(
+                  text:
+                      "${targetItem.estimateDays(moneySaved, user).toString()} hari lagi ",
+                  style: FontConst.body(fontWeight: FontWeight.bold),
+                ),
+                const TextSpan(text: "jika kamu terus berhenti merokok."),
+              ],
+            ),
+          ),
+        SizedBox(height: 16.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              style: ButtonStyleConst.danger(),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Tutup'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

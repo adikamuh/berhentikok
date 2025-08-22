@@ -5,8 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SmokingFreeTotalCardWidget extends StatelessWidget {
   final int total;
-  const SmokingFreeTotalCardWidget({Key? key, required this.total})
-      : super(key: key);
+  const SmokingFreeTotalCardWidget({super.key, required this.total});
 
   @override
   Widget build(BuildContext context) {

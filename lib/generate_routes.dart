@@ -5,7 +5,6 @@ import 'package:berhentikok/page/finance/finance_page.dart';
 import 'package:berhentikok/page/health/health_page.dart';
 import 'package:berhentikok/page/home/home_page.dart';
 import 'package:berhentikok/page/on_boarding/on_boarding_page.dart';
-import 'package:berhentikok/page/statistic/statistic_page.dart';
 import 'package:flutter/material.dart';
 
 class AppRoute {
@@ -15,8 +14,6 @@ class AppRoute {
         return MaterialPageRoute(builder: (context) => const OnBoardingPage());
       case HomePage.routeName:
         return MaterialPageRoute(builder: (context) => const HomePage());
-      case StatisticPage.routeName:
-        return MaterialPageRoute(builder: (context) => const StatisticPage());
       case HealthPage.routeName:
         final args = settings.arguments as HealthArguments;
         return MaterialPageRoute(

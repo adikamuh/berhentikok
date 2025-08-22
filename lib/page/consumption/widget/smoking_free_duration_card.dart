@@ -11,9 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class SmokingFreeDurationCard extends StatefulWidget {
   final User user;
   const SmokingFreeDurationCard({
-    Key? key,
+    super.key,
     required this.user,
-  }) : super(key: key);
+  });
 
   @override
   State<SmokingFreeDurationCard> createState() =>

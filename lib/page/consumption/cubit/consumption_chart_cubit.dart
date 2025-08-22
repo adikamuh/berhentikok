@@ -3,8 +3,8 @@ import 'package:berhentikok/model/smoking_detail.dart';
 import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/repositories/smoking_detail_repository.dart';
 import 'package:berhentikok/repositories/user_repository.dart';
-import 'package:bloc/bloc.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ConsumptionChartCubit extends Cubit<List<FlSpot>> {
   final UserRepository userRepository;
@@ -23,9 +23,9 @@ class ConsumptionChartCubit extends Cubit<List<FlSpot>> {
       if (user != null) {
         Map<DateTime, int> daysFromStopSmoking =
             ChartHelper.consumptionsToChart(
-          user: user,
-          smokingDetails: smokingDetails,
-        );
+              user: user,
+              smokingDetails: smokingDetails,
+            );
         emit(_toFlSpots(user: user, daysStopSmokingMap: daysFromStopSmoking));
       } else {
         emit([]);
@@ -39,11 +39,11 @@ class ConsumptionChartCubit extends Cubit<List<FlSpot>> {
     required User user,
     required Map<DateTime, int> daysStopSmokingMap,
   }) {
-    List<FlSpot> _flSpots = [];
+    List<FlSpot> flSpots = [];
     daysStopSmokingMap.forEach((date, total) {
       final int whatDay = date.difference(user.startDateStopSmoking).inDays + 1;
-      _flSpots.add(FlSpot(whatDay.toDouble(), (total.toDouble() * -1)));
+      flSpots.add(FlSpot(whatDay.toDouble(), (total.toDouble() * -1)));
     });
-    return _flSpots;
+    return flSpots;
   }
 }

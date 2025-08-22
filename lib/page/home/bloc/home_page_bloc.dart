@@ -1,7 +1,7 @@
 import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/repositories/user_repository.dart';
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'home_page_event.dart';
 part 'home_page_state.dart';

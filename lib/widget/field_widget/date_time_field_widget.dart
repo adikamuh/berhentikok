@@ -12,7 +12,7 @@ class DateTimeFieldWidget extends StatefulWidget {
   final String? Function(String?)? validator;
   final void Function(DateTime?)? onChanged;
   const DateTimeFieldWidget({
-    Key? key,
+    super.key,
     required this.label,
     this.suffix,
     this.initialDate,
@@ -20,7 +20,7 @@ class DateTimeFieldWidget extends StatefulWidget {
     this.lastDate,
     this.validator,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<DateTimeFieldWidget> createState() => _DateTimeFieldWidgetState();

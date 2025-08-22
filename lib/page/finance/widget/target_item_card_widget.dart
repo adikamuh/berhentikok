@@ -14,12 +14,12 @@ class TargetItemCardWidget extends StatelessWidget {
   final User user;
   final EdgeInsets? margin;
   const TargetItemCardWidget({
-    Key? key,
+    super.key,
     required this.targetItem,
     required this.user,
     required this.moneySaved,
     this.margin,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +109,7 @@ class TargetItemCardWidget extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

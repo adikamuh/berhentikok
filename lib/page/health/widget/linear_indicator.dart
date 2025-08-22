@@ -8,24 +8,24 @@ class LinearIndicator extends StatelessWidget {
   final Color? valueColor;
   final Color? backgroundColor;
   const LinearIndicator({
-    Key? key,
+    super.key,
     required this.value,
     this.valueColor,
     this.backgroundColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final _width = constraints.maxWidth;
-        final _widthValue = (value / 100) * _width;
+        final width = constraints.maxWidth;
+        final widthValue = (value / 100) * width;
         return Stack(
           alignment: Alignment.centerLeft,
           children: [
             if (value < 100)
               Container(
-                width: _width,
+                width: width,
                 height: 5.h,
                 decoration: BoxDecoration(
                   color: backgroundColor ?? ColorConst.lightGlowingGreen,
@@ -35,7 +35,7 @@ class LinearIndicator extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  width: value >= 100 ? _width : _widthValue,
+                  width: value >= 100 ? width : widthValue,
                   height: 5.h,
                   decoration: BoxDecoration(
                     color: valueColor ?? ColorConst.glowingGreen,

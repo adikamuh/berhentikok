@@ -10,32 +10,34 @@ class SectionStatisticDetailWidget extends StatelessWidget {
   final Color? backgroundColor;
   final Widget child;
   const SectionStatisticDetailWidget({
-    Key? key,
+    super.key,
     this.title,
     this.iconData,
     this.showBorder = true,
     this.backgroundColor,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: backgroundColor ?? Colors.transparent,
-          borderRadius:
-              showBorder ?? false ? BorderRadius.circular(16.r) : null,
-          border: showBorder ?? false
-              ? Border.all(
-                  color: ColorConst.greyColor2.withOpacity(0.5),
+        color: backgroundColor ?? Colors.transparent,
+        borderRadius: showBorder ?? false ? BorderRadius.circular(16.r) : null,
+        border:
+            showBorder ?? false
+                ? Border.all(
+                  color: ColorConst.greyColor2.withValues(alpha: 0.5),
                   width: 1.2,
                 )
-              : null),
+                : null,
+      ),
       margin: EdgeInsets.only(bottom: 16.h),
       child: Padding(
-        padding: showBorder ?? false
-            ? EdgeInsets.symmetric(vertical: 18.w, horizontal: 16.w)
-            : EdgeInsets.zero,
+        padding:
+            showBorder ?? false
+                ? EdgeInsets.symmetric(vertical: 18.w, horizontal: 16.w)
+                : EdgeInsets.zero,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
