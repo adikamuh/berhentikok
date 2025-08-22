@@ -8,10 +8,10 @@ class AchievementCardWidget extends StatelessWidget {
   final Achievement achievement;
   final Function()? onTap;
   const AchievementCardWidget({
-    Key? key,
+    super.key,
     required this.achievement,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +22,10 @@ class AchievementCardWidget extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 10.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          color: achievement.isRead
-              ? ColorConst.lightGreen
-              : achievement.isAchieved
+          color:
+              achievement.isRead
+                  ? ColorConst.lightGreen
+                  : achievement.isAchieved
                   ? ColorConst.darkGreen
                   : Colors.grey.shade200,
         ),
@@ -35,14 +36,16 @@ class AchievementCardWidget extends StatelessWidget {
               height: 45.w,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage(achievement.imageFile),
-                    fit: BoxFit.contain,
-                    colorFilter: achievement.isAchieved
-                        ? null
-                        : ColorFilter.mode(
-                            Colors.black.withOpacity(0.2),
+                  image: AssetImage(achievement.imageFile),
+                  fit: BoxFit.contain,
+                  colorFilter:
+                      achievement.isAchieved
+                          ? null
+                          : ColorFilter.mode(
+                            Colors.black.withValues(alpha: 0.2),
                             BlendMode.dstIn,
-                          )),
+                          ),
+                ),
               ),
             ),
             SizedBox(width: 18.w),
@@ -55,9 +58,10 @@ class AchievementCardWidget extends StatelessWidget {
                     achievement.title,
                     textAlign: TextAlign.center,
                     style: FontConst.subtitle(
-                      color: achievement.isRead
-                          ? ColorConst.darkGreen
-                          : achievement.isAchieved
+                      color:
+                          achievement.isRead
+                              ? ColorConst.darkGreen
+                              : achievement.isAchieved
                               ? ColorConst.lightGreen
                               : Colors.black26,
                       fontWeight: FontWeight.w600,
@@ -65,7 +69,7 @@ class AchievementCardWidget extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

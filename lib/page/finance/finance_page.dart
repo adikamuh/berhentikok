@@ -27,11 +27,11 @@ class FinancePage extends StatefulWidget {
   final User user;
   final int moneySavedOnRelapse;
   const FinancePage({
-    Key? key,
+    super.key,
     required this.finance,
     required this.user,
     required this.moneySavedOnRelapse,
-  }) : super(key: key);
+  });
 
   static const routeName = 'finance';
 
@@ -98,7 +98,7 @@ class _FinancePageState extends State<FinancePage> {
                           return Column(
                             children: state.targetItems.mapIndexed(
                               (index, item) {
-                                final int _moneySaved = index == 0
+                                final int moneySaved = index == 0
                                     ? widget.moneySavedOnRelapse
                                     : widget.moneySavedOnRelapse -
                                         state.targetItems
@@ -117,7 +117,7 @@ class _FinancePageState extends State<FinancePage> {
                                     ),
                                     user: widget.user,
                                     moneySaved:
-                                        _moneySaved >= 0 ? _moneySaved : 0,
+                                        moneySaved >= 0 ? moneySaved : 0,
                                   ),
                                 );
                               },

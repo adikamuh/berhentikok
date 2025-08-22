@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OnBoardingPage extends StatefulWidget {
-  const OnBoardingPage({Key? key}) : super(key: key);
+  const OnBoardingPage({super.key});
 
   static const String routeName = 'intro';
 
@@ -39,8 +39,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               child: BlocListener<OnBoardingCubit, OnBoardingState>(
                 listener: (context, state) {
                   if (state is FormSubmitted) {
-                    Navigator.of(context)
-                        .pushReplacementNamed(HomePage.routeName);
+                    Navigator.of(
+                      context,
+                    ).pushReplacementNamed(HomePage.routeName);
                   }
                 },
                 child: Form(
@@ -177,7 +178,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                       _cigarettesPerPack != null &&
                                       _startDateStopSmoking != null &&
                                       _motivation != null) {
-                                    final User _user = User(
+                                    final User user = User(
                                       name: _name!,
                                       tobaccoConsumption: _tobaccoConsumption!,
                                       averagePrice: _averagePrice!,
@@ -187,9 +188,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                       motivation: _motivation!,
                                       isFistTime: true,
                                     );
-                                    context
-                                        .read<OnBoardingCubit>()
-                                        .submitForm(_user);
+                                    context.read<OnBoardingCubit>().submitForm(
+                                      user,
+                                    );
                                   } else {
                                     "Lengkapi Form".showToast();
                                   }
@@ -199,7 +200,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                             ),
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),

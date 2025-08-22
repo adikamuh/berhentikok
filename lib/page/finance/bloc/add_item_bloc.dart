@@ -1,7 +1,7 @@
 import 'package:berhentikok/model/target_item.dart';
 import 'package:berhentikok/repositories/target_item_repository.dart';
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'add_item_event.dart';
 part 'add_item_state.dart';

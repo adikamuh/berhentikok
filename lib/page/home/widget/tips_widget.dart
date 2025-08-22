@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TipsWidget extends StatefulWidget {
-  const TipsWidget({Key? key}) : super(key: key);
+  const TipsWidget({super.key});
 
   @override
   State<TipsWidget> createState() => _TipsWidgetState();
@@ -67,7 +67,7 @@ class _TipsWidgetState extends State<TipsWidget> {
                         borderRadius: BorderRadius.circular(16.r),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
+                            color: Colors.black.withValues(alpha: 0.5),
                             offset: const Offset(-1, 2),
                             blurRadius: 3,
                           )

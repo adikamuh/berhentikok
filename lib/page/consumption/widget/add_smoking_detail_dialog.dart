@@ -13,8 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddSmokingDetailDialog extends StatefulWidget {
   final User user;
-  const AddSmokingDetailDialog({Key? key, required this.user})
-      : super(key: key);
+  const AddSmokingDetailDialog({super.key, required this.user});
 
   @override
   State<AddSmokingDetailDialog> createState() => _AddSmokingDetailDialogState();

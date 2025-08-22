@@ -6,11 +6,11 @@ class FullDialogWidget extends StatelessWidget {
   final Widget child;
   final bool isShowLeadingIcon;
   const FullDialogWidget({
-    Key? key,
+    super.key,
     required this.child,
     required this.appBarTitle,
     this.isShowLeadingIcon = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

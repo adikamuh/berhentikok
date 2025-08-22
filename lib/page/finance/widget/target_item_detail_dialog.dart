@@ -13,11 +13,11 @@ class TargetItemDetailDialog extends StatelessWidget {
   final int moneySaved;
   final User user;
   const TargetItemDetailDialog({
-    Key? key,
+    super.key,
     required this.targetItem,
     required this.moneySaved,
     required this.user,
-  }) : super(key: key);
+  });
 
   String get _moneyProgress {
     if (moneySaved >= targetItem.price) {
@@ -31,10 +31,7 @@ class TargetItemDetailDialog extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          targetItem.name,
-          style: FontConst.header2(),
-        ),
+        Text(targetItem.name, style: FontConst.header2()),
         SizedBox(height: 40.h),
         CircularPercentIndicator(
           radius: 80.w,

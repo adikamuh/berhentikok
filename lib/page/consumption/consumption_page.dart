@@ -23,10 +23,10 @@ class ConsumptionPage extends StatefulWidget {
   final User user;
   final List<SmokingDetail> smokingDetails;
   const ConsumptionPage({
-    Key? key,
+    super.key,
     required this.user,
     required this.smokingDetails,
-  }) : super(key: key);
+  });
 
   static const routeName = 'consumption';
 
@@ -42,8 +42,8 @@ class _ConsumptionPageState extends State<ConsumptionPage> {
     super.initState();
     context.read<SmokingDetailBloc>().add(LoadSmokingDetails());
     context.read<ConsumptionChartCubit>().load();
-    _totalFreeCigaretteOnRelapse =
-        widget.smokingDetails.totalFreeCigaretteOnRelapse(widget.user);
+    _totalFreeCigaretteOnRelapse = widget.smokingDetails
+        .totalFreeCigaretteOnRelapse(widget.user);
   }
 
   @override
@@ -65,8 +65,9 @@ class _ConsumptionPageState extends State<ConsumptionPage> {
                 child: Column(
                   children: [
                     SmokingFreeTotalCardWidget(
-                      total: widget.smokingDetails
-                          .totalFreeCigaretteOnRelapse(widget.user),
+                      total: widget.smokingDetails.totalFreeCigaretteOnRelapse(
+                        widget.user,
+                      ),
                     ),
                     SizedBox(height: 10.h),
                     ElevatedButton.icon(
@@ -84,7 +85,7 @@ class _ConsumptionPageState extends State<ConsumptionPage> {
                                 vertical: 25.h,
                               ),
                               children: [
-                                AddSmokingDetailDialog(user: widget.user)
+                                AddSmokingDetailDialog(user: widget.user),
                               ],
                             );
                           },

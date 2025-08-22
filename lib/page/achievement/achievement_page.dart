@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AchievementPage extends StatefulWidget {
-  const AchievementPage({Key? key}) : super(key: key);
+  const AchievementPage({super.key});
 
   static const routeName = 'achievement';
 
@@ -48,9 +48,9 @@ class _AchievementPageState extends State<AchievementPage> {
                     state.inferredData!.achievements[index];
                 return AchievementCardWidget(
                   onTap: () async {
-                    context
-                        .read<AchievementBloc>()
-                        .add(ReadAchievment(achievement));
+                    context.read<AchievementBloc>().add(
+                      ReadAchievment(achievement),
+                    );
                     await showDialog(
                       context: context,
                       builder: (context) {

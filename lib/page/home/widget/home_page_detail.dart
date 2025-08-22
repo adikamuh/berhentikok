@@ -29,7 +29,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePageDetail extends StatefulWidget {
-  const HomePageDetail({Key? key}) : super(key: key);
+  const HomePageDetail({super.key});
 
   @override
   State<HomePageDetail> createState() => _HomePageDetailState();
@@ -61,10 +61,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
         listener: (context, state) {
           if (state is UserLoaded) {
             if (state.user.isFistTime) {
-              _showSmokingCessationStrategy(
-                context: context,
-                isFirst: true,
-              );
+              _showSmokingCessationStrategy(context: context, isFirst: true);
             }
           }
         },
@@ -191,13 +188,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: SmokingFreeDurationCard(user: user),
-            ),
-          ],
-        ),
+        Row(children: [Expanded(child: SmokingFreeDurationCard(user: user))]),
       ],
     );
   }
@@ -215,13 +206,15 @@ class _HomePageDetailState extends State<HomePageDetail> {
           bloc: healthBloc,
           builder: (context, state) {
             if (state is Success) {
-              final Duration freeSmokingDuration =
-                  state.inferredData!.smokingDetails.freeSmokingDuration(user);
-              final healthProgress =
-                  state.inferredData!.healthProgresses.firstWhereOnProgress(
-                user: user,
-                smokingDetails: state.inferredData!.smokingDetails,
-              );
+              final Duration freeSmokingDuration = state
+                  .inferredData!
+                  .smokingDetails
+                  .freeSmokingDuration(user);
+              final healthProgress = state.inferredData!.healthProgresses
+                  .firstWhereOnProgress(
+                    user: user,
+                    smokingDetails: state.inferredData!.smokingDetails,
+                  );
               if (healthProgress != null) {
                 return InkWell(
                   onTap: () {
@@ -357,16 +350,17 @@ class _HomePageDetailState extends State<HomePageDetail> {
     showDialog(
       barrierDismissible: isFirst ? false : true,
       context: context,
-      builder: (context) => SimpleDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 30.w,
-          vertical: 25.h,
-        ),
-        children: const [SmokingCessationStrategyDialog()],
-      ),
+      builder:
+          (context) => SimpleDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 30.w,
+              vertical: 25.h,
+            ),
+            children: const [SmokingCessationStrategyDialog()],
+          ),
     );
   }
 }

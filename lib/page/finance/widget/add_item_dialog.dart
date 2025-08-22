@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddItemDialog extends StatefulWidget {
-  const AddItemDialog({Key? key}) : super(key: key);
+  const AddItemDialog({super.key});
 
   @override
   State<AddItemDialog> createState() => _AddItemDialogState();
@@ -35,10 +35,7 @@ class _AddItemDialogState extends State<AddItemDialog> {
         key: _formKey,
         child: Column(
           children: [
-            Text(
-              "Tambah Target Barang",
-              style: FontConst.header3(),
-            ),
+            Text("Tambah Target Barang", style: FontConst.header3()),
             SizedBox(height: 16.h),
             TextFieldWidget(
               label: 'Nama barang',
@@ -90,11 +87,11 @@ class _AddItemDialogState extends State<AddItemDialog> {
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
                       if (_name != null && _price != null) {
-                        final TargetItem _targetItem = TargetItem(
+                        final TargetItem targetItem = TargetItem(
                           name: _name!,
                           price: _price!,
                         );
-                        context.read<AddItemBloc>().add(SaveItem(_targetItem));
+                        context.read<AddItemBloc>().add(SaveItem(targetItem));
                       }
                     }
                   },

@@ -36,16 +36,14 @@ void main() async {
 
   await _initHive();
 
-  initializeDateFormatting('id_ID').then(
-    (_) {
-      return runApp(
-        MultiRepositoryProvider(
-          providers: _buildRepositories(),
-          child: const MyApp(),
-        ),
-      );
-    },
-  );
+  initializeDateFormatting('id_ID').then((_) {
+    return runApp(
+      MultiRepositoryProvider(
+        providers: _buildRepositories(),
+        child: const MyApp(),
+      ),
+    );
+  });
 }
 
 Future<void> _initHive() async {
@@ -71,34 +69,40 @@ Future<void> _initHive() async {
 }
 
 List<RepositoryProvider> _buildRepositories() {
-  final UserRepository userRepository =
-      UserRepository(Hive.box<User>(usersBoxName));
+  final UserRepository userRepository = UserRepository(
+    Hive.box<User>(usersBoxName),
+  );
   final SmokingDetailRepository smokingDetailRepository =
       SmokingDetailRepository(Hive.box<SmokingDetail>(smokingDetailsBoxName));
-  final TargetItemRepository targetItemRepository =
-      TargetItemRepository(Hive.box<TargetItem>(targetItemsBoxName));
+  final TargetItemRepository targetItemRepository = TargetItemRepository(
+    Hive.box<TargetItem>(targetItemsBoxName),
+  );
   final HealthProgressRepository healthProgressRepository =
       HealthProgressRepository();
   final AchievementRepository achievementRepository = AchievementRepository(
     Hive.box<Achievement>(achievementsReadBoxName),
   );
-  final TipsRepository tipsRepository =
-      TipsRepository(Hive.box<int>(tipsBoxName));
+  final TipsRepository tipsRepository = TipsRepository(
+    Hive.box<int>(tipsBoxName),
+  );
   return [
     RepositoryProvider<UserRepository>.value(value: userRepository),
     RepositoryProvider<SmokingDetailRepository>.value(
-        value: smokingDetailRepository),
+      value: smokingDetailRepository,
+    ),
     RepositoryProvider<TargetItemRepository>.value(value: targetItemRepository),
     RepositoryProvider<HealthProgressRepository>.value(
-        value: healthProgressRepository),
+      value: healthProgressRepository,
+    ),
     RepositoryProvider<AchievementRepository>.value(
-        value: achievementRepository),
+      value: achievementRepository,
+    ),
     RepositoryProvider<TipsRepository>.value(value: tipsRepository),
   ];
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -116,37 +120,45 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     healthBloc = HealthBloc(
-      healthProgressRepository:
-          RepositoryProvider.of<HealthProgressRepository>(context),
+      healthProgressRepository: RepositoryProvider.of<HealthProgressRepository>(
+        context,
+      ),
       userRepository: RepositoryProvider.of<UserRepository>(context),
-      smokingDetailRepository:
-          RepositoryProvider.of<SmokingDetailRepository>(context),
+      smokingDetailRepository: RepositoryProvider.of<SmokingDetailRepository>(
+        context,
+      ),
     );
     financeBloc = FinanceBloc(
       userRepository: RepositoryProvider.of<UserRepository>(context),
-      targetItemRepository:
-          RepositoryProvider.of<TargetItemRepository>(context),
-      smokingDetailRepository:
-          RepositoryProvider.of<SmokingDetailRepository>(context),
+      targetItemRepository: RepositoryProvider.of<TargetItemRepository>(
+        context,
+      ),
+      smokingDetailRepository: RepositoryProvider.of<SmokingDetailRepository>(
+        context,
+      ),
     );
     consumptionBloc = ConsumptionBloc(
       userRepository: RepositoryProvider.of<UserRepository>(context),
-      smokingDetailRepository:
-          RepositoryProvider.of<SmokingDetailRepository>(context),
+      smokingDetailRepository: RepositoryProvider.of<SmokingDetailRepository>(
+        context,
+      ),
     );
     smokingStrategyCubit = SmokingStrategyCubit(
       userRepository: RepositoryProvider.of<UserRepository>(context),
-      smokingDetailRepository:
-          RepositoryProvider.of<SmokingDetailRepository>(context),
+      smokingDetailRepository: RepositoryProvider.of<SmokingDetailRepository>(
+        context,
+      ),
     );
     consumptionChartCubit = ConsumptionChartCubit(
       userRepository: RepositoryProvider.of<UserRepository>(context),
-      smokingDetailRepository:
-          RepositoryProvider.of<SmokingDetailRepository>(context),
+      smokingDetailRepository: RepositoryProvider.of<SmokingDetailRepository>(
+        context,
+      ),
     );
     smokingDetailBloc = SmokingDetailBloc(
-      smokingDetailRepository:
-          RepositoryProvider.of<SmokingDetailRepository>(context),
+      smokingDetailRepository: RepositoryProvider.of<SmokingDetailRepository>(
+        context,
+      ),
       healthBloc: healthBloc,
       financeBloc: financeBloc,
       consumptionBloc: consumptionBloc,
@@ -169,20 +181,39 @@ class _MyAppState extends State<MyApp> {
             title: 'BerhentiKok',
             builder: (context, widget) {
               Widget child = MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                data: MediaQuery.of(
+                  context,
+                ).copyWith(textScaler: TextScaler.linear(1.0)),
                 child: widget!,
               );
               return MediaQuery(
-                data: MediaQuery.of(context)
-                    .copyWith(alwaysUse24HourFormat: true),
+                data: MediaQuery.of(
+                  context,
+                ).copyWith(alwaysUse24HourFormat: true),
                 child: child,
               );
             },
-            theme: ThemeData(fontFamily: 'Poppins'),
+            theme: ThemeData(
+              fontFamily: 'Poppins',
+              scaffoldBackgroundColor: Colors.white,
+              colorScheme: ColorScheme(
+                brightness: Brightness.light,
+                primary: const Color(0xFF4CAF50),
+                onPrimary: Colors.white,
+                secondary: const Color(0xFF8BC34A),
+                onSecondary: Colors.white,
+                error: const Color(0xFFF44336),
+                onError: Colors.white,
+                surface: Colors.white,
+                onSurface: Colors.black,
+              ),
+              appBarTheme: AppBarTheme(foregroundColor: Colors.white),
+            ),
             onGenerateRoute: AppRoute.generateRoute,
-            initialRoute: _checkIsRegistered(context)
-                ? HomePage.routeName
-                : OnBoardingPage.routeName,
+            initialRoute:
+                _checkIsRegistered(context)
+                    ? HomePage.routeName
+                    : OnBoardingPage.routeName,
           ),
         );
       },
@@ -196,43 +227,49 @@ class _MyAppState extends State<MyApp> {
   List<BlocProvider> _buildBlocProviders(BuildContext context) {
     return [
       BlocProvider<OnBoardingCubit>(
-        create: (context) => OnBoardingCubit(
-          userRepository: RepositoryProvider.of<UserRepository>(context),
-          smokingStrategyCubit: smokingStrategyCubit,
-        ),
+        create:
+            (context) => OnBoardingCubit(
+              userRepository: RepositoryProvider.of<UserRepository>(context),
+              smokingStrategyCubit: smokingStrategyCubit,
+            ),
       ),
       BlocProvider<HomePageBloc>(
-        create: (context) => HomePageBloc(
-          userRepository: RepositoryProvider.of<UserRepository>(context),
-        ),
+        create:
+            (context) => HomePageBloc(
+              userRepository: RepositoryProvider.of<UserRepository>(context),
+            ),
       ),
       BlocProvider<HealthBloc>.value(value: healthBloc),
       BlocProvider<FinanceBloc>.value(value: financeBloc),
       BlocProvider<AddItemBloc>(
-        create: (context) => AddItemBloc(
-          targetItemRepository:
-              RepositoryProvider.of<TargetItemRepository>(context),
-        ),
+        create:
+            (context) => AddItemBloc(
+              targetItemRepository: RepositoryProvider.of<TargetItemRepository>(
+                context,
+              ),
+            ),
       ),
       BlocProvider<SmokingDetailBloc>.value(value: smokingDetailBloc),
       BlocProvider<ConsumptionBloc>.value(value: consumptionBloc),
       BlocProvider<ConsumptionChartCubit>.value(value: consumptionChartCubit),
       BlocProvider<FinanceChartCubit>(
-        create: (context) => FinanceChartCubit(
-          userRepository: RepositoryProvider.of<UserRepository>(context),
-          smokingDetailRepository:
-              RepositoryProvider.of<SmokingDetailRepository>(context),
-        ),
+        create:
+            (context) => FinanceChartCubit(
+              userRepository: RepositoryProvider.of<UserRepository>(context),
+              smokingDetailRepository:
+                  RepositoryProvider.of<SmokingDetailRepository>(context),
+            ),
       ),
       BlocProvider<AchievementBloc>(
-        create: (context) => AchievementBloc(
-          achievementRepository:
-              RepositoryProvider.of<AchievementRepository>(context),
-          smokingDetailRepository:
-              RepositoryProvider.of<SmokingDetailRepository>(context),
-          userRepository: RepositoryProvider.of<UserRepository>(context),
-          financeBloc: financeBloc,
-        ),
+        create:
+            (context) => AchievementBloc(
+              achievementRepository:
+                  RepositoryProvider.of<AchievementRepository>(context),
+              smokingDetailRepository:
+                  RepositoryProvider.of<SmokingDetailRepository>(context),
+              userRepository: RepositoryProvider.of<UserRepository>(context),
+              financeBloc: financeBloc,
+            ),
       ),
       BlocProvider<SmokingStrategyCubit>.value(value: smokingStrategyCubit),
       // BlocProvider<TipsCubit>(

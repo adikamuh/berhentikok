@@ -10,14 +10,13 @@ class BoxCardWidget extends StatelessWidget {
   final bool showMoreCaption;
 
   const BoxCardWidget({
-    Key? key,
+    super.key,
     required this.child,
     this.backgroundColor,
     Color? outlineBorderColor,
     bool? showMoreCaption,
   })  : outlineBorderColor = outlineBorderColor ?? Colors.transparent,
-        showMoreCaption = showMoreCaption ?? false,
-        super(key: key);
+        showMoreCaption = showMoreCaption ?? false;
 
   @override
   Widget build(BuildContext context) {

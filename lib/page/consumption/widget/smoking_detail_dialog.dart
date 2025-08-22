@@ -7,10 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SmokingDetailDialog extends StatelessWidget {
   final SmokingDetail smokingDetail;
-  const SmokingDetailDialog({
-    Key? key,
-    required this.smokingDetail,
-  }) : super(key: key);
+  const SmokingDetailDialog({super.key, required this.smokingDetail});
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +25,7 @@ class SmokingDetailDialog extends StatelessWidget {
               'Jumlah Rokok: ',
               style: FontConst.body(fontWeight: FontWeight.w600),
             ),
-            Expanded(
-              child: Text("${smokingDetail.total.toString()} Rokok"),
-            ),
+            Expanded(child: Text("${smokingDetail.total.toString()} Rokok")),
           ],
         ),
         SizedBox(height: 8.h),

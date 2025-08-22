@@ -3,13 +3,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 extension StringExtension on String {
-  showToast() {
+  void showToast() {
     Fluttertoast.showToast(
       msg: this,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.grey.shade400.withOpacity(0.5),
+      backgroundColor: Colors.grey.shade400.withValues(alpha: 0.5),
       textColor: Colors.black,
       fontSize: 16.0,
     );

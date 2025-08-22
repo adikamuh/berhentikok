@@ -9,28 +9,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ChartWidget extends StatelessWidget {
   final List<FlSpot> data;
   final ChartType chartType;
-  const ChartWidget({
-    Key? key,
-    required this.data,
-    required this.chartType,
-  }) : super(key: key);
+  const ChartWidget({super.key, required this.data, required this.chartType});
 
   double get _getIntervalX {
     if (data.isEmpty) return 1;
 
-    final _interval = data.length / 3;
-    if (_interval <= 1) return 1;
+    final interval = data.length / 3;
+    if (interval <= 1) return 1;
 
-    return _interval.toDouble();
+    return interval.toDouble();
   }
 
   double get _getIntervalY {
     if (data.isEmpty) return 1;
 
-    final _interval =
+    final interval =
         data.last.y < 0 ? (data.last.y * -1) ~/ 2 : (data.last.y ~/ 2);
-    if (_interval < 1) return 1;
-    return _interval.toDouble();
+    if (interval < 1) return 1;
+    return interval.toDouble();
   }
 
   @override
@@ -48,44 +44,44 @@ class ChartWidget extends StatelessWidget {
           drawHorizontalLine: true,
           verticalInterval: 1,
           getDrawingHorizontalLine: (value) {
-            return FlLine(
-              color: ColorConst.greyColor2,
-              strokeWidth: 1,
-            );
+            return FlLine(color: ColorConst.greyColor2, strokeWidth: 1);
           },
         ),
         titlesData: FlTitlesData(
           show: true,
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: chartType == ChartType.consumption
-              ? AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 50,
-                    getTitlesWidget: bottomTitleWidgets,
-                    interval: _getIntervalX,
-                  ),
-                )
-              : AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          bottomTitles: chartType == ChartType.finance
-              ? AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 50,
-                    getTitlesWidget: bottomTitleWidgets,
-                    interval: _getIntervalX,
-                  ),
-                )
-              : AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          leftTitles: AxisTitles(
-            axisNameWidget: chartType == ChartType.consumption
-                ? Text(
-                    'Jumlah',
-                    textAlign: TextAlign.start,
-                    style: FontConst.body(fontWeight: FontWeight.bold),
+          topTitles:
+              chartType == ChartType.consumption
+                  ? AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 50,
+                      getTitlesWidget: bottomTitleWidgets,
+                      interval: _getIntervalX,
+                    ),
                   )
-                : null,
-            axisNameSize: chartType == ChartType.consumption ? 35.w : null,
+                  : AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          bottomTitles:
+              chartType == ChartType.finance
+                  ? AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 50,
+                      getTitlesWidget: bottomTitleWidgets,
+                      interval: _getIntervalX,
+                    ),
+                  )
+                  : AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          leftTitles: AxisTitles(
+            axisNameWidget:
+                chartType == ChartType.consumption
+                    ? Text(
+                      'Jumlah',
+                      textAlign: TextAlign.start,
+                      style: FontConst.body(fontWeight: FontWeight.bold),
+                    )
+                    : null,
+            axisNameSize: chartType == ChartType.consumption ? 35.w : 35.w,
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 60.w,
@@ -97,61 +93,71 @@ class ChartWidget extends StatelessWidget {
         lineTouchData: LineTouchData(
           handleBuiltInTouches: true,
           touchTooltipData: LineTouchTooltipData(
-            tooltipBgColor: ColorConst.lightGreen.withOpacity(0.5),
+            getTooltipColor: (touchedSpot) {
+              return ColorConst.lightGreen.withValues(alpha: 0.5);
+            },
             getTooltipItems: (touchedSpots) {
-              return touchedSpots.map(
-                (barSpot) {
-                  return LineTooltipItem(
-                    barSpot.y.toInt().toCompactThousandFormatter() + "\n",
-                    FontConst.small(fontWeight: FontWeight.w600),
-                    children: [
-                      TextSpan(
-                        text: "Hari ke-${barSpot.x.toInt()}",
-                        style: FontConst.small().copyWith(
-                          fontStyle: FontStyle.italic,
-                        ),
+              return touchedSpots.map((barSpot) {
+                return LineTooltipItem(
+                  "${barSpot.y.toInt().toCompactThousandFormatter()}\n",
+                  FontConst.small(fontWeight: FontWeight.w600),
+                  children: [
+                    TextSpan(
+                      text: "Hari ke-${barSpot.x.toInt()}",
+                      style: FontConst.small().copyWith(
+                        fontStyle: FontStyle.italic,
                       ),
-                    ],
-                  );
-                },
-              ).toList();
+                    ),
+                  ],
+                );
+              }).toList();
             },
           ),
         ),
         borderData: FlBorderData(
           show: true,
           border: Border(
-            bottom: chartType == ChartType.finance
-                ? const BorderSide(color: ColorConst.greyColor2, width: 3)
-                : BorderSide.none,
-            top: chartType == ChartType.consumption
-                ? const BorderSide(color: ColorConst.greyColor2, width: 3)
-                : BorderSide.none,
+            bottom:
+                chartType == ChartType.finance
+                    ? const BorderSide(color: ColorConst.greyColor2, width: 3)
+                    : BorderSide.none,
+            top:
+                chartType == ChartType.consumption
+                    ? const BorderSide(color: ColorConst.greyColor2, width: 3)
+                    : BorderSide.none,
             // left: BorderSide(color: ColorConst.blackColor2),
           ),
         ),
         minX: 1,
-        maxX: data.isNotEmpty
-            ? data
-                .reduce((current, next) => current.x > next.x ? current : next)
-                .x
-            : 1,
-        minY: chartType == ChartType.consumption
-            ? data.isNotEmpty
+        maxX:
+            data.isNotEmpty
                 ? data
                     .reduce(
-                      (current, next) => current.y < next.y ? current : next,
+                      (current, next) => current.x > next.x ? current : next,
                     )
-                    .y
-                : 0
-            : data.isNotEmpty
+                    .x
+                : 1,
+        minY:
+            chartType == ChartType.consumption
+                ? data.isNotEmpty
+                    ? data
+                        .reduce(
+                          (current, next) =>
+                              current.y < next.y ? current : next,
+                        )
+                        .y
+                    : 0
+                : data.isNotEmpty
                 ? data.first.y
                 : 0,
-        maxY: data.isNotEmpty
-            ? data
-                .reduce((current, next) => current.y > next.y ? current : next)
-                .y
-            : 0,
+        maxY:
+            data.isNotEmpty
+                ? data
+                    .reduce(
+                      (current, next) => current.y > next.y ? current : next,
+                    )
+                    .y
+                : 0,
         lineBarsData: [
           LineChartBarData(
             spots: data,
@@ -163,9 +169,7 @@ class ChartWidget extends StatelessWidget {
             ),
             barWidth: 5,
             isStrokeCapRound: false,
-            dotData: FlDotData(
-              show: true,
-            ),
+            dotData: FlDotData(show: true),
             // belowBarData: BarAreaData(
             //   show: true,
             //   gradient: LinearGradient(

@@ -12,10 +12,10 @@ class CalendarTableWidget extends StatefulWidget {
   final Map<DateTime, List<SmokingDetail>> smokingDetails;
   final User user;
   const CalendarTableWidget({
-    Key? key,
+    super.key,
     required this.smokingDetails,
     required this.user,
-  }) : super(key: key);
+  });
 
   @override
   State<CalendarTableWidget> createState() => _CalendarTableWidgetState();

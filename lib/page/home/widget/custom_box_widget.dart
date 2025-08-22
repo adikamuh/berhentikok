@@ -13,7 +13,7 @@ class CustomBoxWidget extends StatelessWidget {
   final Function() onTap;
 
   const CustomBoxWidget({
-    Key? key,
+    super.key,
     required this.text,
     required this.icon,
     required this.backgroundColor,
@@ -21,8 +21,7 @@ class CustomBoxWidget extends StatelessWidget {
     required this.iconColor,
     required this.textColor,
     required this.onTap,
-  })  : outlineBorderColor = outlineBorderColor ?? Colors.transparent,
-        super(key: key);
+  }) : outlineBorderColor = outlineBorderColor ?? Colors.transparent;
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +30,7 @@ class CustomBoxWidget extends StatelessWidget {
       color: backgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.r),
-        side: BorderSide(
-          color: outlineBorderColor,
-          width: 2,
-        ),
+        side: BorderSide(color: outlineBorderColor, width: 2),
       ),
       child: InkWell(
         onTap: onTap,

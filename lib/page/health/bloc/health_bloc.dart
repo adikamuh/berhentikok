@@ -5,8 +5,8 @@ import 'package:berhentikok/model/user.dart';
 import 'package:berhentikok/repositories/health_progress_repository.dart';
 import 'package:berhentikok/repositories/smoking_detail_repository.dart';
 import 'package:berhentikok/repositories/user_repository.dart';
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'health_event.dart';
 
@@ -42,13 +42,15 @@ class HealthBloc extends Bloc<HealthEvent, Resource<HealthState>> {
         final List<SmokingDetail> smokingDetails =
             await smokingDetailRepository.loadAll();
         final User? user = userRepository.load();
-        emit(Resource.success(
-          HealthState(
-            healthProgresses: healthProgresses,
-            smokingDetails: smokingDetails,
-            user: user!,
+        emit(
+          Resource.success(
+            HealthState(
+              healthProgresses: healthProgresses,
+              smokingDetails: smokingDetails,
+              user: user!,
+            ),
           ),
-        ));
+        );
       } catch (e) {
         emit(Resource.error(e.toString()));
       }

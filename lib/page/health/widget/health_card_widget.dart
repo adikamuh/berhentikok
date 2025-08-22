@@ -23,7 +23,7 @@ class HealthCardWidget extends StatefulWidget {
   final bool showMoreCaption;
 
   HealthCardWidget({
-    Key? key,
+    super.key,
     required this.healthProgress,
     required this.smokingDetails,
     required this.user,
@@ -34,13 +34,9 @@ class HealthCardWidget extends StatefulWidget {
     this.textColor,
     bool? isOutlined,
     bool? showMoreCaption,
-  })  : value = healthProgress.value(
-          user: user,
-          smokingDetails: smokingDetails,
-        ),
-        isOutlined = isOutlined ?? false,
-        showMoreCaption = showMoreCaption ?? false,
-        super(key: key);
+  }) : value = healthProgress.value(user: user, smokingDetails: smokingDetails),
+       isOutlined = isOutlined ?? false,
+       showMoreCaption = showMoreCaption ?? false;
 
   @override
   State<HealthCardWidget> createState() => _HealthCardWidgetState();
@@ -61,12 +57,13 @@ class _HealthCardWidgetState extends State<HealthCardWidget> {
   Widget build(BuildContext context) {
     return BoxCardWidget(
       showMoreCaption: widget.showMoreCaption,
-      backgroundColor: widget.isOutlined
-          ? Colors.transparent
-          : widget.backgroundColor ??
-              (isComplete
-                  ? ColorConst.darkGreen
-                  : isStarted
+      backgroundColor:
+          widget.isOutlined
+              ? Colors.transparent
+              : widget.backgroundColor ??
+                  (isComplete
+                      ? ColorConst.darkGreen
+                      : isStarted
                       ? ColorConst.lightGreen
                       : Colors.grey.shade200),
       outlineBorderColor: widget.isOutlined ? widget.backgroundColor : null,
@@ -75,10 +72,7 @@ class _HealthCardWidgetState extends State<HealthCardWidget> {
           Row(
             children: [
               // SizedBox(width: 12.w),
-              Image.asset(
-                widget.healthProgress.imageFile,
-                width: 40.w,
-              ),
+              Image.asset(widget.healthProgress.imageFile, width: 40.w),
               SizedBox(width: 24.w),
               Expanded(
                 child: Column(
@@ -86,12 +80,13 @@ class _HealthCardWidgetState extends State<HealthCardWidget> {
                     Text(
                       widget.healthProgress.caption,
                       style: FontConst.subtitle(
-                        color: widget.textColor ??
+                        color:
+                            widget.textColor ??
                             (isComplete
                                 ? Colors.white
                                 : isStarted
-                                    ? ColorConst.darkGreen
-                                    : Colors.grey.shade800),
+                                ? ColorConst.darkGreen
+                                : Colors.grey.shade800),
                         fontWeight: FontWeight.w600,
                       ),
                       textAlign: TextAlign.left,
@@ -101,13 +96,15 @@ class _HealthCardWidgetState extends State<HealthCardWidget> {
                       children: [
                         Expanded(
                           child: LinearIndicator(
-                            valueColor: widget.linearValueColor ??
+                            valueColor:
+                                widget.linearValueColor ??
                                 (isComplete
                                     ? ColorConst.glowingGreen
                                     : isStarted
-                                        ? ColorConst.darkGreen
-                                        : Colors.grey.shade200),
-                            backgroundColor: widget.linearBackgroundColor ??
+                                    ? ColorConst.darkGreen
+                                    : Colors.grey.shade200),
+                            backgroundColor:
+                                widget.linearBackgroundColor ??
                                 (isStarted ? null : Colors.grey.shade300),
                             value: widget.value,
                           ),
@@ -142,11 +139,12 @@ class _HealthCardWidgetState extends State<HealthCardWidget> {
 
   Widget _buildPercentage() {
     return Text(
-      widget.value.toString() + "%",
+      "${widget.value}%",
       style: FontConst.small(
-        color: isComplete
-            ? Colors.white
-            : isStarted
+        color:
+            isComplete
+                ? Colors.white
+                : isStarted
                 ? ColorConst.darkGreen
                 : Colors.grey.shade800,
       ),
@@ -161,9 +159,10 @@ class _HealthCardWidgetState extends State<HealthCardWidget> {
     return Text(
       difference.inSeconds >= 0 ? "${difference.toStringDuration()} lagi" : "",
       style: FontConst.small(
-        color: isComplete
-            ? Colors.white
-            : isStarted
+        color:
+            isComplete
+                ? Colors.white
+                : isStarted
                 ? ColorConst.darkGreen
                 : Colors.grey.shade800,
       ),

@@ -53,27 +53,24 @@ extension Ex on List<SmokingDetail> {
 
   // consumption
   int totalSmokingOnDay(DateTime day) => fold(0, (previousValue, element) {
-        if (element.date.isSameDay(day)) {
-          return previousValue + element.total;
-        }
-        return previousValue;
-      });
+    if (element.date.isSameDay(day)) {
+      return previousValue + element.total;
+    }
+    return previousValue;
+  });
 
-  int totalFreeCigaretteToThisDay({
-    required User user,
-    required DateTime day,
-  }) {
-    final Duration _duration = day.difference(user.startDateStopSmoking);
+  int totalFreeCigaretteToThisDay({required User user, required DateTime day}) {
+    final Duration duration = day.difference(user.startDateStopSmoking);
 
-    if (_duration.inDays >= 1) {
+    if (duration.inDays >= 1) {
       return user.tobaccoConsumption -
           totalSmokingOnDay(day) +
           totalFreeCigaretteToThisDay(
             user: user,
             day: day.subtract(const Duration(days: 1)),
           );
-    } else if (_duration.inDays < 1 && _duration.inHours > 0) {
-      return ((user.hoursPerCigarette * _duration.inHours) -
+    } else if (duration.inDays < 1 && duration.inHours > 0) {
+      return ((user.hoursPerCigarette * duration.inHours) -
               totalSmokingOnDay(day))
           .toInt();
     }
@@ -89,10 +86,7 @@ extension Ex on List<SmokingDetail> {
         return previousValue;
       });
 
-  int totalMoneySavedToThisDay({
-    required User user,
-    required DateTime day,
-  }) {
+  int totalMoneySavedToThisDay({required User user, required DateTime day}) {
     if (day.difference(user.startDateStopSmoking).inHours > 24) {
       return user.moneySavedEachDay -
           totalMoneyCostOnDay(day, user) +

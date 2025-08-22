@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SmokingCessationStrategyDialog extends StatelessWidget {
-  const SmokingCessationStrategyDialog({Key? key}) : super(key: key);
+  const SmokingCessationStrategyDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +38,15 @@ class SmokingCessationStrategyDialog extends StatelessWidget {
             ..._buildStrategy(
               isCompleted:
                   state.inferredData!.strategyWeeks != StrategyWeeks.week1 &&
-                      state.inferredData!.strategyWeeks != StrategyWeeks.week5,
+                  state.inferredData!.strategyWeeks != StrategyWeeks.week5,
               isOnprogress:
                   state.inferredData!.strategyWeeks == StrategyWeeks.week5,
               weeks: StrategyWeeks.week5,
               user: state.inferredData!.user,
             ),
             ..._buildStrategy(
-              isCompleted: state.inferredData!.strategyWeeks !=
-                      StrategyWeeks.week1 &&
+              isCompleted:
+                  state.inferredData!.strategyWeeks != StrategyWeeks.week1 &&
                   state.inferredData!.strategyWeeks != StrategyWeeks.week5 &&
                   state.inferredData!.strategyWeeks != StrategyWeeks.week9,
               isOnprogress:
@@ -96,16 +96,15 @@ class SmokingCessationStrategyDialog extends StatelessWidget {
             width: 25.w,
             height: 25.w,
             decoration: BoxDecoration(
-              color: isCompleted || isOnprogress
-                  ? ColorConst.darkGreen
-                  : ColorConst.lightGreen,
+              color:
+                  isCompleted || isOnprogress
+                      ? ColorConst.darkGreen
+                      : ColorConst.lightGreen,
               shape: BoxShape.circle,
-              border: isCompleted || !isOnprogress
-                  ? null
-                  : Border.all(
-                      width: 20.w,
-                      color: ColorConst.lightGreen,
-                    ),
+              border:
+                  isCompleted || !isOnprogress
+                      ? null
+                      : Border.all(width: 20.w, color: ColorConst.lightGreen),
             ),
           ),
           SizedBox(width: 12.w),
@@ -117,20 +116,20 @@ class SmokingCessationStrategyDialog extends StatelessWidget {
                   weeks == StrategyWeeks.week1
                       ? "Minggu ke-1 sampai ke-4"
                       : weeks == StrategyWeeks.week5
-                          ? "Minggu ke-5 sampai ke-8"
-                          : weeks == StrategyWeeks.week9
-                              ? "Minggu ke-9 sampai ke-12"
-                              : "",
+                      ? "Minggu ke-5 sampai ke-8"
+                      : weeks == StrategyWeeks.week9
+                      ? "Minggu ke-9 sampai ke-12"
+                      : "",
                   style: FontConst.body(fontWeight: FontWeight.w600),
                 ),
                 Text(
                   weeks == StrategyWeeks.week1
                       ? "${user.startDateStopSmoking.dateToString()} - ${user.startDateStopSmoking.add(const Duration(days: 28)).dateToString()}"
                       : weeks == StrategyWeeks.week5
-                          ? "${user.startDateStopSmoking.add(const Duration(days: 29)).dateToString()} - ${user.startDateStopSmoking.add(const Duration(days: 56)).dateToString()}"
-                          : weeks == StrategyWeeks.week9
-                              ? "${user.startDateStopSmoking.add(const Duration(days: 57)).dateToString()} - ${user.startDateStopSmoking.add(const Duration(days: 84)).dateToString()}"
-                              : "",
+                      ? "${user.startDateStopSmoking.add(const Duration(days: 29)).dateToString()} - ${user.startDateStopSmoking.add(const Duration(days: 56)).dateToString()}"
+                      : weeks == StrategyWeeks.week9
+                      ? "${user.startDateStopSmoking.add(const Duration(days: 57)).dateToString()} - ${user.startDateStopSmoking.add(const Duration(days: 84)).dateToString()}"
+                      : "",
                   style: FontConst.small(color: ColorConst.darkGreen),
                 ),
               ],
@@ -147,9 +146,7 @@ class SmokingCessationStrategyDialog extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 12.w),
               width: 1.w,
               height: 100.h,
-              decoration: const BoxDecoration(
-                color: ColorConst.greyColor1,
-              ),
+              decoration: const BoxDecoration(color: ColorConst.greyColor1),
             ),
             SizedBox(width: 12.w),
           ],
@@ -165,20 +162,20 @@ class SmokingCessationStrategyDialog extends StatelessWidget {
                   weeks == StrategyWeeks.week1
                       ? "Kurangi konsumsi rokokmu per hari sampai 50%, batas konsumsi rokokmu:"
                       : weeks == StrategyWeeks.week5
-                          ? "Kurangi konsumsi rokokmu per hari sampai 75%, batas konsumsi rokokmu:"
-                          : weeks == StrategyWeeks.week9
-                              ? "Kurangi konsumsi rokokmu per hari sampai 100%, batas konsumsi rokokmu:"
-                              : "",
+                      ? "Kurangi konsumsi rokokmu per hari sampai 75%, batas konsumsi rokokmu:"
+                      : weeks == StrategyWeeks.week9
+                      ? "Kurangi konsumsi rokokmu per hari sampai 100%, batas konsumsi rokokmu:"
+                      : "",
                   style: FontConst.small(),
                 ),
                 Text(
                   weeks == StrategyWeeks.week1
                       ? "${user.tobaccoConsumption ~/ 2} Rokok / hari"
                       : weeks == StrategyWeeks.week5
-                          ? "${user.tobaccoConsumption ~/ 4} Rokok / hari"
-                          : weeks == StrategyWeeks.week9
-                              ? "0 Rokok / hari"
-                              : "",
+                      ? "${user.tobaccoConsumption ~/ 4} Rokok / hari"
+                      : weeks == StrategyWeeks.week9
+                      ? "0 Rokok / hari"
+                      : "",
                   style: FontConst.header3(fontWeight: FontWeight.bold),
                 ),
               ],

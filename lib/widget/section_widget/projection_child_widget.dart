@@ -12,12 +12,12 @@ class ProjectionChildWidget extends StatelessWidget {
   final int? totalFreeCigaretteOnRelapse;
   final User user;
   const ProjectionChildWidget({
-    Key? key,
+    super.key,
     required this.projectionType,
     this.moneySavedOnRelapse,
     this.totalFreeCigaretteOnRelapse,
     required this.user,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

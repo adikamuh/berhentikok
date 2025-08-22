@@ -18,7 +18,7 @@ class TextFieldWidget extends StatefulWidget {
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
   const TextFieldWidget({
-    Key? key,
+    super.key,
     required this.label,
     this.hintText,
     this.helperText,
@@ -30,7 +30,7 @@ class TextFieldWidget extends StatefulWidget {
     this.validator,
     this.onChanged,
     this.textInputAction,
-  }) : super(key: key);
+  });
 
   @override
   State<TextFieldWidget> createState() => _TextFieldWidgetState();
@@ -54,12 +54,13 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             validator: widget.validator,
             onChanged: widget.onChanged,
             initialValue: widget.initialValue,
-            inputFormatters: widget.isNumber
-                ? <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
-                    ThousandsSeparatorInputFormatter(),
-                  ]
-                : null,
+            inputFormatters:
+                widget.isNumber
+                    ? <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                      ThousandsSeparatorInputFormatter(),
+                    ]
+                    : null,
             decoration: FormDecoration.style(
               hintText: widget.hintText,
               prefix: widget.prefix,

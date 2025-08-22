@@ -1,7 +1,7 @@
 import 'package:berhentikok/model/tips.dart';
 import 'package:berhentikok/repositories/tips_repository.dart';
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class TipsState extends Equatable {
   const TipsState();

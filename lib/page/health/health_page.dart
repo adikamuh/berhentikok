@@ -12,11 +12,11 @@ class HealthPage extends StatelessWidget {
   final List<SmokingDetail> smokingDetails;
   final User user;
   const HealthPage({
-    Key? key,
+    super.key,
     required this.healthProgresses,
     required this.smokingDetails,
     required this.user,
-  }) : super(key: key);
+  });
 
   static const routeName = 'health';
 
@@ -31,8 +31,8 @@ class HealthPage extends StatelessWidget {
         padding: SizeConst.pagePadding,
         itemCount: healthProgresses.length,
         itemBuilder: (context, index) {
-          final Duration freeSmokingDuration =
-              smokingDetails.freeSmokingDuration(user);
+          final Duration freeSmokingDuration = smokingDetails
+              .freeSmokingDuration(user);
           final HealthProgress healthProgress = healthProgresses[index];
           return Padding(
             padding: EdgeInsets.only(bottom: 10.h),
